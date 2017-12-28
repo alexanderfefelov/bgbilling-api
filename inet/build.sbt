@@ -1,5 +1,5 @@
 name := "bgbilling-api-inet"
-organization := "alexanderfefelov.github.com"
+organization := "com.github.alexanderfefelov"
 
 scalaVersion := "2.11.12"
 
@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
 )
 
 scalaxbDispatchVersion in (Compile, scalaxb) := "0.11.3"
-scalaxbPackageName in (Compile, scalaxb) := "bgbilling.inet"
+scalaxbPackageName in (Compile, scalaxb) := "com.github.alexanderfefelov.bgbilling.api.inet"
 
 lazy val root = (project in file("."))
   .enablePlugins(ScalaxbPlugin)
