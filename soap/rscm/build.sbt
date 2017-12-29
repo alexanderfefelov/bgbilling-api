@@ -1,4 +1,4 @@
-name := "bgbilling-api-qiwi"
+name := "bgbilling-api-soap-rscm"
 organization := "com.github.alexanderfefelov"
 
 scalaVersion := "2.11.12"
@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
 )
 
 scalaxbDispatchVersion in (Compile, scalaxb) := "0.11.3"
-scalaxbPackageName in (Compile, scalaxb) := "com.github.alexanderfefelov.bgbilling.api.qiwi"
+scalaxbPackageName in (Compile, scalaxb) := "com.github.alexanderfefelov.bgbilling.api.soap.rscm"
 
 lazy val root = (project in file("."))
   .enablePlugins(ScalaxbPlugin)
