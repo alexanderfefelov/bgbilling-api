@@ -1,3 +1,3 @@
-# bgbilling-api-inet
+# bgbilling-api-soap-inet
 
 7.1_564

@@ -1,3 +1,3 @@
-# bgbilling-api-moneta
+# bgbilling-api-soap-moneta
 
 7.1_5

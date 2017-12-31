@@ -1,1 +1,1 @@
-# bgbilling-api-util
+# bgbilling-api-soap-util
