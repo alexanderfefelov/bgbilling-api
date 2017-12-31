@@ -1,4 +1,4 @@
-import com.github.alexanderfefelov.bgbilling.api.soap.kernel._
+import com.github.alexanderfefelov.bgbilling.api.soap.oss._
 import com.github.alexanderfefelov.bgbilling.api.soap.scalaxb._
 import com.github.alexanderfefelov.bgbilling.api.soap.util.BgBillingApiSoapConfig
 import scalaxb._
