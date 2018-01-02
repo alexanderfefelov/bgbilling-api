@@ -14,6 +14,5 @@ trait BgBillingApiSoapConfig {
   val password: String = config.getString(s"$CONFIG_PREFIX_BGBILLING.password")
 
   def serviceBaseAddress(serviceName: String) = config.getString(s"$CONFIG_PREFIX_BGBILLING.service-base-addresses.$serviceName")
-  def serviceBaseAddress(serviceName: String, moduleId: Int) = config.getString(s"$CONFIG_PREFIX_BGBILLING.service-base-addresses.$serviceName")
 
 }
