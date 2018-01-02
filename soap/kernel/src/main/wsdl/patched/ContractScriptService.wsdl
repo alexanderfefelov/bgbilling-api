@@ -109,11 +109,18 @@
         </xs:sequence>
       </xs:complexType>
 
+<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
+
+[error] ContractTariffService_type1.scala:94: Mapable is already defined as trait Mapable
+...
+[error] ContractTariffService_type1.scala:99: MapType is already defined as case class MapType
+
       <xs:complexType name="map">
         <xs:sequence>
           <xs:element name="entry" type="tns:entry" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:complexType>
+-->
 
       <xs:complexType name="entry" final="extension restriction">
         <xs:complexContent>
@@ -130,6 +137,7 @@
         <xs:sequence/>
       </xs:complexType>
 
+<!-- alexanderfefelov
       <xs:complexType name="sortedMap" final="extension restriction">
         <xs:complexContent>
           <xs:extension base="tns:map">
@@ -137,7 +145,9 @@
           </xs:extension>
         </xs:complexContent>
       </xs:complexType>
+-->
 
+<!-- alexanderfefelov
       <xs:complexType name="linkedMap" final="extension restriction">
         <xs:complexContent>
           <xs:extension base="tns:map">
@@ -145,6 +155,7 @@
           </xs:extension>
         </xs:complexContent>
       </xs:complexType>
+-->
 
       <xs:complexType name="list" final="extension restriction">
         <xs:sequence>
@@ -222,11 +233,13 @@
         <xsc:attribute name="recordCount" type="xsc:int" use="required"/>
       </xsc:complexType>
 
+<!-- alexanderfefelov
       <xsc:complexType name="mapHolder">
         <xsc:sequence>
           <xsc:element name="data" type="ns2:map" minOccurs="0"/>
         </xsc:sequence>
       </xsc:complexType>
+-->
 
       <xsc:complexType name="idTitle">
         <xsc:complexContent>
