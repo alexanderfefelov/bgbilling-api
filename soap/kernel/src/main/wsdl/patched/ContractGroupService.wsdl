@@ -8,7 +8,9 @@
 
       <xs:element name="BGException" type="tns:BGException"/>
 
+<!-- alexanderfefelov
       <xs:element name="contractGroupDelete" type="tns:contractGroupDelete"/>
+-->
 
       <xs:element name="contractGroupDeleteResponse" type="tns:contractGroupDeleteResponse"/>
 
@@ -55,11 +57,18 @@
         </xs:sequence>
       </xs:complexType>
 
+<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
+
+[error] xmlprotocol.scala:16145: type mismatch;
+...
+[error] xmlprotocol.scala:16148: value toSeq is not a member of Any
+
       <xs:complexType name="contractGroupDelete">
         <xs:sequence>
           <xs:element name="ids" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:complexType>
+-->
 
       <xs:complexType name="contractGroupDeleteResponse">
         <xs:sequence/>
@@ -125,9 +134,11 @@
   <message name="contractGroupUpdateResponse">
     <part name="parameters" element="tns:contractGroupUpdateResponse"/>
   </message>
+<!-- alexanderfefelov
   <message name="contractGroupDelete">
     <part name="parameters" element="tns:contractGroupDelete"/>
   </message>
+-->
   <message name="contractGroupDeleteResponse">
     <part name="parameters" element="tns:contractGroupDeleteResponse"/>
   </message>
@@ -147,11 +158,13 @@
       <output wsam:Action="http://service.common.api.contract.kernel.bgbilling.bitel.ru/ContractGroupService/contractGroupUpdateResponse" message="tns:contractGroupUpdateResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.contract.kernel.bgbilling.bitel.ru/ContractGroupService/contractGroupUpdate/Fault/BGException"/>
     </operation>
+<!-- alexanderfefelov
     <operation name="contractGroupDelete">
       <input wsam:Action="http://service.common.api.contract.kernel.bgbilling.bitel.ru/ContractGroupService/contractGroupDeleteRequest" message="tns:contractGroupDelete"/>
       <output wsam:Action="http://service.common.api.contract.kernel.bgbilling.bitel.ru/ContractGroupService/contractGroupDeleteResponse" message="tns:contractGroupDeleteResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.contract.kernel.bgbilling.bitel.ru/ContractGroupService/contractGroupDelete/Fault/BGException"/>
     </operation>
+-->
   </portType>
   <binding name="ContractGroupServiceBinding" type="tns:ContractGroupService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
@@ -191,6 +204,7 @@
         <soap:fault name="BGException" use="literal"/>
       </fault>
     </operation>
+<!-- alexanderfefelov
     <operation name="contractGroupDelete">
       <soap:operation soapAction=""/>
       <input>
@@ -203,6 +217,7 @@
         <soap:fault name="BGException" use="literal"/>
       </fault>
     </operation>
+-->
   </binding>
   <service name="ContractGroupService">
     <port name="ContractGroupService" binding="tns:ContractGroupServiceBinding">
