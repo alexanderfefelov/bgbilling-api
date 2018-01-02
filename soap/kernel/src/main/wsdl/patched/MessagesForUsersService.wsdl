@@ -32,7 +32,9 @@
 
       <xs:element name="getUserIdResponse" type="tns:getUserIdResponse"/>
 
+<!-- alexanderfefelov
       <xs:element name="getUsersInGroup" type="tns:getUsersInGroup"/>
+-->
 
       <xs:element name="getUsersInGroupResponse" type="tns:getUsersInGroupResponse"/>
 
@@ -71,11 +73,18 @@
         <xs:sequence/>
       </xs:complexType>
 
+<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
+
+[error] xmlprotocol.scala:17175: type mismatch;
+...
+[error] xmlprotocol.scala:17178: value toSeq is not a member of Any
+
       <xs:complexType name="getUsersInGroup">
         <xs:sequence>
           <xs:element name="arg0" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:complexType>
+-->
 
       <xs:complexType name="getUsersInGroupResponse">
         <xs:sequence>
@@ -235,9 +244,11 @@
   <message name="updateUserConfigResponse">
     <part name="parameters" element="tns:updateUserConfigResponse"/>
   </message>
+<!-- alexanderfefelov
   <message name="getUsersInGroup">
     <part name="parameters" element="tns:getUsersInGroup"/>
   </message>
+-->
   <message name="getUsersInGroupResponse">
     <part name="parameters" element="tns:getUsersInGroupResponse"/>
   </message>
@@ -283,11 +294,13 @@
       <output wsam:Action="http://common.messages4users.admin.kernel.bgbilling.bitel.ru/MessagesForUsersService/updateUserConfigResponse" message="tns:updateUserConfigResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.messages4users.admin.kernel.bgbilling.bitel.ru/MessagesForUsersService/updateUserConfig/Fault/BGException"/>
     </operation>
+<!-- alexanderfefelov
     <operation name="getUsersInGroup">
       <input wsam:Action="http://common.messages4users.admin.kernel.bgbilling.bitel.ru/MessagesForUsersService/getUsersInGroupRequest" message="tns:getUsersInGroup"/>
       <output wsam:Action="http://common.messages4users.admin.kernel.bgbilling.bitel.ru/MessagesForUsersService/getUsersInGroupResponse" message="tns:getUsersInGroupResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.messages4users.admin.kernel.bgbilling.bitel.ru/MessagesForUsersService/getUsersInGroup/Fault/BGException"/>
     </operation>
+-->
     <operation name="getUserId">
       <input wsam:Action="http://common.messages4users.admin.kernel.bgbilling.bitel.ru/MessagesForUsersService/getUserIdRequest" message="tns:getUserId"/>
       <output wsam:Action="http://common.messages4users.admin.kernel.bgbilling.bitel.ru/MessagesForUsersService/getUserIdResponse" message="tns:getUserIdResponse"/>
@@ -380,6 +393,7 @@
         <soap:fault name="BGException" use="literal"/>
       </fault>
     </operation>
+<!-- alexanderfefelov
     <operation name="getUsersInGroup">
       <soap:operation soapAction=""/>
       <input>
@@ -392,6 +406,7 @@
         <soap:fault name="BGException" use="literal"/>
       </fault>
     </operation>
+-->
     <operation name="getUserId">
       <soap:operation soapAction=""/>
       <input>
