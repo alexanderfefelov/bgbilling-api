@@ -54,7 +54,9 @@
 
       <xs:element name="BGMessageException" type="tns:BGMessageException"/>
 
+<!-- alexanderfefelov
       <xs:element name="cancelLimitChangeTask" type="tns:cancelLimitChangeTask"/>
+-->
 
       <xs:element name="cancelLimitChangeTaskResponse" type="tns:cancelLimitChangeTaskResponse"/>
 
@@ -244,11 +246,18 @@
         </xs:complexContent>
       </xs:complexType>
 
+<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
+
+[error] xmlprotocol.scala:16658: type mismatch;
+...
+[error] xmlprotocol.scala:16661: value toSeq is not a member of Any
+
       <xs:complexType name="cancelLimitChangeTask">
         <xs:sequence>
           <xs:element name="arg0" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:complexType>
+-->
 
       <xs:complexType name="cancelLimitChangeTaskResponse">
         <xs:sequence/>
@@ -303,9 +312,11 @@
   <message name="contractLimitGetResponse">
     <part name="parameters" element="tns:contractLimitGetResponse"/>
   </message>
+<!-- alexanderfefelov
   <message name="cancelLimitChangeTask">
     <part name="parameters" element="tns:cancelLimitChangeTask"/>
   </message>
+-->
   <message name="cancelLimitChangeTaskResponse">
     <part name="parameters" element="tns:cancelLimitChangeTaskResponse"/>
   </message>
@@ -347,12 +358,14 @@
       <output wsam:Action="http://service.common.limit.contract.kernel.bgbilling.bitel.ru/ContractLimitService/contractLimitGetResponse" message="tns:contractLimitGetResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.limit.contract.kernel.bgbilling.bitel.ru/ContractLimitService/contractLimitGet/Fault/BGException"/>
     </operation>
+<!-- alexanderfefelov
     <operation name="cancelLimitChangeTask">
       <input wsam:Action="http://service.common.limit.contract.kernel.bgbilling.bitel.ru/ContractLimitService/cancelLimitChangeTaskRequest" message="tns:cancelLimitChangeTask"/>
       <output wsam:Action="http://service.common.limit.contract.kernel.bgbilling.bitel.ru/ContractLimitService/cancelLimitChangeTaskResponse" message="tns:cancelLimitChangeTaskResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.limit.contract.kernel.bgbilling.bitel.ru/ContractLimitService/cancelLimitChangeTask/Fault/BGException"/>
       <fault message="tns:BGMessageException" name="BGMessageException" wsam:Action="http://service.common.limit.contract.kernel.bgbilling.bitel.ru/ContractLimitService/cancelLimitChangeTask/Fault/BGMessageException"/>
     </operation>
+-->
   </portType>
   <binding name="ContractLimitServiceBinding" type="tns:ContractLimitService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
@@ -446,6 +459,7 @@
         <soap:fault name="BGException" use="literal"/>
       </fault>
     </operation>
+<!-- alexanderfefelov
     <operation name="cancelLimitChangeTask">
       <soap:operation soapAction=""/>
       <input>
@@ -461,6 +475,7 @@
         <soap:fault name="BGMessageException" use="literal"/>
       </fault>
     </operation>
+-->
   </binding>
   <service name="ContractLimitService">
     <port name="ContractLimitService" binding="tns:ContractLimitServiceBinding">
