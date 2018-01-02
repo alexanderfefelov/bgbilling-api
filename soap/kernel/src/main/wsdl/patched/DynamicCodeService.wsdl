@@ -11,7 +11,9 @@
 
       <xs:element name="compileResponse" type="tns:compileResponse"/>
 
+<!-- alexanderfefelov
       <xs:element name="deleteClasses" type="tns:deleteClasses"/>
+-->
 
       <xs:element name="deleteClassesResponse" type="tns:deleteClassesResponse"/>
 
@@ -135,11 +137,18 @@
         </xs:sequence>
       </xs:complexType>
 
+<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
+
+[error] xmlprotocol.scala:17099: type mismatch;
+...
+[error] xmlprotocol.scala:17102: value toSeq is not a member of Any
+
       <xs:complexType name="deleteClasses">
         <xs:sequence>
           <xs:element name="arg0" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:complexType>
+-->
 
       <xs:complexType name="deleteClassesResponse">
         <xs:sequence>
@@ -281,9 +290,11 @@
   <message name="getDynamicClassesByInterfaceResponse">
     <part name="parameters" element="tns:getDynamicClassesByInterfaceResponse"/>
   </message>
+<!-- alexanderfefelov
   <message name="deleteClasses">
     <part name="parameters" element="tns:deleteClasses"/>
   </message>
+-->
   <message name="deleteClassesResponse">
     <part name="parameters" element="tns:deleteClassesResponse"/>
   </message>
@@ -342,11 +353,13 @@
       <output wsam:Action="http://common.dynamic.kernel.bgbilling.bitel.ru/DynamicCodeService/getDynamicClassesByInterfaceResponse" message="tns:getDynamicClassesByInterfaceResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.dynamic.kernel.bgbilling.bitel.ru/DynamicCodeService/getDynamicClassesByInterface/Fault/BGException"/>
     </operation>
+<!-- alexanderfefelov
     <operation name="deleteClasses">
       <input wsam:Action="http://common.dynamic.kernel.bgbilling.bitel.ru/DynamicCodeService/deleteClassesRequest" message="tns:deleteClasses"/>
       <output wsam:Action="http://common.dynamic.kernel.bgbilling.bitel.ru/DynamicCodeService/deleteClassesResponse" message="tns:deleteClassesResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.dynamic.kernel.bgbilling.bitel.ru/DynamicCodeService/deleteClasses/Fault/BGException"/>
     </operation>
+-->
     <operation name="generateCode">
       <input wsam:Action="http://common.dynamic.kernel.bgbilling.bitel.ru/DynamicCodeService/generateCodeRequest" message="tns:generateCode"/>
       <output wsam:Action="http://common.dynamic.kernel.bgbilling.bitel.ru/DynamicCodeService/generateCodeResponse" message="tns:generateCodeResponse"/>
@@ -442,6 +455,7 @@
         <soap:fault name="BGException" use="literal"/>
       </fault>
     </operation>
+<!-- alexanderfefelov
     <operation name="deleteClasses">
       <soap:operation soapAction=""/>
       <input>
@@ -454,6 +468,7 @@
         <soap:fault name="BGException" use="literal"/>
       </fault>
     </operation>
+-->
     <operation name="generateCode">
       <soap:operation soapAction=""/>
       <input>
