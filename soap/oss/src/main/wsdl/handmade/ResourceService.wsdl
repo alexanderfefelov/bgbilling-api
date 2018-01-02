@@ -31,7 +31,6 @@
             <xs:element name="ipCategoryUpdateResponse" type="tns:ipCategoryUpdateResponse"/>
             <xs:element name="ipResourceDelete" type="tns:ipResourceDelete"/>
             <xs:element name="ipResourceDeleteResponse" type="tns:ipResourceDeleteResponse"/>
-            <xs:element name="ipResourceList" type="tns:ipResourceList"/>
             <xs:element name="ipResourceListResponse" type="tns:ipResourceListResponse"/>
             <xs:element name="ipResourceSubscribe" type="tns:ipResourceSubscribe"/>
             <xs:element name="ipResourceSubscribeResponse" type="tns:ipResourceSubscribeResponse"/>
@@ -311,11 +310,6 @@
             </xs:complexType>
             <xs:complexType name="vlanResourceDeleteResponse">
                 <xs:sequence/>
-            </xs:complexType>
-            <xs:complexType name="ipResourceList">
-                <xs:sequence>
-                    <xs:element name="categoryIds" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
-                </xs:sequence>
             </xs:complexType>
             <xs:complexType name="ipResourceListResponse">
                 <xs:sequence>
@@ -680,10 +674,6 @@
         <part name="parameters" element="tns:ipCategoryListResponse">
         </part>
     </message>
-    <message name="ipResourceList">
-        <part name="parameters" element="tns:ipResourceList">
-        </part>
-    </message>
     <message name="ipResourceListResponse">
         <part name="parameters" element="tns:ipResourceListResponse">
         </part>
@@ -926,17 +916,6 @@
             </output>
             <fault message="tns:BGException" name="BGException"
                    wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipCategoryList/Fault/BGException">
-            </fault>
-        </operation>
-        <operation name="ipResourceList">
-            <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceListRequest"
-                   message="tns:ipResourceList">
-            </input>
-            <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceListResponse"
-                    message="tns:ipResourceListResponse">
-            </output>
-            <fault message="tns:BGException" name="BGException"
-                   wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceList/Fault/BGException">
             </fault>
         </operation>
         <operation name="ipCategoryUpdate">
@@ -1268,22 +1247,6 @@
             </fault>
         </operation>
         <operation name="ipCategoryList">
-            <soap:operation soapAction="">
-            </soap:operation>
-            <input>
-                <soap:body use="literal">
-                </soap:body>
-            </input>
-            <output>
-                <soap:body use="literal">
-                </soap:body>
-            </output>
-            <fault name="BGException">
-                <soap:fault name="BGException" use="literal">
-                </soap:fault>
-            </fault>
-        </operation>
-        <operation name="ipResourceList">
             <soap:operation soapAction="">
             </soap:operation>
             <input>
