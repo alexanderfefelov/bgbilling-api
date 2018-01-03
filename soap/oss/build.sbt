@@ -12,10 +12,21 @@ libraryDependencies ++= Seq(
   "com.github.alexanderfefelov" %% "bgbilling-api-soap-util" % "0.1-SNAPSHOT"
 )
 
+val targetPackage = "com.github.alexanderfefelov.bgbilling.api.soap.oss"
+
 scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV
-scalaxbPackageName in (Compile, scalaxb) := "com.github.alexanderfefelov.bgbilling.api.soap.oss"
+scalaxbPackageName in (Compile, scalaxb) := targetPackage
+
+buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion,
+  "builtBy" -> {System.getProperty("user.name")},
+  "builtOn" -> {java.net.InetAddress.getLocalHost.getHostName},
+  "builtAt" -> {new java.util.Date()},
+  "builtAtMillis" -> {System.currentTimeMillis()}
+)
+buildInfoPackage := targetPackage
 
 lazy val root = (project in file("."))
   .enablePlugins(ScalaxbPlugin)
+  .enablePlugins(BuildInfoPlugin)
 
 doc in Compile := target.map(_ / "none").value

@@ -7,6 +7,17 @@ libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.1"
 )
 
-lazy val root = project in file(".")
+val targetPackage = "com.github.alexanderfefelov.bgbilling.api.soap.util"
+
+buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion,
+  "builtBy" -> {System.getProperty("user.name")},
+  "builtOn" -> {java.net.InetAddress.getLocalHost.getHostName},
+  "builtAt" -> {new java.util.Date()},
+  "builtAtMillis" -> {System.currentTimeMillis()}
+)
+buildInfoPackage := targetPackage
+
+lazy val root = (project in file("."))
+  .enablePlugins(BuildInfoPlugin)
 
 doc in Compile := target.map(_ / "none").value
