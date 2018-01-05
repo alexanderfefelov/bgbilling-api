@@ -1,5 +1,9 @@
 lazy val root = (project in file("."))
   .aggregate(soap)
+  .settings(
+    publishLocal := {},
+    publish := {}
+  )
 
 lazy val commonSettings = Seq(
   organization := "com.github.alexanderfefelov",
@@ -16,6 +20,10 @@ lazy val commonSettings = Seq(
 
 lazy val soap = (project in file("soap"))
   .aggregate(bill, card, inet, kernel, moneta, oss, qiwi, rscm, subscription, util)
+  .settings(
+    publishLocal := {},
+    publish := {}
+  )
 
 lazy val soapTargetPackage = "com.github.alexanderfefelov.bgbilling.api.soap"
 
