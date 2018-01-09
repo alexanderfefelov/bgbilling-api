@@ -113,7 +113,7 @@ object AddressQuarter {
       rs.long("id"),
       rs.string("title"),
       rs.longOpt("gid"),
-      rs.long("cityId")
+      rs.long("cityid")
     )
 
 }
