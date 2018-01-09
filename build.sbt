@@ -79,8 +79,7 @@ lazy val soapBill = (project in file("soap/bill"))
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
     scalaxbPackageName in (Compile, scalaxb) := soapBillTargetPackage,
-    buildInfoPackage := soapBillTargetPackage,
-    libraryDependencies ++= scalaxbLibraryDependencies
+    buildInfoPackage := soapBillTargetPackage
   )
 
 lazy val soapCardTargetPackage = soapTargetPackage + ".card"
@@ -93,8 +92,7 @@ lazy val soapCard = (project in file("soap/card"))
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
     scalaxbPackageName in (Compile, scalaxb) := soapCardTargetPackage,
-    buildInfoPackage := soapCardTargetPackage,
-    libraryDependencies ++= scalaxbLibraryDependencies
+    buildInfoPackage := soapCardTargetPackage
   )
 
 lazy val soapInetTargetPackage = soapTargetPackage + ".inet"
@@ -107,8 +105,7 @@ lazy val soapInet = (project in file("soap/inet"))
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
     scalaxbPackageName in (Compile, scalaxb) := soapInetTargetPackage,
-    buildInfoPackage := soapInetTargetPackage,
-    libraryDependencies ++= scalaxbLibraryDependencies
+    buildInfoPackage := soapInetTargetPackage
   )
 
 lazy val soapKernelTargetPackage = soapTargetPackage + ".kernel"
@@ -135,8 +132,7 @@ lazy val soapMoneta = (project in file("soap/moneta"))
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
     scalaxbPackageName in (Compile, scalaxb) := soapMonetaTargetPackage,
-    buildInfoPackage := soapMonetaTargetPackage,
-    libraryDependencies ++= scalaxbLibraryDependencies
+    buildInfoPackage := soapMonetaTargetPackage
   )
 
 lazy val soapOssTargetPackage = soapTargetPackage + ".oss"
@@ -149,8 +145,7 @@ lazy val soapOss = (project in file("soap/oss"))
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
     scalaxbPackageName in (Compile, scalaxb) := soapOssTargetPackage,
-    buildInfoPackage := soapOssTargetPackage,
-    libraryDependencies ++= scalaxbLibraryDependencies
+    buildInfoPackage := soapOssTargetPackage
   )
 
 lazy val soapQiwiTargetPackage = soapTargetPackage + ".qiwi"
@@ -163,8 +158,7 @@ lazy val soapQiwi = (project in file("soap/qiwi"))
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
     scalaxbPackageName in (Compile, scalaxb) := soapQiwiTargetPackage,
-    buildInfoPackage := soapQiwiTargetPackage,
-    libraryDependencies ++= scalaxbLibraryDependencies
+    buildInfoPackage := soapQiwiTargetPackage
   )
 
 lazy val soapRscmTargetPackage = soapTargetPackage + ".rscm"
@@ -177,8 +171,7 @@ lazy val soapRscm = (project in file("soap/rscm"))
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
     scalaxbPackageName in (Compile, scalaxb) := soapRscmTargetPackage,
-    buildInfoPackage := soapRscmTargetPackage,
-    libraryDependencies ++= scalaxbLibraryDependencies
+    buildInfoPackage := soapRscmTargetPackage
   )
 
 lazy val soapSubscriptionTargetPackage = soapTargetPackage + ".subscription"
@@ -191,8 +184,7 @@ lazy val soapSubscription = (project in file("soap/subscription"))
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
     scalaxbPackageName in (Compile, scalaxb) := soapSubscriptionTargetPackage,
-    buildInfoPackage := soapSubscriptionTargetPackage,
-    libraryDependencies ++= scalaxbLibraryDependencies
+    buildInfoPackage := soapSubscriptionTargetPackage
   )
 
 lazy val soapUtilTargetPackage = soapTargetPackage + ".util"
