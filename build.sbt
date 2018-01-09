@@ -71,7 +71,7 @@ lazy val scalaxbLibraryDependencies = Seq(
 
 lazy val soapBillTargetPackage = soapTargetPackage + ".bill"
 lazy val soapBill = (project in file("soap/bill"))
-  .dependsOn(soapUtil)
+  .dependsOn(soapKernel)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
@@ -85,7 +85,7 @@ lazy val soapBill = (project in file("soap/bill"))
 
 lazy val soapCardTargetPackage = soapTargetPackage + ".card"
 lazy val soapCard = (project in file("soap/card"))
-  .dependsOn(soapUtil)
+  .dependsOn(soapKernel)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
@@ -99,7 +99,7 @@ lazy val soapCard = (project in file("soap/card"))
 
 lazy val soapInetTargetPackage = soapTargetPackage + ".inet"
 lazy val soapInet = (project in file("soap/inet"))
-  .dependsOn(soapUtil)
+  .dependsOn(soapKernel)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
@@ -127,7 +127,7 @@ lazy val soapKernel = (project in file("soap/kernel"))
 
 lazy val soapMonetaTargetPackage = soapTargetPackage + ".moneta"
 lazy val soapMoneta = (project in file("soap/moneta"))
-  .dependsOn(soapUtil)
+  .dependsOn(soapKernel)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
@@ -141,7 +141,7 @@ lazy val soapMoneta = (project in file("soap/moneta"))
 
 lazy val soapOssTargetPackage = soapTargetPackage + ".oss"
 lazy val soapOss = (project in file("soap/oss"))
-  .dependsOn(soapUtil)
+  .dependsOn(soapKernel)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
@@ -155,7 +155,7 @@ lazy val soapOss = (project in file("soap/oss"))
 
 lazy val soapQiwiTargetPackage = soapTargetPackage + ".qiwi"
 lazy val soapQiwi = (project in file("soap/qiwi"))
-  .dependsOn(soapUtil)
+  .dependsOn(soapKernel)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
@@ -169,7 +169,7 @@ lazy val soapQiwi = (project in file("soap/qiwi"))
 
 lazy val soapRscmTargetPackage = soapTargetPackage + ".rscm"
 lazy val soapRscm = (project in file("soap/rscm"))
-  .dependsOn(soapUtil)
+  .dependsOn(soapKernel)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
@@ -183,7 +183,7 @@ lazy val soapRscm = (project in file("soap/rscm"))
 
 lazy val soapSubscriptionTargetPackage = soapTargetPackage + ".subscription"
 lazy val soapSubscription = (project in file("soap/subscription"))
-  .dependsOn(soapUtil)
+  .dependsOn(soapKernel)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
