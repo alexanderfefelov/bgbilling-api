@@ -117,3 +117,24 @@ object AddressQuarter {
     )
 
 }
+
+case class AddressStreet (
+
+  id: Long,
+  title: String,
+  pIndex: String,
+  cityid: Long
+
+)
+
+object AddressStreet {
+
+  val * = (rs: WrappedResultSet) =>
+    AddressStreet(
+      rs.long("id"),
+      rs.string("title"),
+      rs.string("p_index"),
+      rs.long("cityid")
+    )
+
+}

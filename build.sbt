@@ -19,7 +19,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val db = (project in file("db"))
-  .aggregate(dbOss)
+  .aggregate(dbOss, dbUtil)
   .settings(
     publishLocal := {},
     publish := {}
