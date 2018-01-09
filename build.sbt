@@ -1,5 +1,5 @@
 lazy val root = (project in file("."))
-  .aggregate(soap)
+  .aggregate(db, soap)
   .settings(
     publishLocal := {},
     publish := {}
@@ -18,8 +18,42 @@ lazy val commonSettings = Seq(
   )
 )
 
+lazy val db = (project in file("db"))
+  .aggregate(dbOss)
+  .settings(
+    publishLocal := {},
+    publish := {}
+  )
+
+lazy val dbTargetPackage = "com.github.alexanderfefelov.bgbilling.api.db"
+
+lazy val dbOssTargetPackage = dbTargetPackage + ".oss"
+lazy val dbOss = (project in file("db/oss"))
+  .dependsOn(dbUtil)
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "bgbilling-api-db-oss",
+    commonSettings,
+    buildInfoPackage := dbOssTargetPackage
+  )
+
+lazy val dbUtilTargetPackage = dbTargetPackage + ".util"
+lazy val dbUtil = (project in file("db/util"))
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "bgbilling-api-db-util",
+    commonSettings,
+    buildInfoPackage := soapUtilTargetPackage,
+    libraryDependencies ++= Seq(
+      "org.scalikejdbc" %% "scalikejdbc" % "3.1.0",
+      "org.scalikejdbc" %% "scalikejdbc-config" % "3.1.0",
+      "mysql" % "mysql-connector-java" % "5.1.45",
+      "ch.qos.logback" % "logback-classic" % "1.2.3"
+    )
+  )
+
 lazy val soap = (project in file("soap"))
-  .aggregate(bill, card, inet, kernel, moneta, oss, qiwi, rscm, subscription, util)
+  .aggregate(soapBill, soapCard, soapInet, soapKernel, soapMoneta, soapOss, soapQiwi, soapRscm, soapSubscription, soapUtil)
   .settings(
     publishLocal := {},
     publish := {}
@@ -35,131 +69,139 @@ lazy val scalaxbLibraryDependencies = Seq(
   "net.databinder.dispatch" %% "dispatch-core" % dispatchV
 )
 
-lazy val billTargetPackage = soapTargetPackage + ".bill"
-lazy val bill = (project in file("soap/bill"))
+lazy val soapBillTargetPackage = soapTargetPackage + ".bill"
+lazy val soapBill = (project in file("soap/bill"))
+  .dependsOn(soapUtil)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-bill",
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
-    scalaxbPackageName in (Compile, scalaxb) := billTargetPackage,
-    buildInfoPackage := billTargetPackage,
+    scalaxbPackageName in (Compile, scalaxb) := soapBillTargetPackage,
+    buildInfoPackage := soapBillTargetPackage,
     libraryDependencies ++= scalaxbLibraryDependencies
   )
 
-lazy val cardTargetPackage = soapTargetPackage + ".card"
-lazy val card = (project in file("soap/card"))
+lazy val soapCardTargetPackage = soapTargetPackage + ".card"
+lazy val soapCard = (project in file("soap/card"))
+  .dependsOn(soapUtil)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-card",
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
-    scalaxbPackageName in (Compile, scalaxb) := cardTargetPackage,
-    buildInfoPackage := cardTargetPackage,
+    scalaxbPackageName in (Compile, scalaxb) := soapCardTargetPackage,
+    buildInfoPackage := soapCardTargetPackage,
     libraryDependencies ++= scalaxbLibraryDependencies
   )
 
-lazy val inetTargetPackage = soapTargetPackage + ".inet"
-lazy val inet = (project in file("soap/inet"))
+lazy val soapInetTargetPackage = soapTargetPackage + ".inet"
+lazy val soapInet = (project in file("soap/inet"))
+  .dependsOn(soapUtil)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-inet",
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
-    scalaxbPackageName in (Compile, scalaxb) := inetTargetPackage,
-    buildInfoPackage := inetTargetPackage,
+    scalaxbPackageName in (Compile, scalaxb) := soapInetTargetPackage,
+    buildInfoPackage := soapInetTargetPackage,
     libraryDependencies ++= scalaxbLibraryDependencies
   )
 
-lazy val kernelTargetPackage = soapTargetPackage + ".kernel"
-lazy val kernel = (project in file("soap/kernel"))
-  .dependsOn(util)
+lazy val soapKernelTargetPackage = soapTargetPackage + ".kernel"
+lazy val soapKernel = (project in file("soap/kernel"))
+  .dependsOn(soapUtil)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-kernel",
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
-    scalaxbPackageName in (Compile, scalaxb) := kernelTargetPackage,
-    buildInfoPackage := kernelTargetPackage,
+    scalaxbPackageName in (Compile, scalaxb) := soapKernelTargetPackage,
+    buildInfoPackage := soapKernelTargetPackage,
     libraryDependencies ++= scalaxbLibraryDependencies
   )
 
-lazy val monetaTargetPackage = soapTargetPackage + ".moneta"
-lazy val moneta = (project in file("soap/moneta"))
+lazy val soapMonetaTargetPackage = soapTargetPackage + ".moneta"
+lazy val soapMoneta = (project in file("soap/moneta"))
+  .dependsOn(soapUtil)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-moneta",
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
-    scalaxbPackageName in (Compile, scalaxb) := monetaTargetPackage,
-    buildInfoPackage := monetaTargetPackage,
+    scalaxbPackageName in (Compile, scalaxb) := soapMonetaTargetPackage,
+    buildInfoPackage := soapMonetaTargetPackage,
     libraryDependencies ++= scalaxbLibraryDependencies
   )
 
-lazy val ossTargetPackage = soapTargetPackage + ".oss"
-lazy val oss = (project in file("soap/oss"))
+lazy val soapOssTargetPackage = soapTargetPackage + ".oss"
+lazy val soapOss = (project in file("soap/oss"))
+  .dependsOn(soapUtil)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-oss",
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
-    scalaxbPackageName in (Compile, scalaxb) := ossTargetPackage,
-    buildInfoPackage := ossTargetPackage,
+    scalaxbPackageName in (Compile, scalaxb) := soapOssTargetPackage,
+    buildInfoPackage := soapOssTargetPackage,
     libraryDependencies ++= scalaxbLibraryDependencies
   )
 
-lazy val qiwiTargetPackage = soapTargetPackage + ".qiwi"
-lazy val qiwi = (project in file("soap/qiwi"))
+lazy val soapQiwiTargetPackage = soapTargetPackage + ".qiwi"
+lazy val soapQiwi = (project in file("soap/qiwi"))
+  .dependsOn(soapUtil)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-qiwi",
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
-    scalaxbPackageName in (Compile, scalaxb) := qiwiTargetPackage,
-    buildInfoPackage := qiwiTargetPackage,
+    scalaxbPackageName in (Compile, scalaxb) := soapQiwiTargetPackage,
+    buildInfoPackage := soapQiwiTargetPackage,
     libraryDependencies ++= scalaxbLibraryDependencies
   )
 
-lazy val rscmTargetPackage = soapTargetPackage + ".rscm"
-lazy val rscm = (project in file("soap/rscm"))
+lazy val soapRscmTargetPackage = soapTargetPackage + ".rscm"
+lazy val soapRscm = (project in file("soap/rscm"))
+  .dependsOn(soapUtil)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-rscm",
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
-    scalaxbPackageName in (Compile, scalaxb) := rscmTargetPackage,
-    buildInfoPackage := rscmTargetPackage,
+    scalaxbPackageName in (Compile, scalaxb) := soapRscmTargetPackage,
+    buildInfoPackage := soapRscmTargetPackage,
     libraryDependencies ++= scalaxbLibraryDependencies
   )
 
-lazy val subscriptionTargetPackage = soapTargetPackage + ".subscription"
-lazy val subscription = (project in file("soap/subscription"))
+lazy val soapSubscriptionTargetPackage = soapTargetPackage + ".subscription"
+lazy val soapSubscription = (project in file("soap/subscription"))
+  .dependsOn(soapUtil)
   .enablePlugins(ScalaxbPlugin)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-subscription",
     commonSettings,
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
-    scalaxbPackageName in (Compile, scalaxb) := subscriptionTargetPackage,
-    buildInfoPackage := subscriptionTargetPackage,
+    scalaxbPackageName in (Compile, scalaxb) := soapSubscriptionTargetPackage,
+    buildInfoPackage := soapSubscriptionTargetPackage,
     libraryDependencies ++= scalaxbLibraryDependencies
   )
 
-lazy val utilTargetPackage = soapTargetPackage + ".util"
-lazy val util = (project in file("soap/util"))
+lazy val soapUtilTargetPackage = soapTargetPackage + ".util"
+lazy val soapUtil = (project in file("soap/util"))
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-util",
     commonSettings,
-    buildInfoPackage := billTargetPackage,
+    buildInfoPackage := soapUtilTargetPackage,
     libraryDependencies ++= Seq(
       "com.typesafe" % "config" % "1.3.1"
     )
