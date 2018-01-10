@@ -123,7 +123,7 @@ case class AddressStreet (
   id: Long,
   title: String,
   pIndex: String,
-  cityid: Long
+  cityId: Long
 
 )
 
