@@ -24,7 +24,9 @@ object AddressStreet extends SQLSyntaxSupport[AddressStreet] {
   def apply(as: SyntaxProvider[AddressStreet])(rs: WrappedResultSet): AddressStreet = autoConstruct(rs, as)
   def apply(as: ResultName[AddressStreet])(rs: WrappedResultSet): AddressStreet = autoConstruct(rs, as)
 
-  val as = AddressStreet.syntax("as_")
+  val as = AddressStreet.syntax("as_") /* alexanderfefelov
+                                          as is a reserved word in MySQL */
+
 
   override val autoSession = AutoSession
 
