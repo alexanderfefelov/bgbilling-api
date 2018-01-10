@@ -57,6 +57,7 @@ lazy val dbUtil = (project in file("db/util"))
     libraryDependencies ++= Seq(
       "org.scalikejdbc" %% "scalikejdbc" % "3.1.0",
       "org.scalikejdbc" %% "scalikejdbc-config" % "3.1.0",
+      "org.scalikejdbc" %% "scalikejdbc-syntax-support-macro" % "3.1.0",
       "mysql" % "mysql-connector-java" % "5.1.45",
       "ch.qos.logback" % "logback-classic" % "1.2.3"
     )
