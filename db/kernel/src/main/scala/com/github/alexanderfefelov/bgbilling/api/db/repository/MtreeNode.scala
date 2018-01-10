@@ -23,15 +23,8 @@ object MtreeNode extends SQLSyntaxSupport[MtreeNode] {
 
   override val columns = Seq("id", "parent_node", "mtree_id", "type", "data", "pos")
 
-  def apply(mn: SyntaxProvider[MtreeNode])(rs: WrappedResultSet): MtreeNode = apply(mn.resultName)(rs)
-  def apply(mn: ResultName[MtreeNode])(rs: WrappedResultSet): MtreeNode = new MtreeNode(
-    id = rs.get(mn.id),
-    parentNode = rs.get(mn.parentNode),
-    mtreeId = rs.get(mn.mtreeId),
-    `type` = rs.get(mn.`type`),
-    data = rs.get(mn.data),
-    pos = rs.get(mn.pos)
-  )
+  def apply(mn: SyntaxProvider[MtreeNode])(rs: WrappedResultSet): MtreeNode = autoConstruct(rs, mn)
+  def apply(mn: ResultName[MtreeNode])(rs: WrappedResultSet): MtreeNode = autoConstruct(rs, mn)
 
   val mn = MtreeNode.syntax("mn")
 

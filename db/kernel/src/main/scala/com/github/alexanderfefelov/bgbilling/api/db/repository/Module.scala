@@ -21,13 +21,8 @@ object Module extends SQLSyntaxSupport[Module] {
 
   override val columns = Seq("id", "title", "name", "config_id")
 
-  def apply(m: SyntaxProvider[Module])(rs: WrappedResultSet): Module = apply(m.resultName)(rs)
-  def apply(m: ResultName[Module])(rs: WrappedResultSet): Module = new Module(
-    id = rs.get(m.id),
-    title = rs.get(m.title),
-    name = rs.get(m.name),
-    configId = rs.get(m.configId)
-  )
+  def apply(m: SyntaxProvider[Module])(rs: WrappedResultSet): Module = autoConstruct(rs, m)
+  def apply(m: ResultName[Module])(rs: WrappedResultSet): Module = autoConstruct(rs, m)
 
   val m = Module.syntax("m")
 

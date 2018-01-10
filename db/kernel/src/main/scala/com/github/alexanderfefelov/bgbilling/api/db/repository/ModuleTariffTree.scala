@@ -22,14 +22,8 @@ object ModuleTariffTree extends SQLSyntaxSupport[ModuleTariffTree] {
 
   override val columns = Seq("id", "mid", "tree_id", "parent_tree", "lm")
 
-  def apply(mtt: SyntaxProvider[ModuleTariffTree])(rs: WrappedResultSet): ModuleTariffTree = apply(mtt.resultName)(rs)
-  def apply(mtt: ResultName[ModuleTariffTree])(rs: WrappedResultSet): ModuleTariffTree = new ModuleTariffTree(
-    id = rs.get(mtt.id),
-    mid = rs.get(mtt.mid),
-    treeId = rs.get(mtt.treeId),
-    parentTree = rs.get(mtt.parentTree),
-    lm = rs.get(mtt.lm)
-  )
+  def apply(mtt: SyntaxProvider[ModuleTariffTree])(rs: WrappedResultSet): ModuleTariffTree = autoConstruct(rs, mtt)
+  def apply(mtt: ResultName[ModuleTariffTree])(rs: WrappedResultSet): ModuleTariffTree = autoConstruct(rs, mtt)
 
   val mtt = ModuleTariffTree.syntax("mtt")
 
