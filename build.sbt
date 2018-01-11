@@ -1,5 +1,19 @@
+name := "bgbilling-api"
+organization := "com.github.alexanderfefelov"
+
+lazy val scalaV = "2.11.12"
+
+lazy val dispatchV = "0.11.3"
+lazy val logbackClassicV = "1.2.3"
+lazy val mysqlConnectorJavaV = "5.1.45"
+lazy val scalaParserCombinatorsV = "1.0.6"
+lazy val scalaXmlV = "1.0.6"
+lazy val scalikejdbcV = "3.1.0"
+lazy val scalikejdbcSyntaxSupportMacro = scalikejdbcV
+lazy val typesafeConfigV = "1.3.1"
+
 lazy val root = (project in file("."))
-  .aggregate(db, soap)
+  .aggregate(db, soap, util)
   .settings(
     publishLocal := {},
     publish := {}
@@ -7,7 +21,7 @@ lazy val root = (project in file("."))
 
 lazy val commonSettings = Seq(
   organization := "com.github.alexanderfefelov",
-  scalaVersion := "2.11.12",
+  scalaVersion := scalaV,
   version := "0.1.0-SNAPSHOT",
   doc in Compile := target.map(_ / "none").value,
   buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion,
@@ -49,17 +63,17 @@ lazy val dbOss = (project in file("db/oss"))
 
 lazy val dbUtilTargetPackage = dbTargetPackage + ".util"
 lazy val dbUtil = (project in file("db/util"))
+  .dependsOn(util)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-db-util",
     commonSettings,
     buildInfoPackage := soapUtilTargetPackage,
     libraryDependencies ++= Seq(
-      "org.scalikejdbc" %% "scalikejdbc" % "3.1.0",
-      "org.scalikejdbc" %% "scalikejdbc-config" % "3.1.0",
-      "org.scalikejdbc" %% "scalikejdbc-syntax-support-macro" % "3.1.0",
-      "mysql" % "mysql-connector-java" % "5.1.45",
-      "ch.qos.logback" % "logback-classic" % "1.2.3"
+      "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcV,
+      "org.scalikejdbc" %% "scalikejdbc-syntax-support-macro" % scalikejdbcSyntaxSupportMacro,
+      "mysql" % "mysql-connector-java" % mysqlConnectorJavaV,
+      "ch.qos.logback" % "logback-classic" % logbackClassicV
     )
   )
 
@@ -72,11 +86,9 @@ lazy val soap = (project in file("soap"))
 
 lazy val soapTargetPackage = "com.github.alexanderfefelov.bgbilling.api.soap"
 
-lazy val dispatchV = "0.11.3"
-
 lazy val scalaxbLibraryDependencies = Seq(
-  "org.scala-lang.modules" %% "scala-xml" % "1.0.6",
-  "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.6",
+  "org.scala-lang.modules" %% "scala-xml" % scalaXmlV,
+  "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsV,
   "net.databinder.dispatch" %% "dispatch-core" % dispatchV
 )
 
@@ -200,12 +212,25 @@ lazy val soapSubscription = (project in file("soap/subscription"))
 
 lazy val soapUtilTargetPackage = soapTargetPackage + ".util"
 lazy val soapUtil = (project in file("soap/util"))
+  .dependsOn(util)
   .enablePlugins(BuildInfoPlugin)
   .settings(
     name := "bgbilling-api-soap-util",
     commonSettings,
     buildInfoPackage := soapUtilTargetPackage,
     libraryDependencies ++= Seq(
-      "com.typesafe" % "config" % "1.3.1"
+      "com.typesafe" % "config" % typesafeConfigV
+    )
+  )
+
+lazy val utilTargetPackage = "com.github.alexanderfefelov.bgbilling.api.util"
+lazy val util = (project in file("util"))
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "bgbilling-api-util",
+    commonSettings,
+    buildInfoPackage := utilTargetPackage,
+    libraryDependencies ++= Seq(
+      "com.typesafe" % "config" % typesafeConfigV
     )
   )

@@ -25,7 +25,8 @@ object AddressStreet extends SQLSyntaxSupport[AddressStreet] {
   def apply(as: ResultName[AddressStreet])(rs: WrappedResultSet): AddressStreet = autoConstruct(rs, as)
 
   val as = AddressStreet.syntax("as_") /* alexanderfefelov
-                                          as is a reserved word in MySQL */
+                                          as is a reserved word in MySQL
+                                          https://github.com/scalikejdbc/scalikejdbc/issues/810 */
 
 
   override val autoSession = AutoSession

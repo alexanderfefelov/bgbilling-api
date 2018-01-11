@@ -1,14 +1,14 @@
 import com.github.alexanderfefelov.bgbilling.api.soap.kernel._
 import com.github.alexanderfefelov.bgbilling.api.soap.scalaxb._
-import com.github.alexanderfefelov.bgbilling.api.soap.util.BgBillingApiSoapConfig
+import com.github.alexanderfefelov.bgbilling.api.soap.util._
 import scalaxb._
 
 import scala.util.{Failure, Success}
 
 object Main extends App {
 
-  class ContractServiceCake extends ContractServiceBindings with Soap11ClientsWithAuthHeaderAsync with DispatchHttpClientsAsync with BgBillingApiSoapConfig {
-    override def baseAddress = new java.net.URI(serviceBaseAddress("ContractService"))
+  class ContractServiceCake extends ContractServiceBindings with Soap11ClientsWithAuthHeaderAsync with DispatchHttpClientsAsync with ApiSoapConfig {
+    override def baseAddress = new java.net.URI(soapServiceBaseAddress("ContractService"))
   }
 
   val cake = new ContractServiceCake
