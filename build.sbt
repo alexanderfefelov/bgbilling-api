@@ -33,7 +33,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val db = (project in file("db"))
-  .aggregate(dbBill, dbInet, dbKernel, dbMoneta, dbOss, dbQiwi, dbRscm, dbUtil)
+  .aggregate(dbBill, dbInet, dbKernel, dbMoneta, dbOss, dbQiwi, dbRscm, dbSubscription, dbUtil)
   .settings(
     publishLocal := {},
     publish := {}
@@ -109,6 +109,16 @@ lazy val dbRscm = (project in file("db/rscm"))
     name := "bgbilling-api-db-rscm",
     commonSettings,
     buildInfoPackage := dbRscmTargetPackage
+  )
+
+lazy val dbSubscriptionTargetPackage = dbTargetPackage + ".subscription"
+lazy val dbSubscription = (project in file("db/subscription"))
+  .dependsOn(dbUtil)
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "bgbilling-api-db-subscription",
+    commonSettings,
+    buildInfoPackage := dbSubscriptionTargetPackage
   )
 
 lazy val dbUtilTargetPackage = dbTargetPackage + ".util"
