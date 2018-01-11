@@ -33,7 +33,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val db = (project in file("db"))
-  .aggregate(dbBill, dbCard, dbInet, dbKernel, dbMoneta, dbOss, dbQiwi, dbRscm, dbSubscription, dbUtil)
+  .aggregate(dbBill, dbBonus, dbCard, dbInet, dbKernel, dbMoneta, dbOss, dbQiwi, dbRscm, dbSubscription, dbUtil)
   .settings(
     publishLocal := {},
     publish := {}
@@ -49,6 +49,16 @@ lazy val dbBill = (project in file("db/bill"))
     name := "bgbilling-api-db-bill",
     commonSettings,
     buildInfoPackage := dbBillTargetPackage
+  )
+
+lazy val dbBonusTargetPackage = dbTargetPackage + ".bonus"
+lazy val dbBonus = (project in file("db/bonus"))
+  .dependsOn(dbUtil)
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "bgbilling-api-db-bonus",
+    commonSettings,
+    buildInfoPackage := dbBonusTargetPackage
   )
 
 lazy val dbCardTargetPackage = dbTargetPackage + ".card"
