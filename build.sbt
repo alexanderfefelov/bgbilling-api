@@ -33,13 +33,23 @@ lazy val commonSettings = Seq(
 )
 
 lazy val db = (project in file("db"))
-  .aggregate(dbInet, dbKernel, dbOss, dbRscm, dbUtil)
+  .aggregate(dbBill, dbInet, dbKernel, dbOss, dbRscm, dbUtil)
   .settings(
     publishLocal := {},
     publish := {}
   )
 
 lazy val dbTargetPackage = "com.github.alexanderfefelov.bgbilling.api.db"
+
+lazy val dbBillTargetPackage = dbTargetPackage + ".bill"
+lazy val dbBill = (project in file("db/bill"))
+  .dependsOn(dbUtil)
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "bgbilling-api-db-bill",
+    commonSettings,
+    buildInfoPackage := dbBillTargetPackage
+  )
 
 lazy val dbInetTargetPackage = dbTargetPackage + ".inet"
 lazy val dbInet = (project in file("db/inet"))
