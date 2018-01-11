@@ -8,6 +8,6 @@ trait ApiConfig {
 
   val config: Config = ConfigFactory.load()
 
-  def bgBillingModuleId(moduleName: String): String = config.getString(s"$CONFIG_PREFIX_API.bgbilling.module-id.$moduleName")
+  def bgBillingModuleId(moduleName: String): Int = config.getInt(s"$CONFIG_PREFIX_API.bgbilling.module-id.$moduleName")
 
 }
