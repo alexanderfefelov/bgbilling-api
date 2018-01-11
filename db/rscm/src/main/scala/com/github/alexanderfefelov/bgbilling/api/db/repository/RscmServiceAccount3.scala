@@ -21,7 +21,7 @@ case class RscmServiceAccount3(
 
 object RscmServiceAccount3 extends SQLSyntaxSupport[RscmServiceAccount3] with ApiDbConfig {
 
-  override val tableName = s"rscm_service_account_$bgBillingModuleId("rscm")"
+  override val tableName = s"rscm_service_account_${bgBillingModuleId("rscm")}"
 
   override val columns = Seq("id", "cid", "sid", "date", "amount", "comment")
 
