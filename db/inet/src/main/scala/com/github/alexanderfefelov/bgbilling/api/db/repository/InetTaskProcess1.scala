@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{DateTime}
 
@@ -18,9 +19,9 @@ case class InetTaskProcess1(
 }
 
 
-object InetTaskProcess1 extends SQLSyntaxSupport[InetTaskProcess1] {
+object InetTaskProcess1 extends SQLSyntaxSupport[InetTaskProcess1] with ApiDbConfig {
 
-  override val tableName = "inet_task_process_1"
+  override val tableName = s"inet_task_process_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("id", "deviceId", "day", "startTime", "curentHour", "type")
 

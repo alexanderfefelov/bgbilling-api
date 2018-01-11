@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{DateTime}
 
@@ -31,9 +32,9 @@ case class InetConnection1(
 }
 
 
-object InetConnection1 extends SQLSyntaxSupport[InetConnection1] {
+object InetConnection1 extends SQLSyntaxSupport[InetConnection1] with ApiDbConfig {
 
-  override val tableName = "inet_connection_1"
+  override val tableName = s"inet_connection_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("id", "parentId", "deviceId", "devicePort", "agentDeviceId", "circuitId", "acctSessionId", "username", "type", "accessCode", "servId", "calledStationId", "callingStationId", "ipResourceId", "ipAddress", "connectionStart", "deviceState", "deviceOptions", "status")
 

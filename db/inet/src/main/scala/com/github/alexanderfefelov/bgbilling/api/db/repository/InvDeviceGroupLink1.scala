@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class InvDeviceGroupLink1(
@@ -13,9 +14,9 @@ case class InvDeviceGroupLink1(
 }
 
 
-object InvDeviceGroupLink1 extends SQLSyntaxSupport[InvDeviceGroupLink1] {
+object InvDeviceGroupLink1 extends SQLSyntaxSupport[InvDeviceGroupLink1] with ApiDbConfig {
 
-  override val tableName = "inv_device_group_link_1"
+  override val tableName = s"inv_device_group_link_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("deviceId", "deviceGroupId")
 

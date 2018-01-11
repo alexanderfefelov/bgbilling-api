@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class InvDevicePort1(
@@ -17,9 +18,9 @@ case class InvDevicePort1(
 }
 
 
-object InvDevicePort1 extends SQLSyntaxSupport[InvDevicePort1] {
+object InvDevicePort1 extends SQLSyntaxSupport[InvDevicePort1] with ApiDbConfig {
 
-  override val tableName = "inv_device_port_1"
+  override val tableName = s"inv_device_port_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("deviceId", "port", "title", "status", "ipCategoryId", "comment")
 

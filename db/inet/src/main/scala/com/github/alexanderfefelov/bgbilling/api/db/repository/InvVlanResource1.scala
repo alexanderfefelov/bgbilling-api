@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{LocalDate}
 
@@ -20,9 +21,9 @@ case class InvVlanResource1(
 }
 
 
-object InvVlanResource1 extends SQLSyntaxSupport[InvVlanResource1] {
+object InvVlanResource1 extends SQLSyntaxSupport[InvVlanResource1] with ApiDbConfig {
 
-  override val tableName = "inv_vlan_resource_1"
+  override val tableName = s"inv_vlan_resource_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("id", "title", "vlanFrom", "vlanTo", "dateFrom", "dateTo", "comment", "categoryId")
 

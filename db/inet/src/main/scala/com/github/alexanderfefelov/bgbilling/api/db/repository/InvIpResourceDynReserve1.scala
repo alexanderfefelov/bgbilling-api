@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class InvIpResourceDynReserve1(
@@ -14,9 +15,9 @@ case class InvIpResourceDynReserve1(
 }
 
 
-object InvIpResourceDynReserve1 extends SQLSyntaxSupport[InvIpResourceDynReserve1] {
+object InvIpResourceDynReserve1 extends SQLSyntaxSupport[InvIpResourceDynReserve1] with ApiDbConfig {
 
-  override val tableName = "inv_ip_resource_dyn_reserve_1"
+  override val tableName = s"inv_ip_resource_dyn_reserve_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("address", "timeout", "ipResourceId")
 

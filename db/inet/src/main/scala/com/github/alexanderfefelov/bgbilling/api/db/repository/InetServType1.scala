@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class InetServType1(
@@ -32,9 +33,9 @@ case class InetServType1(
 }
 
 
-object InetServType1 extends SQLSyntaxSupport[InetServType1] {
+object InetServType1 extends SQLSyntaxSupport[InetServType1] with ApiDbConfig {
 
-  override val tableName = "inet_serv_type_1"
+  override val tableName = s"inet_serv_type_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("id", "title", "parentTypeIds", "sessionInitiationType", "sessionCountLimit", "sessionCountLimitLock", "addressType", "addressAllInterface", "trafficTypeLinkId", "needLogin", "needDevice", "needInterface", "personalInterface", "needVlan", "needIdentifier", "needMacAddress", "needContractObject", "needRestriction", "config", "personalVlan", "ipFromParentRange")
 

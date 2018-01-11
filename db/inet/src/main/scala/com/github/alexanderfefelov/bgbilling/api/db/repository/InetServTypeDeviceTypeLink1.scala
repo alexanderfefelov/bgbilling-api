@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class InetServTypeDeviceTypeLink1(
@@ -13,9 +14,9 @@ case class InetServTypeDeviceTypeLink1(
 }
 
 
-object InetServTypeDeviceTypeLink1 extends SQLSyntaxSupport[InetServTypeDeviceTypeLink1] {
+object InetServTypeDeviceTypeLink1 extends SQLSyntaxSupport[InetServTypeDeviceTypeLink1] with ApiDbConfig {
 
-  override val tableName = "inet_serv_type_device_type_link_1"
+  override val tableName = s"inet_serv_type_device_type_link_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("inetServId", "deviceTypeId")
 

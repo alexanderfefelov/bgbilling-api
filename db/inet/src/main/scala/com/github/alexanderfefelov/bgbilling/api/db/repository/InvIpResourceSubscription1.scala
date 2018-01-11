@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{LocalDate}
 
@@ -20,9 +21,9 @@ case class InvIpResourceSubscription1(
 }
 
 
-object InvIpResourceSubscription1 extends SQLSyntaxSupport[InvIpResourceSubscription1] {
+object InvIpResourceSubscription1 extends SQLSyntaxSupport[InvIpResourceSubscription1] with ApiDbConfig {
 
-  override val tableName = "inv_ip_resource_subscription_1"
+  override val tableName = s"inv_ip_resource_subscription_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("id", "subscriberId", "ipResourceId", "addressFrom", "addressTo", "dateFrom", "dateTo", "subscriberTitle")
 

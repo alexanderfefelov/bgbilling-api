@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class InetTrafficType1(
@@ -14,9 +15,9 @@ case class InetTrafficType1(
 }
 
 
-object InetTrafficType1 extends SQLSyntaxSupport[InetTrafficType1] {
+object InetTrafficType1 extends SQLSyntaxSupport[InetTrafficType1] with ApiDbConfig {
 
-  override val tableName = "inet_traffic_type_1"
+  override val tableName = s"inet_traffic_type_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("id", "title", "unit")
 

@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class InetTariffTrafficRange1(
@@ -19,9 +20,9 @@ case class InetTariffTrafficRange1(
 }
 
 
-object InetTariffTrafficRange1 extends SQLSyntaxSupport[InetTariffTrafficRange1] {
+object InetTariffTrafficRange1 extends SQLSyntaxSupport[InetTariffTrafficRange1] with ApiDbConfig {
 
-  override val tableName = "inet_tariff_traffic_range_1"
+  override val tableName = s"inet_tariff_traffic_range_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("contractId", "treeNodeId", "rangeKey", "amount", "counter", "maxAmount", "yy", "mm")
 

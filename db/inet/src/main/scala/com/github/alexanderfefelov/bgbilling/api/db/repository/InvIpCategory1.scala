@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class InvIpCategory1(
@@ -14,9 +15,9 @@ case class InvIpCategory1(
 }
 
 
-object InvIpCategory1 extends SQLSyntaxSupport[InvIpCategory1] {
+object InvIpCategory1 extends SQLSyntaxSupport[InvIpCategory1] with ApiDbConfig {
 
-  override val tableName = "inv_ip_category_1"
+  override val tableName = s"inv_ip_category_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("id", "parentId", "title")
 

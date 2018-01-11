@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{LocalDate}
 
@@ -17,9 +18,9 @@ case class InetAccountingPeriod1BakSec(
 }
 
 
-object InetAccountingPeriod1BakSec extends SQLSyntaxSupport[InetAccountingPeriod1BakSec] {
+object InetAccountingPeriod1BakSec extends SQLSyntaxSupport[InetAccountingPeriod1BakSec] with ApiDbConfig {
 
-  override val tableName = "inet_accounting_period_1_bak_sec"
+  override val tableName = s"inet_accounting_period_${bgBillingModuleId("inet")}_bak_sec"
 
   override val columns = Seq("id", "contractId", "dateFrom", "dateTo", "userId")
 

@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class InetSessionDetail1(
@@ -17,9 +18,9 @@ case class InetSessionDetail1(
 }
 
 
-object InetSessionDetail1 extends SQLSyntaxSupport[InetSessionDetail1] {
+object InetSessionDetail1 extends SQLSyntaxSupport[InetSessionDetail1] with ApiDbConfig {
 
-  override val tableName = "inet_session_detail_1"
+  override val tableName = s"inet_session_detail_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("sessionId", "day", "hour", "trafficTypeId", "deviceId", "amount")
 

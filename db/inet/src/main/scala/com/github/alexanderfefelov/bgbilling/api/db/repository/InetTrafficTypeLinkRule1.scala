@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{LocalDate}
 
@@ -33,9 +34,9 @@ case class InetTrafficTypeLinkRule1(
 }
 
 
-object InetTrafficTypeLinkRule1 extends SQLSyntaxSupport[InetTrafficTypeLinkRule1] {
+object InetTrafficTypeLinkRule1 extends SQLSyntaxSupport[InetTrafficTypeLinkRule1] with ApiDbConfig {
 
-  override val tableName = "inet_traffic_type_link_rule_1"
+  override val tableName = s"inet_traffic_type_link_rule_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("id", "linkId", "position", "dateFrom", "dateTo", "type", "sourceId", "interfaceId", "direction", "addressFrom", "addressTo", "portFrom", "portTo", "diffServ", "counterRealm", "counterService", "counterVendor", "counterType", "counterPrefix", "trafficTypeId", "comment")
 

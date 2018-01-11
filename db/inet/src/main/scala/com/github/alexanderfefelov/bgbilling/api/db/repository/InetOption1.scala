@@ -1,5 +1,6 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
+import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class InetOption1(
@@ -17,9 +18,9 @@ case class InetOption1(
 }
 
 
-object InetOption1 extends SQLSyntaxSupport[InetOption1] {
+object InetOption1 extends SQLSyntaxSupport[InetOption1] with ApiDbConfig {
 
-  override val tableName = "inet_option_1"
+  override val tableName = s"inet_option_${bgBillingModuleId("inet")}"
 
   override val columns = Seq("id", "parentId", "title", "groupIntersection", "config", "comment")
 
