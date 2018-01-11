@@ -61,6 +61,16 @@ lazy val dbOss = (project in file("db/oss"))
     buildInfoPackage := dbOssTargetPackage
   )
 
+lazy val dbRscmTargetPackage = dbTargetPackage + ".rscm"
+lazy val dbRscm = (project in file("db/rscm"))
+  .dependsOn(dbUtil)
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "bgbilling-api-db-rscm",
+    commonSettings,
+    buildInfoPackage := dbRscmTargetPackage
+  )
+
 lazy val dbUtilTargetPackage = dbTargetPackage + ".util"
 lazy val dbUtil = (project in file("db/util"))
   .dependsOn(util)
