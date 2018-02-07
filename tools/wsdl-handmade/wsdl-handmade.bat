@@ -4,15 +4,17 @@ set WSDLMERGE=bin\WSDLMerge.exe
 set XMLSTARLET=bin\xml.exe
 set SED=bin\sed.exe
 
+set EXECUTER=http://bgbilling.local:8080/bgbilling/executer
+
 set TARGET_DIR=soap\oss\src\main\wsdl\handmade
 if not exist %TARGET_DIR%\nul mkdir %TARGET_DIR%
-call :process http://bgbilling.local:8080/bgbilling/executer/ru.bitel.oss.kernel.directories.address AddressService
-call :process http://bgbilling.local:8080/bgbilling/executer/ru.bitel.oss.kernel.entity              EntityService
-call :process http://bgbilling.local:8080/bgbilling/executer/ru.bitel.oss.systems.inventory.resource PhoneResourceService
-call :process http://bgbilling.local:8080/bgbilling/executer/ru.bitel.oss.systems.order.product      ProductOrderService
-call :process http://bgbilling.local:8080/bgbilling/executer/ru.bitel.oss.systems.inventory.product  ProductService
-call :process http://bgbilling.local:8080/bgbilling/executer/ru.bitel.oss.systems.inventory.resource ResourceService
-call :process http://bgbilling.local:8080/bgbilling/executer/ru.bitel.oss.systems.inventory.service  ServiceService
+call :process %EXECUTER%/ru.bitel.oss.kernel.directories.address AddressService
+call :process %EXECUTER%/ru.bitel.oss.kernel.entity              EntityService
+call :process %EXECUTER%/ru.bitel.oss.systems.inventory.resource PhoneResourceService
+call :process %EXECUTER%/ru.bitel.oss.systems.order.product      ProductOrderService
+call :process %EXECUTER%/ru.bitel.oss.systems.inventory.product  ProductService
+call :process %EXECUTER%/ru.bitel.oss.systems.inventory.resource ResourceService
+call :process %EXECUTER%/ru.bitel.oss.systems.inventory.service  ServiceService
 
 exit
 
