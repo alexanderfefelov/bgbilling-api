@@ -178,7 +178,7 @@ lazy val dbUtil = (project in file("db/util"))
   )
 
 lazy val soap = (project in file("soap"))
-  .aggregate(soapBill, soapCard, soapInet, soapKernel, soapMoneta, soapOss, soapQiwi, soapRscm, soapSubscription, soapUtil)
+  .aggregate(soapBill, soapBonus, soapCard, soapInet, soapKernel, soapMoneta, soapOss, soapQiwi, soapRscm, soapSubscription, soapUtil)
   .settings(
     publishLocal := {},
     publish := {}
@@ -203,6 +203,19 @@ lazy val soapBill = (project in file("soap/bill"))
     scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
     scalaxbPackageName in (Compile, scalaxb) := soapBillTargetPackage,
     buildInfoPackage := soapBillTargetPackage
+  )
+
+lazy val soapBonusTargetPackage = soapTargetPackage + ".bonus"
+lazy val soapBonus = (project in file("soap/bonus"))
+  .dependsOn(soapKernel)
+  .enablePlugins(ScalaxbPlugin)
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "bgbilling-api-soap-bonus",
+    commonSettings,
+    scalaxbDispatchVersion in (Compile, scalaxb) := dispatchV,
+    scalaxbPackageName in (Compile, scalaxb) := soapBonusTargetPackage,
+    buildInfoPackage := soapBonusTargetPackage
   )
 
 lazy val soapCardTargetPackage = soapTargetPackage + ".card"

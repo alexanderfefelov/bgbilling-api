@@ -15,6 +15,7 @@ call :process %EXECUTER%/ru.bitel.oss.systems.order.product      ProductOrderSer
 call :process %EXECUTER%/ru.bitel.oss.systems.inventory.product  ProductService
 call :process %EXECUTER%/ru.bitel.oss.systems.inventory.resource ResourceService
 call :process %EXECUTER%/ru.bitel.oss.systems.inventory.service  ServiceService
+call :process %EXECUTER%/ru.bitel.bgbilling.plugins.bonus        BonusService
 
 exit
 
