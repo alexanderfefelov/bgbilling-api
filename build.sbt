@@ -13,7 +13,7 @@ lazy val scalikejdbcSyntaxSupportMacro = scalikejdbcV
 lazy val typesafeConfigV = "1.3.1"
 
 lazy val root = (project in file("."))
-  .aggregate(db, soap, util)
+  .aggregate(action, db, soap, util)
   .settings(
     publishLocal := {},
     publish := {}
@@ -31,6 +31,38 @@ lazy val commonSettings = Seq(
     "builtAtMillis" -> {System.currentTimeMillis()}
   )
 )
+
+lazy val action = (project in file("action"))
+  .aggregate(actionKernel, actionUtil)
+  .settings(
+    publishLocal := {},
+    publish := {}
+  )
+
+lazy val actionTargetPackage = "com.github.alexanderfefelov.bgbilling.api.action"
+
+lazy val actionKernelTargetPackage = actionTargetPackage + ".kernel"
+lazy val actionKernel = (project in file("action/kernel"))
+  .dependsOn(actionUtil)
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "bgbilling-api-action-kernel",
+    commonSettings,
+    buildInfoPackage := actionKernelTargetPackage
+  )
+
+lazy val actionUtilTargetPackage = actionTargetPackage + ".util"
+lazy val actionUtil = (project in file("action/util"))
+  .dependsOn(util)
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    name := "bgbilling-api-action-util",
+    commonSettings,
+    buildInfoPackage := actionUtilTargetPackage,
+    libraryDependencies ++= Seq(
+      "org.apache.httpcomponents" % "httpclient" % "4.5.5"
+    )
+  )
 
 lazy val db = (project in file("db"))
   .aggregate(dbBill, dbBonus, dbCard, dbDispatch, dbInet, dbKernel, dbMoneta, dbMps, dbOss, dbQiwi, dbRscm, dbSubscription, dbUtil)
