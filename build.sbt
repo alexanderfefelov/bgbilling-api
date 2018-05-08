@@ -362,10 +362,7 @@ lazy val soapUtil = (project in file("soap/util"))
   .settings(
     name := "bgbilling-api-soap-util",
     commonSettings,
-    buildInfoPackage := soapUtilTargetPackage,
-    libraryDependencies ++= Seq(
-      "com.typesafe" % "config" % typesafeConfigV
-    )
+    buildInfoPackage := soapUtilTargetPackage
   )
 
 lazy val utilTargetPackage = "com.github.alexanderfefelov.bgbilling.api.util"
