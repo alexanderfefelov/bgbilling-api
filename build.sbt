@@ -4,6 +4,7 @@ organization := "com.github.alexanderfefelov"
 lazy val scalaV = "2.11.12"
 
 lazy val dispatchV = "0.11.3"
+lazy val jodaV = "2.9.9"
 lazy val logbackClassicV = "1.2.3"
 lazy val mysqlConnectorJavaV = "5.1.45"
 lazy val scalaParserCombinatorsV = "1.0.6"
@@ -50,7 +51,8 @@ lazy val actionKernel = (project in file("action/kernel"))
     commonSettings,
     buildInfoPackage := actionKernelTargetPackage,
     libraryDependencies ++= Seq(
-      "org.scala-lang.modules" %% "scala-xml" % scalaXmlV
+      "org.scala-lang.modules" %% "scala-xml" % scalaXmlV,
+      "joda-time" % "joda-time" % jodaV
     )
   )
 
