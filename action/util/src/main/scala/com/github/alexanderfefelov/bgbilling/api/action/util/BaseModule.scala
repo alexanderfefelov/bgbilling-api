@@ -49,6 +49,7 @@ trait BaseModule extends ApiActionConfig {
     val nameValuePairs = new util.ArrayList[NameValuePair]()
     nameValuePairs.add(new BasicNameValuePair("user", actionUsername))
     nameValuePairs.add(new BasicNameValuePair("pswd", actionPassword))
+    nameValuePairs.add(new BasicNameValuePair("authToSession", "0"))
     nameValuePairs.add(new BasicNameValuePair("module", module))
     args.foreach(a => nameValuePairs.add(new BasicNameValuePair(a._1, a._2)))
     nameValuePairs

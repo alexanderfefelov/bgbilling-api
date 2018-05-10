@@ -48,7 +48,10 @@ lazy val actionKernel = (project in file("action/kernel"))
   .settings(
     name := "bgbilling-api-action-kernel",
     commonSettings,
-    buildInfoPackage := actionKernelTargetPackage
+    buildInfoPackage := actionKernelTargetPackage,
+    libraryDependencies ++= Seq(
+      "org.scala-lang.modules" %% "scala-xml" % scalaXmlV
+    )
   )
 
 lazy val actionUtilTargetPackage = actionTargetPackage + ".util"
