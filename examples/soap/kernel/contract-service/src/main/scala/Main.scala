@@ -8,7 +8,7 @@ import scala.util.{Failure, Success}
 object Main extends App {
 
   class ContractServiceCake extends ContractServiceBindings with Soap11ClientsWithAuthHeaderAsync with DispatchHttpClientsAsync with ApiSoapConfig {
-    override def baseAddress = new java.net.URI(soapServiceBaseAddress("ContractService"))
+    override def baseAddress = new java.net.URI(soapServiceBaseAddress("contract-service"))
   }
 
   val cake = new ContractServiceCake

@@ -9,6 +9,6 @@ trait ApiActionConfig extends ApiConfig {
   val actionUrl: String = config.getString(s"$CONFIG_PREFIX_API_ACTION.action.url")
   val actionUsername: String = config.getString(s"$CONFIG_PREFIX_API_ACTION.action.username")
   val actionPassword: String = config.getString(s"$CONFIG_PREFIX_API_ACTION.action.password")
-  val actionUserAgent: String = config.getString(s"$CONFIG_PREFIX_API_ACTION.action.userAgent")
+  val actionUserAgent: String = config.getString(s"$CONFIG_PREFIX_API_ACTION.action.user-agent")
 
 }
