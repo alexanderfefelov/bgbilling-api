@@ -11,9 +11,9 @@ trait ApiSoapConfig extends ApiConfig {
   val soapUrl: String = config.getString(s"$CONFIG_PREFIX_API_SOAP.soap.url")
   val soapUsername: String = config.getString(s"$CONFIG_PREFIX_API_SOAP.soap.username")
   val soapPassword: String = config.getString(s"$CONFIG_PREFIX_API_SOAP.soap.password")
-  val soapHttpConnectionTimeout: Duration = config.getDuration(s"$CONFIG_PREFIX_API_SOAP.soap.http.connection-timeout")
-  val soapHttpReadTimeout: Duration = config.getDuration(s"$CONFIG_PREFIX_API_SOAP.soap.http.read-timeout")
-  val soapHttpRequestTimeout: Duration = config.getDuration(s"$CONFIG_PREFIX_API_SOAP.soap.http.request-timeout")
+  val soapHttpConnectionTimeout: Duration = config.getDuration(s"$CONFIG_PREFIX_API_SOAP.http.connection-timeout")
+  val soapHttpReadTimeout: Duration = config.getDuration(s"$CONFIG_PREFIX_API_SOAP.http.read-timeout")
+  val soapHttpRequestTimeout: Duration = config.getDuration(s"$CONFIG_PREFIX_API_SOAP.http.request-timeout")
 
   def soapServiceBaseAddress(serviceName: String): String = config.getString(s"$CONFIG_PREFIX_API_SOAP.soap.service-base-address.$serviceName")
 
