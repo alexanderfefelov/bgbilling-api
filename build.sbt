@@ -4,6 +4,7 @@ organization := "com.github.alexanderfefelov"
 lazy val scalaV = "2.11.12"
 
 lazy val dispatchV = "0.11.3"
+lazy val httpClientV = "4.5.5"
 lazy val jodaV = "2.9.9"
 lazy val logbackClassicV = "1.2.3"
 lazy val mysqlConnectorJavaV = "5.1.45"
@@ -65,7 +66,7 @@ lazy val actionUtil = (project in file("action/util"))
     commonSettings,
     buildInfoPackage := actionUtilTargetPackage,
     libraryDependencies ++= Seq(
-      "org.apache.httpcomponents" % "httpclient" % "4.5.5"
+      "org.apache.httpcomponents" % "httpclient" % httpClientV
     )
   )
 
