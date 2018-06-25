@@ -6,7 +6,7 @@
 
       <xs:import namespace="http://common.bitel.ru"/>
 
-      <xs:import namespace="http://www.w3.org/2005/05/xmlmime" schemaLocation="http://www.w3.org/2005/05/xmlmime"/>
+      
       <xs:element name="BGException" type="tns:BGException"/>
 
       <xs:element name="BGIllegalArgumentException" type="tns:BGIllegalArgumentException"/>

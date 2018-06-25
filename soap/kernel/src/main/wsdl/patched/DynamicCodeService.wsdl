@@ -137,12 +137,7 @@
         </xs:sequence>
       </xs:complexType>
 
-<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
-
-[error] xmlprotocol.scala:17099: type mismatch;
-...
-[error] xmlprotocol.scala:17102: value toSeq is not a member of Any
-
+<!-- alexanderfefelov
       <xs:complexType name="deleteClasses">
         <xs:sequence>
           <xs:element name="arg0" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>

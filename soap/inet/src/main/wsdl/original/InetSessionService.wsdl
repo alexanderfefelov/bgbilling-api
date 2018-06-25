@@ -11,6 +11,10 @@
 
       <xs:element name="connectionClose" type="tns:connectionClose"/>
 
+      <xs:element name="connectionCloseOld" type="tns:connectionCloseOld"/>
+
+      <xs:element name="connectionCloseOldResponse" type="tns:connectionCloseOldResponse"/>
+
       <xs:element name="connectionCloseResponse" type="tns:connectionCloseResponse"/>
 
       <xs:element name="connectionFind" type="tns:connectionFind"/>
@@ -19,11 +23,19 @@
 
       <xs:element name="connectionFinish" type="tns:connectionFinish"/>
 
+      <xs:element name="connectionFinishOld" type="tns:connectionFinishOld"/>
+
+      <xs:element name="connectionFinishOldResponse" type="tns:connectionFinishOldResponse"/>
+
       <xs:element name="connectionFinishResponse" type="tns:connectionFinishResponse"/>
 
       <xs:element name="connectionRebind" type="tns:connectionRebind"/>
 
       <xs:element name="connectionRebindResponse" type="tns:connectionRebindResponse"/>
+
+      <xs:element name="connectionsStop" type="tns:connectionsStop"/>
+
+      <xs:element name="connectionsStopResponse" type="tns:connectionsStopResponse"/>
 
       <xs:element name="inetContractTraffic" type="tns:inetContractTraffic"/>
 
@@ -491,6 +503,17 @@
         </xs:sequence>
       </xs:complexType>
 
+      <xs:complexType name="connectionsStop">
+        <xs:sequence>
+          <xs:element name="arg0" type="xs:int"/>
+          <xs:element name="arg1" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="connectionsStopResponse">
+        <xs:sequence/>
+      </xs:complexType>
+
       <xs:complexType name="inetSessionExportSendToEmail">
         <xs:sequence>
           <xs:element name="contractId" type="xs:int"/>
@@ -556,11 +579,22 @@
 
       <xs:complexType name="connectionFinish">
         <xs:sequence>
+          <xs:element name="contractId" type="xs:int"/>
           <xs:element name="connectionId" type="xs:long"/>
         </xs:sequence>
       </xs:complexType>
 
       <xs:complexType name="connectionFinishResponse">
+        <xs:sequence/>
+      </xs:complexType>
+
+      <xs:complexType name="connectionFinishOld">
+        <xs:sequence>
+          <xs:element name="connectionId" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="connectionFinishOldResponse">
         <xs:sequence/>
       </xs:complexType>
 
@@ -742,11 +776,22 @@
 
       <xs:complexType name="connectionClose">
         <xs:sequence>
+          <xs:element name="contractId" type="xs:int"/>
           <xs:element name="connectionId" type="xs:long"/>
         </xs:sequence>
       </xs:complexType>
 
       <xs:complexType name="connectionCloseResponse">
+        <xs:sequence/>
+      </xs:complexType>
+
+      <xs:complexType name="connectionCloseOld">
+        <xs:sequence>
+          <xs:element name="connectionId" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="connectionCloseOldResponse">
         <xs:sequence/>
       </xs:complexType>
 
@@ -913,11 +958,23 @@
   <message name="connectionCloseResponse">
     <part name="parameters" element="tns:connectionCloseResponse"/>
   </message>
+  <message name="connectionCloseOld">
+    <part name="parameters" element="tns:connectionCloseOld"/>
+  </message>
+  <message name="connectionCloseOldResponse">
+    <part name="parameters" element="tns:connectionCloseOldResponse"/>
+  </message>
   <message name="connectionFinish">
     <part name="parameters" element="tns:connectionFinish"/>
   </message>
   <message name="connectionFinishResponse">
     <part name="parameters" element="tns:connectionFinishResponse"/>
+  </message>
+  <message name="connectionFinishOld">
+    <part name="parameters" element="tns:connectionFinishOld"/>
+  </message>
+  <message name="connectionFinishOldResponse">
+    <part name="parameters" element="tns:connectionFinishOldResponse"/>
   </message>
   <message name="inetSessionExportSendToEmail">
     <part name="parameters" element="tns:inetSessionExportSendToEmail"/>
@@ -997,6 +1054,12 @@
   <message name="connectionRebindResponse">
     <part name="parameters" element="tns:connectionRebindResponse"/>
   </message>
+  <message name="connectionsStop">
+    <part name="parameters" element="tns:connectionsStop"/>
+  </message>
+  <message name="connectionsStopResponse">
+    <part name="parameters" element="tns:connectionsStopResponse"/>
+  </message>
   <portType name="InetSessionService">
     <operation name="inetSessionAliveList">
       <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/inetSessionAliveListRequest" message="tns:inetSessionAliveList"/>
@@ -1023,10 +1086,20 @@
       <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionCloseResponse" message="tns:connectionCloseResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionClose/Fault/BGException"/>
     </operation>
+    <operation name="connectionCloseOld">
+      <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionCloseOldRequest" message="tns:connectionCloseOld"/>
+      <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionCloseOldResponse" message="tns:connectionCloseOldResponse"/>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionCloseOld/Fault/BGException"/>
+    </operation>
     <operation name="connectionFinish">
       <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionFinishRequest" message="tns:connectionFinish"/>
       <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionFinishResponse" message="tns:connectionFinishResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionFinish/Fault/BGException"/>
+    </operation>
+    <operation name="connectionFinishOld">
+      <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionFinishOldRequest" message="tns:connectionFinishOld"/>
+      <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionFinishOldResponse" message="tns:connectionFinishOldResponse"/>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionFinishOld/Fault/BGException"/>
     </operation>
     <operation name="inetSessionExportSendToEmail">
       <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/inetSessionExportSendToEmailRequest" message="tns:inetSessionExportSendToEmail"/>
@@ -1093,6 +1166,11 @@
       <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionRebindResponse" message="tns:connectionRebindResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionRebind/Fault/BGException"/>
     </operation>
+    <operation name="connectionsStop">
+      <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionsStopRequest" message="tns:connectionsStop"/>
+      <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionsStopResponse" message="tns:connectionsStopResponse"/>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetSessionService/connectionsStop/Fault/BGException"/>
+    </operation>
   </portType>
   <binding name="InetSessionServiceBinding" type="tns:InetSessionService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
@@ -1156,7 +1234,31 @@
         <soap:fault name="BGException" use="literal"/>
       </fault>
     </operation>
+    <operation name="connectionCloseOld">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal"/>
+      </fault>
+    </operation>
     <operation name="connectionFinish">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="connectionFinishOld">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>
@@ -1313,6 +1415,18 @@
       </fault>
     </operation>
     <operation name="connectionRebind">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="connectionsStop">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>

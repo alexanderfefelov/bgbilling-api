@@ -58,6 +58,10 @@
 
       <xs:element name="deviceReload" type="tns:deviceReload"/>
 
+      <xs:element name="deviceReloadOld" type="tns:deviceReloadOld"/>
+
+      <xs:element name="deviceReloadOldResponse" type="tns:deviceReloadOldResponse"/>
+
       <xs:element name="deviceReloadResponse" type="tns:deviceReloadResponse"/>
 
       <xs:element name="deviceRoot" type="tns:deviceRoot"/>
@@ -690,8 +694,18 @@
         <xs:sequence/>
       </xs:complexType>
 
-      <xs:complexType name="deviceReload">
+      <xs:complexType name="deviceReloadOld">
         <xs:sequence/>
+      </xs:complexType>
+
+      <xs:complexType name="deviceReloadOldResponse">
+        <xs:sequence/>
+      </xs:complexType>
+
+      <xs:complexType name="deviceReload">
+        <xs:sequence>
+          <xs:element name="rootDeviceId" type="xs:int"/>
+        </xs:sequence>
       </xs:complexType>
 
       <xs:complexType name="deviceReloadResponse">
@@ -957,6 +971,12 @@
   <message name="BGException">
     <part name="fault" element="tns:BGException"/>
   </message>
+  <message name="deviceReloadOld">
+    <part name="parameters" element="tns:deviceReloadOld"/>
+  </message>
+  <message name="deviceReloadOldResponse">
+    <part name="parameters" element="tns:deviceReloadOldResponse"/>
+  </message>
   <message name="deviceReload">
     <part name="parameters" element="tns:deviceReload"/>
   </message>
@@ -1137,6 +1157,11 @@
       <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/inetDeviceListResponse" message="tns:inetDeviceListResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/inetDeviceList/Fault/BGException"/>
     </operation>
+    <operation name="deviceReloadOld">
+      <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/deviceReloadOldRequest" message="tns:deviceReloadOld"/>
+      <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/deviceReloadOldResponse" message="tns:deviceReloadOldResponse"/>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/deviceReloadOld/Fault/BGException"/>
+    </operation>
     <operation name="deviceReload">
       <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/deviceReloadRequest" message="tns:deviceReload"/>
       <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/deviceReloadResponse" message="tns:deviceReloadResponse"/>
@@ -1283,6 +1308,18 @@
   <binding name="InetDeviceServiceBinding" type="tns:InetDeviceService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
     <operation name="inetDeviceList">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="deviceReloadOld">
       <soap:operation soapAction=""/>
       <input>
         <soap:body use="literal"/>

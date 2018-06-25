@@ -177,12 +177,7 @@
         <xs:sequence/>
       </xs:complexType>
 
-<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
-
-[error] ResourceService_type1.scala:364: Mapable is already defined as trait Mapable
-...
-[error] ResourceService_type1.scala:369: MapType is already defined as case class MapType
-
+<!-- alexanderfefelov
       <xs:complexType name="map">
         <xs:sequence>
           <xs:element name="entry" type="tns:entry" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
@@ -295,16 +290,24 @@
       </xsc:complexType>
     </xsc:schema>
   </types>
+  <message name="phoneFreeList">
+    <part name="parameters" element="tns:phoneFreeList">
+    </part>
+  </message>
+  <message name="phoneFreeListResponse">
+    <part name="parameters" element="tns:phoneFreeListResponse">
+    </part>
+  </message>
+  <message name="BGException">
+    <part name="fault" element="tns:BGException">
+    </part>
+  </message>
   <message name="phoneCategoryRoot">
     <part name="parameters" element="tns:phoneCategoryRoot">
     </part>
   </message>
   <message name="phoneCategoryRootResponse">
     <part name="parameters" element="tns:phoneCategoryRootResponse">
-    </part>
-  </message>
-  <message name="BGException">
-    <part name="fault" element="tns:BGException">
     </part>
   </message>
   <message name="phoneCategoryUpdate">
@@ -359,14 +362,6 @@
     <part name="parameters" element="tns:phoneSubscriptionListResponse">
     </part>
   </message>
-  <message name="phoneFreeList">
-    <part name="parameters" element="tns:phoneFreeList">
-    </part>
-  </message>
-  <message name="phoneFreeListResponse">
-    <part name="parameters" element="tns:phoneFreeListResponse">
-    </part>
-  </message>
   <message name="phoneResourceSubscribe">
     <part name="parameters" element="tns:phoneResourceSubscribe">
     </part>
@@ -384,6 +379,14 @@
     </part>
   </message>
   <portType name="PhoneResourceService">
+    <operation name="phoneFreeList">
+      <input wsam:Action="http://service.common.resource.inventory.systems.oss.bitel.ru/PhoneResourceService/phoneFreeListRequest" message="tns:phoneFreeList">
+      </input>
+      <output wsam:Action="http://service.common.resource.inventory.systems.oss.bitel.ru/PhoneResourceService/phoneFreeListResponse" message="tns:phoneFreeListResponse">
+      </output>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.resource.inventory.systems.oss.bitel.ru/PhoneResourceService/phoneFreeList/Fault/BGException">
+      </fault>
+    </operation>
     <operation name="phoneCategoryRoot">
       <input wsam:Action="http://service.common.resource.inventory.systems.oss.bitel.ru/PhoneResourceService/phoneCategoryRootRequest" message="tns:phoneCategoryRoot">
       </input>
@@ -442,14 +445,6 @@
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.resource.inventory.systems.oss.bitel.ru/PhoneResourceService/phoneSubscriptionList/Fault/BGException">
       </fault>
     </operation>
-    <operation name="phoneFreeList">
-      <input wsam:Action="http://service.common.resource.inventory.systems.oss.bitel.ru/PhoneResourceService/phoneFreeListRequest" message="tns:phoneFreeList">
-      </input>
-      <output wsam:Action="http://service.common.resource.inventory.systems.oss.bitel.ru/PhoneResourceService/phoneFreeListResponse" message="tns:phoneFreeListResponse">
-      </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.resource.inventory.systems.oss.bitel.ru/PhoneResourceService/phoneFreeList/Fault/BGException">
-      </fault>
-    </operation>
     <operation name="phoneResourceSubscribe">
       <input wsam:Action="http://service.common.resource.inventory.systems.oss.bitel.ru/PhoneResourceService/phoneResourceSubscribeRequest" message="tns:phoneResourceSubscribe">
       </input>
@@ -470,6 +465,22 @@
   <binding name="PhoneResourceServiceBinding" type="tns:PhoneResourceService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document">
     </soap:binding>
+    <operation name="phoneFreeList">
+      <soap:operation soapAction="">
+      </soap:operation>
+      <input>
+        <soap:body use="literal">
+        </soap:body>
+      </input>
+      <output>
+        <soap:body use="literal">
+        </soap:body>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal">
+        </soap:fault>
+      </fault>
+    </operation>
     <operation name="phoneCategoryRoot">
       <soap:operation soapAction="">
       </soap:operation>
@@ -571,22 +582,6 @@
       </fault>
     </operation>
     <operation name="phoneSubscriptionList">
-      <soap:operation soapAction="">
-      </soap:operation>
-      <input>
-        <soap:body use="literal">
-        </soap:body>
-      </input>
-      <output>
-        <soap:body use="literal">
-        </soap:body>
-      </output>
-      <fault name="BGException">
-        <soap:fault name="BGException" use="literal">
-        </soap:fault>
-      </fault>
-    </operation>
-    <operation name="phoneFreeList">
       <soap:operation soapAction="">
       </soap:operation>
       <input>

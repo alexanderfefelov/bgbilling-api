@@ -10,6 +10,28 @@
 
       <xs:element name="BGException" type="tns:BGException"/>
 
+      <xs:element name="BGIllegalAccessException" type="tns:BGIllegalAccessException"/>
+
+      <xs:element name="BGIllegalArgumentException" type="tns:BGIllegalArgumentException"/>
+
+      <xs:element name="BGMessageException" type="tns:BGMessageException"/>
+
+      <xs:element name="autopaymentInvoke" type="tns:autopaymentInvoke"/>
+
+      <xs:element name="autopaymentInvokeResponse" type="tns:autopaymentInvokeResponse"/>
+
+      <xs:element name="autopaymentSearch" type="tns:autopaymentSearch"/>
+
+      <xs:element name="autopaymentSearchResponse" type="tns:autopaymentSearchResponse"/>
+
+      <xs:element name="contractAutopaymentModeCheck" type="tns:contractAutopaymentModeCheck"/>
+
+      <xs:element name="contractAutopaymentModeCheckResponse" type="tns:contractAutopaymentModeCheckResponse"/>
+
+      <xs:element name="contractAutopaymentModeList" type="tns:contractAutopaymentModeList"/>
+
+      <xs:element name="contractAutopaymentModeListResponse" type="tns:contractAutopaymentModeListResponse"/>
+
       <xs:element name="isEnabled" type="tns:isEnabled"/>
 
       <xs:element name="isEnabledResponse" type="tns:isEnabledResponse"/>
@@ -21,6 +43,22 @@
       <xs:element name="setEnabled" type="tns:setEnabled"/>
 
       <xs:element name="setEnabledResponse" type="tns:setEnabledResponse"/>
+
+      <xs:complexType name="autopayment">
+        <xs:complexContent>
+          <xs:extension base="ns1:id">
+            <xs:sequence>
+              <xs:element name="accessToken" type="xs:string" minOccurs="0"/>
+              <xs:element name="contractId" type="xs:int"/>
+              <xs:element name="data" type="xs:string" minOccurs="0"/>
+              <xs:element name="mode" type="tns:autopaymentMode" minOccurs="0"/>
+              <xs:element name="modeData" type="xs:string" minOccurs="0"/>
+              <xs:element name="period" type="ns1:period" minOccurs="0"/>
+              <xs:element name="sum" type="xs:decimal" minOccurs="0"/>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
 
       <xs:complexType name="contractAutopayment">
         <xs:complexContent>
@@ -38,6 +76,79 @@
         </xs:complexContent>
       </xs:complexType>
 
+      <xs:complexType name="contractAutopaymentMode" abstract="true">
+        <xs:sequence>
+          <xs:element name="mode" type="tns:autopaymentMode" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="contractAutopaymentModePeriodic">
+        <xs:complexContent>
+          <xs:extension base="tns:contractAutopaymentMode">
+            <xs:sequence>
+              <xs:element name="day" type="xs:int"/>
+              <xs:element name="sum" type="xs:decimal" minOccurs="0"/>
+              <xs:element name="sumMax" type="xs:decimal" minOccurs="0"/>
+              <xs:element name="sumMin" type="xs:decimal" minOccurs="0"/>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+
+      <xs:complexType name="contractAutopaymentModeAuto">
+        <xs:complexContent>
+          <xs:extension base="tns:contractAutopaymentMode">
+            <xs:sequence>
+              <xs:element name="daySum" type="xs:decimal" minOccurs="0"/>
+              <xs:element name="daySumMax" type="xs:decimal" minOccurs="0"/>
+              <xs:element name="monthSum" type="xs:decimal" minOccurs="0"/>
+              <xs:element name="monthSumMax" type="xs:decimal" minOccurs="0"/>
+              <xs:element name="weekSum" type="xs:decimal" minOccurs="0"/>
+              <xs:element name="weekSumMax" type="xs:decimal" minOccurs="0"/>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+
+      <xs:complexType name="autopaymentInvoke">
+        <xs:sequence>
+          <xs:element name="contractId" type="xs:int"/>
+          <xs:element name="amount" type="xs:decimal" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="autopaymentInvokeResponse">
+        <xs:sequence/>
+      </xs:complexType>
+
+      <xs:complexType name="BGException">
+        <xs:sequence>
+          <xs:element name="message" type="xs:string" minOccurs="0"/>
+          <xs:element name="tag" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="BGMessageException">
+        <xs:sequence>
+          <xs:element name="message" type="xs:string" minOccurs="0"/>
+          <xs:element name="tag" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="BGIllegalArgumentException">
+        <xs:sequence>
+          <xs:element name="message" type="xs:string" minOccurs="0"/>
+          <xs:element name="tag" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="BGIllegalAccessException">
+        <xs:sequence>
+          <xs:element name="message" type="xs:string" minOccurs="0"/>
+          <xs:element name="tag" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+
       <xs:complexType name="isEnabled">
         <xs:sequence>
           <xs:element name="contractId" type="xs:int"/>
@@ -47,13 +158,6 @@
       <xs:complexType name="isEnabledResponse">
         <xs:sequence>
           <xs:element name="return" type="xs:boolean"/>
-        </xs:sequence>
-      </xs:complexType>
-
-      <xs:complexType name="BGException">
-        <xs:sequence>
-          <xs:element name="message" type="xs:string" minOccurs="0"/>
-          <xs:element name="tag" type="xs:string" minOccurs="0"/>
         </xs:sequence>
       </xs:complexType>
 
@@ -84,6 +188,53 @@
           <xs:element name="return" type="xs:boolean"/>
         </xs:sequence>
       </xs:complexType>
+
+      <xs:complexType name="contractAutopaymentModeCheck">
+        <xs:sequence>
+          <xs:element name="contractId" type="xs:int"/>
+          <xs:element name="autopaymentMode" type="tns:contractAutopaymentMode" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="contractAutopaymentModeCheckResponse">
+        <xs:sequence/>
+      </xs:complexType>
+
+      <xs:complexType name="autopaymentSearch">
+        <xs:sequence>
+          <xs:element name="contractId" type="xs:int"/>
+          <xs:element name="period" type="ns1:period" minOccurs="0"/>
+          <xs:element name="sort" type="xs:string" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+          <xs:element name="page" type="ns1:page" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="autopaymentSearchResponse">
+        <xs:sequence>
+          <xs:element name="return" type="ns1:searchResult" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="contractAutopaymentModeList">
+        <xs:sequence>
+          <xs:element name="contractId" type="xs:int"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="contractAutopaymentModeListResponse">
+        <xs:sequence>
+          <xs:element name="return" type="tns:contractAutopaymentMode" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:simpleType name="autopaymentMode">
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="OFF"/>
+          <xs:enumeration value="WEEK"/>
+          <xs:enumeration value="MONTH"/>
+          <xs:enumeration value="AUTO"/>
+        </xs:restriction>
+      </xs:simpleType>
 </xs:schema>
     <xsc:schema elementFormDefault="unqualified" version="1.0" targetNamespace="http://common.bitel.ru" xmlns:common="http://common.bitel.ru" xmlns:tns="http://common.bitel.ru" xmlns:xsc="http://www.w3.org/2001/XMLSchema" xmlns:ns3="http://jaxb.dev.java.net/array" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
@@ -137,6 +288,15 @@
   <message name="BGException">
     <part name="fault" element="tns:BGException"/>
   </message>
+  <message name="BGMessageException">
+    <part name="fault" element="tns:BGMessageException"/>
+  </message>
+  <message name="BGIllegalArgumentException">
+    <part name="fault" element="tns:BGIllegalArgumentException"/>
+  </message>
+  <message name="BGIllegalAccessException">
+    <part name="fault" element="tns:BGIllegalAccessException"/>
+  </message>
   <message name="searchContractAutopayment">
     <part name="parameters" element="tns:searchContractAutopayment"/>
   </message>
@@ -149,11 +309,38 @@
   <message name="setEnabledResponse">
     <part name="parameters" element="tns:setEnabledResponse"/>
   </message>
+  <message name="contractAutopaymentModeList">
+    <part name="parameters" element="tns:contractAutopaymentModeList"/>
+  </message>
+  <message name="contractAutopaymentModeListResponse">
+    <part name="parameters" element="tns:contractAutopaymentModeListResponse"/>
+  </message>
+  <message name="contractAutopaymentModeCheck">
+    <part name="parameters" element="tns:contractAutopaymentModeCheck"/>
+  </message>
+  <message name="contractAutopaymentModeCheckResponse">
+    <part name="parameters" element="tns:contractAutopaymentModeCheckResponse"/>
+  </message>
+  <message name="autopaymentSearch">
+    <part name="parameters" element="tns:autopaymentSearch"/>
+  </message>
+  <message name="autopaymentSearchResponse">
+    <part name="parameters" element="tns:autopaymentSearchResponse"/>
+  </message>
+  <message name="autopaymentInvoke">
+    <part name="parameters" element="tns:autopaymentInvoke"/>
+  </message>
+  <message name="autopaymentInvokeResponse">
+    <part name="parameters" element="tns:autopaymentInvokeResponse"/>
+  </message>
   <portType name="ContractAutopaymentService">
     <operation name="isEnabled">
       <input wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/isEnabledRequest" message="tns:isEnabled"/>
       <output wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/isEnabledResponse" message="tns:isEnabledResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/isEnabled/Fault/BGException"/>
+      <fault message="tns:BGMessageException" name="BGMessageException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/isEnabled/Fault/BGMessageException"/>
+      <fault message="tns:BGIllegalArgumentException" name="BGIllegalArgumentException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/isEnabled/Fault/BGIllegalArgumentException"/>
+      <fault message="tns:BGIllegalAccessException" name="BGIllegalAccessException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/isEnabled/Fault/BGIllegalAccessException"/>
     </operation>
     <operation name="searchContractAutopayment">
       <input wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/searchContractAutopaymentRequest" message="tns:searchContractAutopayment"/>
@@ -164,6 +351,41 @@
       <input wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/setEnabledRequest" message="tns:setEnabled"/>
       <output wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/setEnabledResponse" message="tns:setEnabledResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/setEnabled/Fault/BGException"/>
+      <fault message="tns:BGMessageException" name="BGMessageException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/setEnabled/Fault/BGMessageException"/>
+      <fault message="tns:BGIllegalArgumentException" name="BGIllegalArgumentException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/setEnabled/Fault/BGIllegalArgumentException"/>
+      <fault message="tns:BGIllegalAccessException" name="BGIllegalAccessException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/setEnabled/Fault/BGIllegalAccessException"/>
+    </operation>
+    <operation name="contractAutopaymentModeList">
+      <input wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeListRequest" message="tns:contractAutopaymentModeList"/>
+      <output wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeListResponse" message="tns:contractAutopaymentModeListResponse"/>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeList/Fault/BGException"/>
+      <fault message="tns:BGMessageException" name="BGMessageException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeList/Fault/BGMessageException"/>
+      <fault message="tns:BGIllegalArgumentException" name="BGIllegalArgumentException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeList/Fault/BGIllegalArgumentException"/>
+      <fault message="tns:BGIllegalAccessException" name="BGIllegalAccessException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeList/Fault/BGIllegalAccessException"/>
+    </operation>
+    <operation name="contractAutopaymentModeCheck">
+      <input wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeCheckRequest" message="tns:contractAutopaymentModeCheck"/>
+      <output wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeCheckResponse" message="tns:contractAutopaymentModeCheckResponse"/>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeCheck/Fault/BGException"/>
+      <fault message="tns:BGMessageException" name="BGMessageException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeCheck/Fault/BGMessageException"/>
+      <fault message="tns:BGIllegalArgumentException" name="BGIllegalArgumentException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeCheck/Fault/BGIllegalArgumentException"/>
+      <fault message="tns:BGIllegalAccessException" name="BGIllegalAccessException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/contractAutopaymentModeCheck/Fault/BGIllegalAccessException"/>
+    </operation>
+    <operation name="autopaymentSearch">
+      <input wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentSearchRequest" message="tns:autopaymentSearch"/>
+      <output wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentSearchResponse" message="tns:autopaymentSearchResponse"/>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentSearch/Fault/BGException"/>
+      <fault message="tns:BGMessageException" name="BGMessageException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentSearch/Fault/BGMessageException"/>
+      <fault message="tns:BGIllegalArgumentException" name="BGIllegalArgumentException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentSearch/Fault/BGIllegalArgumentException"/>
+      <fault message="tns:BGIllegalAccessException" name="BGIllegalAccessException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentSearch/Fault/BGIllegalAccessException"/>
+    </operation>
+    <operation name="autopaymentInvoke">
+      <input wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentInvokeRequest" message="tns:autopaymentInvoke"/>
+      <output wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentInvokeResponse" message="tns:autopaymentInvokeResponse"/>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentInvoke/Fault/BGException"/>
+      <fault message="tns:BGMessageException" name="BGMessageException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentInvoke/Fault/BGMessageException"/>
+      <fault message="tns:BGIllegalArgumentException" name="BGIllegalArgumentException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentInvoke/Fault/BGIllegalArgumentException"/>
+      <fault message="tns:BGIllegalAccessException" name="BGIllegalAccessException" wsam:Action="http://service.common.autopayment.contract.kernel.bgbilling.bitel.ru/ContractAutopaymentService/autopaymentInvoke/Fault/BGIllegalAccessException"/>
     </operation>
   </portType>
   <binding name="ContractAutopaymentServiceBinding" type="tns:ContractAutopaymentService">
@@ -179,6 +401,15 @@
       <fault name="BGException">
         <soap:fault name="BGException" use="literal"/>
       </fault>
+      <fault name="BGMessageException">
+        <soap:fault name="BGMessageException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalArgumentException">
+        <soap:fault name="BGIllegalArgumentException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalAccessException">
+        <soap:fault name="BGIllegalAccessException" use="literal"/>
+      </fault>
     </operation>
     <operation name="searchContractAutopayment">
       <soap:operation soapAction=""/>
@@ -202,6 +433,99 @@
       </output>
       <fault name="BGException">
         <soap:fault name="BGException" use="literal"/>
+      </fault>
+      <fault name="BGMessageException">
+        <soap:fault name="BGMessageException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalArgumentException">
+        <soap:fault name="BGIllegalArgumentException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalAccessException">
+        <soap:fault name="BGIllegalAccessException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="contractAutopaymentModeList">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal"/>
+      </fault>
+      <fault name="BGMessageException">
+        <soap:fault name="BGMessageException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalArgumentException">
+        <soap:fault name="BGIllegalArgumentException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalAccessException">
+        <soap:fault name="BGIllegalAccessException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="contractAutopaymentModeCheck">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal"/>
+      </fault>
+      <fault name="BGMessageException">
+        <soap:fault name="BGMessageException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalArgumentException">
+        <soap:fault name="BGIllegalArgumentException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalAccessException">
+        <soap:fault name="BGIllegalAccessException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="autopaymentSearch">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal"/>
+      </fault>
+      <fault name="BGMessageException">
+        <soap:fault name="BGMessageException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalArgumentException">
+        <soap:fault name="BGIllegalArgumentException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalAccessException">
+        <soap:fault name="BGIllegalAccessException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="autopaymentInvoke">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal"/>
+      </fault>
+      <fault name="BGMessageException">
+        <soap:fault name="BGMessageException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalArgumentException">
+        <soap:fault name="BGIllegalArgumentException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalAccessException">
+        <soap:fault name="BGIllegalAccessException" use="literal"/>
       </fault>
     </operation>
   </binding>

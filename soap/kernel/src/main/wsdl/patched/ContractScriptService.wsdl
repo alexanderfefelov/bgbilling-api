@@ -109,12 +109,7 @@
         </xs:sequence>
       </xs:complexType>
 
-<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
-
-[error] ContractTariffService_type1.scala:94: Mapable is already defined as trait Mapable
-...
-[error] ContractTariffService_type1.scala:99: MapType is already defined as case class MapType
-
+<!-- alexanderfefelov
       <xs:complexType name="map">
         <xs:sequence>
           <xs:element name="entry" type="tns:entry" nillable="true" minOccurs="0" maxOccurs="unbounded"/>

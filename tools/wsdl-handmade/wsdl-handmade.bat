@@ -4,11 +4,12 @@ set WSDLMERGE=bin\WSDLMerge.exe
 set XMLSTARLET=bin\xml.exe
 set SED=bin\sed.exe
 
-set EXECUTER=http://bgbilling.local:8080/bgbilling/executer
+set EXECUTER=http://billing.bgbilling.local:8080/bgbilling/executer
 
 set TARGET_DIR=soap\oss\src\main\wsdl\handmade
 if not exist %TARGET_DIR%\nul mkdir %TARGET_DIR%
 call :process %EXECUTER%/ru.bitel.oss.kernel.directories.address AddressService
+call :process %EXECUTER%/ru.bitel.oss.kernel.directories.domain  DomainService
 call :process %EXECUTER%/ru.bitel.oss.kernel.entity              EntityService
 call :process %EXECUTER%/ru.bitel.oss.systems.inventory.resource PhoneResourceService
 call :process %EXECUTER%/ru.bitel.oss.systems.order.product      ProductOrderService

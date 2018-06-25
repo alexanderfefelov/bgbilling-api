@@ -206,7 +206,7 @@ lazy val dbUtil = (project in file("db/util"))
   .settings(
     name := "bgbilling-api-db-util",
     commonSettings,
-    buildInfoPackage := soapUtilTargetPackage,
+    buildInfoPackage := dbUtilTargetPackage,
     libraryDependencies ++= Seq(
       "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcV,
       "org.scalikejdbc" %% "scalikejdbc-syntax-support-macro" % scalikejdbcSyntaxSupportMacro,

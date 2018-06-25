@@ -73,12 +73,7 @@
         <xs:sequence/>
       </xs:complexType>
 
-<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
-
-[error] xmlprotocol.scala:17175: type mismatch;
-...
-[error] xmlprotocol.scala:17178: value toSeq is not a member of Any
-
+<!-- alexanderfefelov
       <xs:complexType name="getUsersInGroup">
         <xs:sequence>
           <xs:element name="arg0" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>

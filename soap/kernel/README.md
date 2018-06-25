@@ -1,3 +1,3 @@
 # bgbilling-api-soap-kernel
 
-7.1_941
+7.1_987

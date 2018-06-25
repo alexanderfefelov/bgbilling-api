@@ -24,12 +24,7 @@
       <xs:element name="ipResourceDelete" type="tns:ipResourceDelete"/>
       <xs:element name="ipResourceDeleteResponse" type="tns:ipResourceDeleteResponse"/>
 
-<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
-
-[error] xmlprotocol.scala:7767: type mismatch
-...
-[error] xmlprotocol.scala:7770: value toSeq is not a member of Any
-
+<!-- alexanderfefelov
       <xs:element name="ipResourceList" type="tns:ipResourceList"/>
 -->
 
@@ -174,8 +169,10 @@
           <xs:element name="return" type="xs:int" minOccurs="0"/>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="freeIpResourceRangeList">
+      <xs:complexType name="freeIpResourceRangeListOld">
         <xs:sequence>
+          <xs:element name="deviceId" type="xs:int"/>
+          <xs:element name="interfaceId" type="xs:int"/>
           <xs:element name="ipResourceCategoryIds" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="ipResourceIds" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="dateFrom" type="xs:dateTime" minOccurs="0"/>
@@ -184,7 +181,7 @@
           <xs:element name="max" type="xs:int"/>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="freeIpResourceRangeListResponse">
+      <xs:complexType name="freeIpResourceRangeListOldResponse">
         <xs:sequence>
           <xs:element name="return" type="tns:ipResourceRange" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
@@ -202,10 +199,8 @@
         <xs:attribute name="from" type="xs:base64Binary"/>
         <xs:attribute name="to" type="xs:base64Binary"/>
       </xs:complexType>
-      <xs:complexType name="freeIpResourceRangeListOld">
+      <xs:complexType name="freeIpResourceRangeList">
         <xs:sequence>
-          <xs:element name="deviceId" type="xs:int"/>
-          <xs:element name="interfaceId" type="xs:int"/>
           <xs:element name="ipResourceCategoryIds" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="ipResourceIds" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="dateFrom" type="xs:dateTime" minOccurs="0"/>
@@ -214,7 +209,7 @@
           <xs:element name="max" type="xs:int"/>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="freeIpResourceRangeListOldResponse">
+      <xs:complexType name="freeIpResourceRangeListResponse">
         <xs:sequence>
           <xs:element name="return" type="tns:ipResourceRange" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
@@ -264,21 +259,6 @@
           <xs:element name="return" type="xs:int"/>
         </xs:sequence>
       </xs:complexType>
-      <xs:complexType name="ipCategoryList">
-        <xs:sequence/>
-      </xs:complexType>
-      <xs:complexType name="ipCategoryListResponse">
-        <xs:sequence>
-          <xs:element name="return" type="tns:ipCategory" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-      </xs:complexType>
-      <xs:complexType name="ipCategory">
-        <xs:complexContent>
-          <xs:extension base="ns1:abstractTreeNode">
-            <xs:sequence/>
-          </xs:extension>
-        </xs:complexContent>
-      </xs:complexType>
       <xs:complexType name="vlanResourceSubscribe">
         <xs:sequence>
           <xs:element name="vlan" type="xs:int"/>
@@ -295,7 +275,21 @@
           <xs:element name="return" type="xs:boolean"/>
         </xs:sequence>
       </xs:complexType>
-
+      <xs:complexType name="ipCategoryList">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="ipCategoryListResponse">
+        <xs:sequence>
+          <xs:element name="return" type="tns:ipCategory" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="ipCategory">
+        <xs:complexContent>
+          <xs:extension base="ns1:abstractTreeNode">
+            <xs:sequence/>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
 <!-- alexanderfefelov
       <xs:complexType name="ipResourceList">
         <xs:sequence>
@@ -303,7 +297,6 @@
         </xs:sequence>
       </xs:complexType>
 -->
-
       <xs:complexType name="ipResourceListResponse">
         <xs:sequence>
           <xs:element name="return" type="tns:ipResource" minOccurs="0" maxOccurs="unbounded"/>
@@ -572,6 +565,44 @@
       </xsc:complexType>
     </xsc:schema>
   </types>
+  <message name="vlanResourceSubscribe">
+    <part name="parameters" element="tns:vlanResourceSubscribe">
+    </part>
+  </message>
+  <message name="vlanResourceSubscribeResponse">
+    <part name="parameters" element="tns:vlanResourceSubscribeResponse">
+    </part>
+  </message>
+  <message name="BGException">
+    <part name="fault" element="tns:BGException">
+    </part>
+  </message>
+  <message name="ipResourceUnsubscribe">
+    <part name="parameters" element="tns:ipResourceUnsubscribe">
+    </part>
+  </message>
+  <message name="ipResourceUnsubscribeResponse">
+    <part name="parameters" element="tns:ipResourceUnsubscribeResponse">
+    </part>
+  </message>
+<!-- alexanderfefelov
+  <message name="ipResourceList">
+    <part name="parameters" element="tns:ipResourceList">
+    </part>
+  </message>
+-->
+  <message name="ipResourceListResponse">
+    <part name="parameters" element="tns:ipResourceListResponse">
+    </part>
+  </message>
+  <message name="ipResourceSubscribe">
+    <part name="parameters" element="tns:ipResourceSubscribe">
+    </part>
+  </message>
+  <message name="ipResourceSubscribeResponse">
+    <part name="parameters" element="tns:ipResourceSubscribeResponse">
+    </part>
+  </message>
   <message name="vlanResourceUnsubscribe">
     <part name="parameters" element="tns:vlanResourceUnsubscribe">
     </part>
@@ -580,32 +611,12 @@
     <part name="parameters" element="tns:vlanResourceUnsubscribeResponse">
     </part>
   </message>
-  <message name="BGException">
-    <part name="fault" element="tns:BGException">
+  <message name="vlanResourceUpdate">
+    <part name="parameters" element="tns:vlanResourceUpdate">
     </part>
   </message>
-  <message name="vlanSubscriptionList1">
-    <part name="parameters" element="tns:vlanSubscriptionList1">
-    </part>
-  </message>
-  <message name="vlanSubscriptionList1Response">
-    <part name="parameters" element="tns:vlanSubscriptionList1Response">
-    </part>
-  </message>
-  <message name="vlanSubscriptionList">
-    <part name="parameters" element="tns:vlanSubscriptionList">
-    </part>
-  </message>
-  <message name="vlanSubscriptionListResponse">
-    <part name="parameters" element="tns:vlanSubscriptionListResponse">
-    </part>
-  </message>
-  <message name="vlanCategoryRoot">
-    <part name="parameters" element="tns:vlanCategoryRoot">
-    </part>
-  </message>
-  <message name="vlanCategoryRootResponse">
-    <part name="parameters" element="tns:vlanCategoryRootResponse">
+  <message name="vlanResourceUpdateResponse">
+    <part name="parameters" element="tns:vlanResourceUpdateResponse">
     </part>
   </message>
   <message name="vlanCategoryUpdate">
@@ -638,18 +649,6 @@
   </message>
   <message name="ipCategoryListResponse">
     <part name="parameters" element="tns:ipCategoryListResponse">
-    </part>
-  </message>
-
-<!-- alexanderfefelov
-  <message name="ipResourceList">
-    <part name="parameters" element="tns:ipResourceList">
-    </part>
-  </message>
--->
-
-  <message name="ipResourceListResponse">
-    <part name="parameters" element="tns:ipResourceListResponse">
     </part>
   </message>
   <message name="ipCategoryUpdate">
@@ -700,12 +699,12 @@
     <part name="parameters" element="tns:vlanResourceGetResponse">
     </part>
   </message>
-  <message name="vlanResourceUpdate">
-    <part name="parameters" element="tns:vlanResourceUpdate">
+  <message name="vlanResourceDelete">
+    <part name="parameters" element="tns:vlanResourceDelete">
     </part>
   </message>
-  <message name="vlanResourceUpdateResponse">
-    <part name="parameters" element="tns:vlanResourceUpdateResponse">
+  <message name="vlanResourceDeleteResponse">
+    <part name="parameters" element="tns:vlanResourceDeleteResponse">
     </part>
   </message>
   <message name="nextFreeVlan">
@@ -716,36 +715,28 @@
     <part name="parameters" element="tns:nextFreeVlanResponse">
     </part>
   </message>
-  <message name="vlanResourceDelete">
-    <part name="parameters" element="tns:vlanResourceDelete">
+  <message name="vlanSubscriptionList1">
+    <part name="parameters" element="tns:vlanSubscriptionList1">
     </part>
   </message>
-  <message name="vlanResourceDeleteResponse">
-    <part name="parameters" element="tns:vlanResourceDeleteResponse">
+  <message name="vlanSubscriptionList1Response">
+    <part name="parameters" element="tns:vlanSubscriptionList1Response">
     </part>
   </message>
-  <message name="vlanResourceSubscribe">
-    <part name="parameters" element="tns:vlanResourceSubscribe">
+  <message name="vlanSubscriptionList">
+    <part name="parameters" element="tns:vlanSubscriptionList">
     </part>
   </message>
-  <message name="vlanResourceSubscribeResponse">
-    <part name="parameters" element="tns:vlanResourceSubscribeResponse">
+  <message name="vlanSubscriptionListResponse">
+    <part name="parameters" element="tns:vlanSubscriptionListResponse">
     </part>
   </message>
-  <message name="ipResourceSubscribe">
-    <part name="parameters" element="tns:ipResourceSubscribe">
+  <message name="vlanCategoryRoot">
+    <part name="parameters" element="tns:vlanCategoryRoot">
     </part>
   </message>
-  <message name="ipResourceSubscribeResponse">
-    <part name="parameters" element="tns:ipResourceSubscribeResponse">
-    </part>
-  </message>
-  <message name="ipResourceUnsubscribe">
-    <part name="parameters" element="tns:ipResourceUnsubscribe">
-    </part>
-  </message>
-  <message name="ipResourceUnsubscribeResponse">
-    <part name="parameters" element="tns:ipResourceUnsubscribeResponse">
+  <message name="vlanCategoryRootResponse">
+    <part name="parameters" element="tns:vlanCategoryRootResponse">
     </part>
   </message>
   <message name="ipSubscriptionList">
@@ -756,28 +747,12 @@
     <part name="parameters" element="tns:ipSubscriptionListResponse">
     </part>
   </message>
-  <message name="vlanResourceList">
-    <part name="parameters" element="tns:vlanResourceList">
-    </part>
-  </message>
-  <message name="vlanResourceListResponse">
-    <part name="parameters" element="tns:vlanResourceListResponse">
-    </part>
-  </message>
   <message name="freeVlan">
     <part name="parameters" element="tns:freeVlan">
     </part>
   </message>
   <message name="freeVlanResponse">
     <part name="parameters" element="tns:freeVlanResponse">
-    </part>
-  </message>
-  <message name="freeIpResourceRangeList">
-    <part name="parameters" element="tns:freeIpResourceRangeList">
-    </part>
-  </message>
-  <message name="freeIpResourceRangeListResponse">
-    <part name="parameters" element="tns:freeIpResourceRangeListResponse">
     </part>
   </message>
   <message name="freeIpResourceRangeListOld">
@@ -788,7 +763,57 @@
     <part name="parameters" element="tns:freeIpResourceRangeListOldResponse">
     </part>
   </message>
+  <message name="freeIpResourceRangeList">
+    <part name="parameters" element="tns:freeIpResourceRangeList">
+    </part>
+  </message>
+  <message name="freeIpResourceRangeListResponse">
+    <part name="parameters" element="tns:freeIpResourceRangeListResponse">
+    </part>
+  </message>
+  <message name="vlanResourceList">
+    <part name="parameters" element="tns:vlanResourceList">
+    </part>
+  </message>
+  <message name="vlanResourceListResponse">
+    <part name="parameters" element="tns:vlanResourceListResponse">
+    </part>
+  </message>
   <portType name="ResourceService">
+    <operation name="vlanResourceSubscribe">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceSubscribeRequest" message="tns:vlanResourceSubscribe">
+      </input>
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceSubscribeResponse" message="tns:vlanResourceSubscribeResponse">
+      </output>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceSubscribe/Fault/BGException">
+      </fault>
+    </operation>
+    <operation name="ipResourceUnsubscribe">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceUnsubscribeRequest" message="tns:ipResourceUnsubscribe">
+      </input>
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceUnsubscribeResponse" message="tns:ipResourceUnsubscribeResponse">
+      </output>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceUnsubscribe/Fault/BGException">
+      </fault>
+    </operation>
+<!-- alexanderfefelov
+    <operation name="ipResourceList">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceListRequest" message="tns:ipResourceList">
+      </input>
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceListResponse" message="tns:ipResourceListResponse">
+      </output>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceList/Fault/BGException">
+      </fault>
+    </operation>
+-->
+    <operation name="ipResourceSubscribe">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceSubscribeRequest" message="tns:ipResourceSubscribe">
+      </input>
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceSubscribeResponse" message="tns:ipResourceSubscribeResponse">
+      </output>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceSubscribe/Fault/BGException">
+      </fault>
+    </operation>
     <operation name="vlanResourceUnsubscribe">
       <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceUnsubscribeRequest" message="tns:vlanResourceUnsubscribe">
       </input>
@@ -797,28 +822,12 @@
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceUnsubscribe/Fault/BGException">
       </fault>
     </operation>
-    <operation name="vlanSubscriptionList1">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionList1Request" message="tns:vlanSubscriptionList1">
+    <operation name="vlanResourceUpdate">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceUpdateRequest" message="tns:vlanResourceUpdate">
       </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionList1Response" message="tns:vlanSubscriptionList1Response">
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceUpdateResponse" message="tns:vlanResourceUpdateResponse">
       </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionList1/Fault/BGException">
-      </fault>
-    </operation>
-    <operation name="vlanSubscriptionList">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionListRequest" message="tns:vlanSubscriptionList">
-      </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionListResponse" message="tns:vlanSubscriptionListResponse">
-      </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionList/Fault/BGException">
-      </fault>
-    </operation>
-    <operation name="vlanCategoryRoot">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanCategoryRootRequest" message="tns:vlanCategoryRoot">
-      </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanCategoryRootResponse" message="tns:vlanCategoryRootResponse">
-      </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanCategoryRoot/Fault/BGException">
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceUpdate/Fault/BGException">
       </fault>
     </operation>
     <operation name="vlanCategoryUpdate">
@@ -853,18 +862,6 @@
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipCategoryList/Fault/BGException">
       </fault>
     </operation>
-
-<!-- alexanderfefelov
-    <operation name="ipResourceList">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceListRequest" message="tns:ipResourceList">
-      </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceListResponse" message="tns:ipResourceListResponse">
-      </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceList/Fault/BGException">
-      </fault>
-    </operation>
--->
-
     <operation name="ipCategoryUpdate">
       <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipCategoryUpdateRequest" message="tns:ipCategoryUpdate">
       </input>
@@ -913,12 +910,12 @@
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceGet/Fault/BGException">
       </fault>
     </operation>
-    <operation name="vlanResourceUpdate">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceUpdateRequest" message="tns:vlanResourceUpdate">
+    <operation name="vlanResourceDelete">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceDeleteRequest" message="tns:vlanResourceDelete">
       </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceUpdateResponse" message="tns:vlanResourceUpdateResponse">
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceDeleteResponse" message="tns:vlanResourceDeleteResponse">
       </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceUpdate/Fault/BGException">
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceDelete/Fault/BGException">
       </fault>
     </operation>
     <operation name="nextFreeVlan">
@@ -929,36 +926,28 @@
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/nextFreeVlan/Fault/BGException">
       </fault>
     </operation>
-    <operation name="vlanResourceDelete">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceDeleteRequest" message="tns:vlanResourceDelete">
+    <operation name="vlanSubscriptionList1">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionList1Request" message="tns:vlanSubscriptionList1">
       </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceDeleteResponse" message="tns:vlanResourceDeleteResponse">
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionList1Response" message="tns:vlanSubscriptionList1Response">
       </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceDelete/Fault/BGException">
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionList1/Fault/BGException">
       </fault>
     </operation>
-    <operation name="vlanResourceSubscribe">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceSubscribeRequest" message="tns:vlanResourceSubscribe">
+    <operation name="vlanSubscriptionList">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionListRequest" message="tns:vlanSubscriptionList">
       </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceSubscribeResponse" message="tns:vlanResourceSubscribeResponse">
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionListResponse" message="tns:vlanSubscriptionListResponse">
       </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceSubscribe/Fault/BGException">
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanSubscriptionList/Fault/BGException">
       </fault>
     </operation>
-    <operation name="ipResourceSubscribe">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceSubscribeRequest" message="tns:ipResourceSubscribe">
+    <operation name="vlanCategoryRoot">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanCategoryRootRequest" message="tns:vlanCategoryRoot">
       </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceSubscribeResponse" message="tns:ipResourceSubscribeResponse">
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanCategoryRootResponse" message="tns:vlanCategoryRootResponse">
       </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceSubscribe/Fault/BGException">
-      </fault>
-    </operation>
-    <operation name="ipResourceUnsubscribe">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceUnsubscribeRequest" message="tns:ipResourceUnsubscribe">
-      </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceUnsubscribeResponse" message="tns:ipResourceUnsubscribeResponse">
-      </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipResourceUnsubscribe/Fault/BGException">
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanCategoryRoot/Fault/BGException">
       </fault>
     </operation>
     <operation name="ipSubscriptionList">
@@ -969,28 +958,12 @@
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/ipSubscriptionList/Fault/BGException">
       </fault>
     </operation>
-    <operation name="vlanResourceList">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceListRequest" message="tns:vlanResourceList">
-      </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceListResponse" message="tns:vlanResourceListResponse">
-      </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceList/Fault/BGException">
-      </fault>
-    </operation>
     <operation name="freeVlan">
       <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/freeVlanRequest" message="tns:freeVlan">
       </input>
       <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/freeVlanResponse" message="tns:freeVlanResponse">
       </output>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/freeVlan/Fault/BGException">
-      </fault>
-    </operation>
-    <operation name="freeIpResourceRangeList">
-      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/freeIpResourceRangeListRequest" message="tns:freeIpResourceRangeList">
-      </input>
-      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/freeIpResourceRangeListResponse" message="tns:freeIpResourceRangeListResponse">
-      </output>
-      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/freeIpResourceRangeList/Fault/BGException">
       </fault>
     </operation>
     <operation name="freeIpResourceRangeListOld">
@@ -1001,10 +974,92 @@
       <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/freeIpResourceRangeListOld/Fault/BGException">
       </fault>
     </operation>
+    <operation name="freeIpResourceRangeList">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/freeIpResourceRangeListRequest" message="tns:freeIpResourceRangeList">
+      </input>
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/freeIpResourceRangeListResponse" message="tns:freeIpResourceRangeListResponse">
+      </output>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/freeIpResourceRangeList/Fault/BGException">
+      </fault>
+    </operation>
+    <operation name="vlanResourceList">
+      <input wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceListRequest" message="tns:vlanResourceList">
+      </input>
+      <output wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceListResponse" message="tns:vlanResourceListResponse">
+      </output>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://common.resource.inventory.systems.oss.bitel.ru/ResourceService/vlanResourceList/Fault/BGException">
+      </fault>
+    </operation>
   </portType>
   <binding name="ResourceServiceBinding" type="tns:ResourceService">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document">
     </soap:binding>
+    <operation name="vlanResourceSubscribe">
+      <soap:operation soapAction="">
+      </soap:operation>
+      <input>
+        <soap:body use="literal">
+        </soap:body>
+      </input>
+      <output>
+        <soap:body use="literal">
+        </soap:body>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal">
+        </soap:fault>
+      </fault>
+    </operation>
+    <operation name="ipResourceUnsubscribe">
+      <soap:operation soapAction="">
+      </soap:operation>
+      <input>
+        <soap:body use="literal">
+        </soap:body>
+      </input>
+      <output>
+        <soap:body use="literal">
+        </soap:body>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal">
+        </soap:fault>
+      </fault>
+    </operation>
+<!-- alexanderfefelov
+    <operation name="ipResourceList">
+      <soap:operation soapAction="">
+      </soap:operation>
+      <input>
+        <soap:body use="literal">
+        </soap:body>
+      </input>
+      <output>
+        <soap:body use="literal">
+        </soap:body>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal">
+        </soap:fault>
+      </fault>
+    </operation>
+-->
+    <operation name="ipResourceSubscribe">
+      <soap:operation soapAction="">
+      </soap:operation>
+      <input>
+        <soap:body use="literal">
+        </soap:body>
+      </input>
+      <output>
+        <soap:body use="literal">
+        </soap:body>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal">
+        </soap:fault>
+      </fault>
+    </operation>
     <operation name="vlanResourceUnsubscribe">
       <soap:operation soapAction="">
       </soap:operation>
@@ -1021,39 +1076,7 @@
         </soap:fault>
       </fault>
     </operation>
-    <operation name="vlanSubscriptionList1">
-      <soap:operation soapAction="">
-      </soap:operation>
-      <input>
-        <soap:body use="literal">
-        </soap:body>
-      </input>
-      <output>
-        <soap:body use="literal">
-        </soap:body>
-      </output>
-      <fault name="BGException">
-        <soap:fault name="BGException" use="literal">
-        </soap:fault>
-      </fault>
-    </operation>
-    <operation name="vlanSubscriptionList">
-      <soap:operation soapAction="">
-      </soap:operation>
-      <input>
-        <soap:body use="literal">
-        </soap:body>
-      </input>
-      <output>
-        <soap:body use="literal">
-        </soap:body>
-      </output>
-      <fault name="BGException">
-        <soap:fault name="BGException" use="literal">
-        </soap:fault>
-      </fault>
-    </operation>
-    <operation name="vlanCategoryRoot">
+    <operation name="vlanResourceUpdate">
       <soap:operation soapAction="">
       </soap:operation>
       <input>
@@ -1133,26 +1156,6 @@
         </soap:fault>
       </fault>
     </operation>
-
-<!-- alexanderfefelov
-    <operation name="ipResourceList">
-      <soap:operation soapAction="">
-      </soap:operation>
-      <input>
-        <soap:body use="literal">
-        </soap:body>
-      </input>
-      <output>
-        <soap:body use="literal">
-        </soap:body>
-      </output>
-      <fault name="BGException">
-        <soap:fault name="BGException" use="literal">
-        </soap:fault>
-      </fault>
-    </operation>
--->
-
     <operation name="ipCategoryUpdate">
       <soap:operation soapAction="">
       </soap:operation>
@@ -1249,7 +1252,7 @@
         </soap:fault>
       </fault>
     </operation>
-    <operation name="vlanResourceUpdate">
+    <operation name="vlanResourceDelete">
       <soap:operation soapAction="">
       </soap:operation>
       <input>
@@ -1281,7 +1284,7 @@
         </soap:fault>
       </fault>
     </operation>
-    <operation name="vlanResourceDelete">
+    <operation name="vlanSubscriptionList1">
       <soap:operation soapAction="">
       </soap:operation>
       <input>
@@ -1297,7 +1300,7 @@
         </soap:fault>
       </fault>
     </operation>
-    <operation name="vlanResourceSubscribe">
+    <operation name="vlanSubscriptionList">
       <soap:operation soapAction="">
       </soap:operation>
       <input>
@@ -1313,23 +1316,7 @@
         </soap:fault>
       </fault>
     </operation>
-    <operation name="ipResourceSubscribe">
-      <soap:operation soapAction="">
-      </soap:operation>
-      <input>
-        <soap:body use="literal">
-        </soap:body>
-      </input>
-      <output>
-        <soap:body use="literal">
-        </soap:body>
-      </output>
-      <fault name="BGException">
-        <soap:fault name="BGException" use="literal">
-        </soap:fault>
-      </fault>
-    </operation>
-    <operation name="ipResourceUnsubscribe">
+    <operation name="vlanCategoryRoot">
       <soap:operation soapAction="">
       </soap:operation>
       <input>
@@ -1361,7 +1348,7 @@
         </soap:fault>
       </fault>
     </operation>
-    <operation name="vlanResourceList">
+    <operation name="freeVlan">
       <soap:operation soapAction="">
       </soap:operation>
       <input>
@@ -1377,7 +1364,7 @@
         </soap:fault>
       </fault>
     </operation>
-    <operation name="freeVlan">
+    <operation name="freeIpResourceRangeListOld">
       <soap:operation soapAction="">
       </soap:operation>
       <input>
@@ -1409,7 +1396,7 @@
         </soap:fault>
       </fault>
     </operation>
-    <operation name="freeIpResourceRangeListOld">
+    <operation name="vlanResourceList">
       <soap:operation soapAction="">
       </soap:operation>
       <input>

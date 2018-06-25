@@ -246,12 +246,7 @@
         </xs:complexContent>
       </xs:complexType>
 
-<!-- alexanderfefelov: scalaxb 1.5.2 won't compile
-
-[error] xmlprotocol.scala:16658: type mismatch;
-...
-[error] xmlprotocol.scala:16661: value toSeq is not a member of Any
-
+<!-- alexanderfefelov
       <xs:complexType name="cancelLimitChangeTask">
         <xs:sequence>
           <xs:element name="arg0" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
@@ -312,11 +307,9 @@
   <message name="contractLimitGetResponse">
     <part name="parameters" element="tns:contractLimitGetResponse"/>
   </message>
-<!-- alexanderfefelov
   <message name="cancelLimitChangeTask">
     <part name="parameters" element="tns:cancelLimitChangeTask"/>
   </message>
--->
   <message name="cancelLimitChangeTaskResponse">
     <part name="parameters" element="tns:cancelLimitChangeTaskResponse"/>
   </message>

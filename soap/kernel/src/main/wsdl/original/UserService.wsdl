@@ -113,6 +113,11 @@
             <xs:attribute name="contractPid" type="xs:int" use="required"/>
             <xs:attribute name="contractTitle" type="xs:string"/>
             <xs:attribute name="date" type="xs:dateTime"/>
+            <xs:attribute name="domainIds">
+              <xs:simpleType>
+                <xs:list itemType="xs:int"/>
+              </xs:simpleType>
+            </xs:attribute>
             <xs:attribute name="email" type="xs:string"/>
             <xs:attribute name="password" type="xs:string"/>
             <xs:attribute name="ruleAccessContractParameter">
