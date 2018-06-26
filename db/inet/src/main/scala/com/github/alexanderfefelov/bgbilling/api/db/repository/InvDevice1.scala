@@ -45,9 +45,9 @@ object InvDevice1 extends SQLSyntaxSupport[InvDevice1] with ApiDbConfig {
 
   override val autoSession = AutoSession
 
-  def find(id: Int)(implicit session: DBSession = autoSession): Option[InvDevice1] = {
+  def find(ident: Int)(implicit session: DBSession = autoSession): Option[InvDevice1] = {
     withSQL {
-      select.from(InvDevice1 as id).where.eq(id.id, id)
+      select.from(InvDevice1 as id).where.eq(id.id, ident)
     }.map(InvDevice1(id.resultName)).single.apply()
   }
 
