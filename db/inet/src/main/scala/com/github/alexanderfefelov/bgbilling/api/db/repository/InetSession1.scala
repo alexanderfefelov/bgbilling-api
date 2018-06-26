@@ -3,6 +3,8 @@ package com.github.alexanderfefelov.bgbilling.api.db.repository
 import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class InetSession1(
   id: Long,
@@ -37,9 +39,9 @@ object InetSession1 extends SQLSyntaxSupport[InetSession1] with ApiDbConfig {
 
   override val autoSession = AutoSession
 
-  def find(id: Long, parentid: Long, splittedid: Long, connectionid: Long, sessionstart: DateTime, sessionstop: Option[DateTime], lastactive: DateTime, sessiontime: Long, sessioncost: BigDecimal, devicestate: Short, status: Short)(implicit session: DBSession = autoSession): Option[InetSession1] = {
+  def find(connectionid: Long, id: Long)(implicit session: DBSession = autoSession): Option[InetSession1] = {
     withSQL {
-      select.from(InetSession1 as is).where.eq(is.id, id).and.eq(is.parentid, parentid).and.eq(is.splittedid, splittedid).and.eq(is.connectionid, connectionid).and.eq(is.sessionstart, sessionstart).and.eq(is.sessionstop, sessionstop).and.eq(is.lastactive, lastactive).and.eq(is.sessiontime, sessiontime).and.eq(is.sessioncost, sessioncost).and.eq(is.devicestate, devicestate).and.eq(is.status, status)
+      select.from(InetSession1 as is).where.eq(is.connectionid, connectionid).and.eq(is.id, id)
     }.map(InetSession1(is.resultName)).single.apply()
   }
 
@@ -70,6 +72,7 @@ object InetSession1 extends SQLSyntaxSupport[InetSession1] with ApiDbConfig {
   }
 
   def create(
+    id: Long,
     parentid: Long,
     splittedid: Long,
     connectionid: Long,
@@ -80,8 +83,9 @@ object InetSession1 extends SQLSyntaxSupport[InetSession1] with ApiDbConfig {
     sessioncost: BigDecimal,
     devicestate: Short,
     status: Short)(implicit session: DBSession = autoSession): InetSession1 = {
-    val generatedKey = withSQL {
+    withSQL {
       insert.into(InetSession1).namedValues(
+        column.id -> id,
         column.parentid -> parentid,
         column.splittedid -> splittedid,
         column.connectionid -> connectionid,
@@ -93,10 +97,10 @@ object InetSession1 extends SQLSyntaxSupport[InetSession1] with ApiDbConfig {
         column.devicestate -> devicestate,
         column.status -> status
       )
-    }.updateAndReturnGeneratedKey.apply()
+    }.update.apply()
 
     InetSession1(
-      id = generatedKey,
+      id = id,
       parentid = parentid,
       splittedid = splittedid,
       connectionid = connectionid,
@@ -112,6 +116,7 @@ object InetSession1 extends SQLSyntaxSupport[InetSession1] with ApiDbConfig {
   def batchInsert(entities: Seq[InetSession1])(implicit session: DBSession = autoSession): List[Int] = {
     val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
+        'id -> entity.id,
         'parentid -> entity.parentid,
         'splittedid -> entity.splittedid,
         'connectionid -> entity.connectionid,
@@ -123,6 +128,7 @@ object InetSession1 extends SQLSyntaxSupport[InetSession1] with ApiDbConfig {
         'devicestate -> entity.devicestate,
         'status -> entity.status))
     SQL("""insert into inet_session_1(
+      id,
       parentId,
       splittedId,
       connectionId,
@@ -134,6 +140,7 @@ object InetSession1 extends SQLSyntaxSupport[InetSession1] with ApiDbConfig {
       deviceState,
       status
     ) values (
+      {id},
       {parentid},
       {splittedid},
       {connectionid},
@@ -161,13 +168,13 @@ object InetSession1 extends SQLSyntaxSupport[InetSession1] with ApiDbConfig {
         column.sessioncost -> entity.sessioncost,
         column.devicestate -> entity.devicestate,
         column.status -> entity.status
-      ).where.eq(column.id, entity.id).and.eq(column.parentid, entity.parentid).and.eq(column.splittedid, entity.splittedid).and.eq(column.connectionid, entity.connectionid).and.eq(column.sessionstart, entity.sessionstart).and.eq(column.sessionstop, entity.sessionstop).and.eq(column.lastactive, entity.lastactive).and.eq(column.sessiontime, entity.sessiontime).and.eq(column.sessioncost, entity.sessioncost).and.eq(column.devicestate, entity.devicestate).and.eq(column.status, entity.status)
+      ).where.eq(column.connectionid, entity.connectionid).and.eq(column.id, entity.id)
     }.update.apply()
     entity
   }
 
   def destroy(entity: InetSession1)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(InetSession1).where.eq(column.id, entity.id).and.eq(column.parentid, entity.parentid).and.eq(column.splittedid, entity.splittedid).and.eq(column.connectionid, entity.connectionid).and.eq(column.sessionstart, entity.sessionstart).and.eq(column.sessionstop, entity.sessionstop).and.eq(column.lastactive, entity.lastactive).and.eq(column.sessiontime, entity.sessiontime).and.eq(column.sessioncost, entity.sessioncost).and.eq(column.devicestate, entity.devicestate).and.eq(column.status, entity.status) }.update.apply()
+    withSQL { delete.from(InetSession1).where.eq(column.connectionid, entity.connectionid).and.eq(column.id, entity.id) }.update.apply()
   }
 
 }

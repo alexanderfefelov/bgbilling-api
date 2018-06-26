@@ -3,6 +3,8 @@ package com.github.alexanderfefelov.bgbilling.api.db.repository
 import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class InetConnection1(
   id: Long,
@@ -45,9 +47,9 @@ object InetConnection1 extends SQLSyntaxSupport[InetConnection1] with ApiDbConfi
 
   override val autoSession = AutoSession
 
-  def find(id: Long, parentid: Long, deviceid: Int, deviceport: Int, agentdeviceid: Int, circuitid: Option[String], acctsessionid: Option[String], username: Option[String], `type`: Int, accesscode: Short, servid: Int, calledstationid: Option[String], callingstationid: Option[String], ipresourceid: Int, ipaddress: Option[Array[Byte]], connectionstart: DateTime, devicestate: Short, deviceoptions: String, status: Short)(implicit session: DBSession = autoSession): Option[InetConnection1] = {
+  def find(deviceid: Int, id: Long)(implicit session: DBSession = autoSession): Option[InetConnection1] = {
     withSQL {
-      select.from(InetConnection1 as ic).where.eq(ic.id, id).and.eq(ic.parentid, parentid).and.eq(ic.deviceid, deviceid).and.eq(ic.deviceport, deviceport).and.eq(ic.agentdeviceid, agentdeviceid).and.eq(ic.circuitid, circuitid).and.eq(ic.acctsessionid, acctsessionid).and.eq(ic.username, username).and.eq(ic.`type`, `type`).and.eq(ic.accesscode, accesscode).and.eq(ic.servid, servid).and.eq(ic.calledstationid, calledstationid).and.eq(ic.callingstationid, callingstationid).and.eq(ic.ipresourceid, ipresourceid).and.eq(ic.ipaddress, ipaddress).and.eq(ic.connectionstart, connectionstart).and.eq(ic.devicestate, devicestate).and.eq(ic.deviceoptions, deviceoptions).and.eq(ic.status, status)
+      select.from(InetConnection1 as ic).where.eq(ic.deviceid, deviceid).and.eq(ic.id, id)
     }.map(InetConnection1(ic.resultName)).single.apply()
   }
 
@@ -78,6 +80,7 @@ object InetConnection1 extends SQLSyntaxSupport[InetConnection1] with ApiDbConfi
   }
 
   def create(
+    id: Long,
     parentid: Long,
     deviceid: Int,
     deviceport: Int,
@@ -96,8 +99,9 @@ object InetConnection1 extends SQLSyntaxSupport[InetConnection1] with ApiDbConfi
     devicestate: Short,
     deviceoptions: String,
     status: Short)(implicit session: DBSession = autoSession): InetConnection1 = {
-    val generatedKey = withSQL {
+    withSQL {
       insert.into(InetConnection1).namedValues(
+        column.id -> id,
         column.parentid -> parentid,
         column.deviceid -> deviceid,
         column.deviceport -> deviceport,
@@ -117,10 +121,10 @@ object InetConnection1 extends SQLSyntaxSupport[InetConnection1] with ApiDbConfi
         column.deviceoptions -> deviceoptions,
         column.status -> status
       )
-    }.updateAndReturnGeneratedKey.apply()
+    }.update.apply()
 
     InetConnection1(
-      id = generatedKey,
+      id = id,
       parentid = parentid,
       deviceid = deviceid,
       deviceport = deviceport,
@@ -144,6 +148,7 @@ object InetConnection1 extends SQLSyntaxSupport[InetConnection1] with ApiDbConfi
   def batchInsert(entities: Seq[InetConnection1])(implicit session: DBSession = autoSession): List[Int] = {
     val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
+        'id -> entity.id,
         'parentid -> entity.parentid,
         'deviceid -> entity.deviceid,
         'deviceport -> entity.deviceport,
@@ -163,6 +168,7 @@ object InetConnection1 extends SQLSyntaxSupport[InetConnection1] with ApiDbConfi
         'deviceoptions -> entity.deviceoptions,
         'status -> entity.status))
     SQL("""insert into inet_connection_1(
+      id,
       parentId,
       deviceId,
       devicePort,
@@ -182,6 +188,7 @@ object InetConnection1 extends SQLSyntaxSupport[InetConnection1] with ApiDbConfi
       deviceOptions,
       status
     ) values (
+      {id},
       {parentid},
       {deviceid},
       {deviceport},
@@ -225,13 +232,13 @@ object InetConnection1 extends SQLSyntaxSupport[InetConnection1] with ApiDbConfi
         column.devicestate -> entity.devicestate,
         column.deviceoptions -> entity.deviceoptions,
         column.status -> entity.status
-      ).where.eq(column.id, entity.id).and.eq(column.parentid, entity.parentid).and.eq(column.deviceid, entity.deviceid).and.eq(column.deviceport, entity.deviceport).and.eq(column.agentdeviceid, entity.agentdeviceid).and.eq(column.circuitid, entity.circuitid).and.eq(column.acctsessionid, entity.acctsessionid).and.eq(column.username, entity.username).and.eq(column.`type`, entity.`type`).and.eq(column.accesscode, entity.accesscode).and.eq(column.servid, entity.servid).and.eq(column.calledstationid, entity.calledstationid).and.eq(column.callingstationid, entity.callingstationid).and.eq(column.ipresourceid, entity.ipresourceid).and.eq(column.ipaddress, entity.ipaddress).and.eq(column.connectionstart, entity.connectionstart).and.eq(column.devicestate, entity.devicestate).and.eq(column.deviceoptions, entity.deviceoptions).and.eq(column.status, entity.status)
+      ).where.eq(column.deviceid, entity.deviceid).and.eq(column.id, entity.id)
     }.update.apply()
     entity
   }
 
   def destroy(entity: InetConnection1)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(InetConnection1).where.eq(column.id, entity.id).and.eq(column.parentid, entity.parentid).and.eq(column.deviceid, entity.deviceid).and.eq(column.deviceport, entity.deviceport).and.eq(column.agentdeviceid, entity.agentdeviceid).and.eq(column.circuitid, entity.circuitid).and.eq(column.acctsessionid, entity.acctsessionid).and.eq(column.username, entity.username).and.eq(column.`type`, entity.`type`).and.eq(column.accesscode, entity.accesscode).and.eq(column.servid, entity.servid).and.eq(column.calledstationid, entity.calledstationid).and.eq(column.callingstationid, entity.callingstationid).and.eq(column.ipresourceid, entity.ipresourceid).and.eq(column.ipaddress, entity.ipaddress).and.eq(column.connectionstart, entity.connectionstart).and.eq(column.devicestate, entity.devicestate).and.eq(column.deviceoptions, entity.deviceoptions).and.eq(column.status, entity.status) }.update.apply()
+    withSQL { delete.from(InetConnection1).where.eq(column.deviceid, entity.deviceid).and.eq(column.id, entity.id) }.update.apply()
   }
 
 }

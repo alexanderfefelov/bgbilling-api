@@ -3,6 +3,8 @@ package com.github.alexanderfefelov.bgbilling.api.db.repository
 import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{DateTime, LocalDate}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class InvDevice1(
   id: Int,
@@ -39,42 +41,39 @@ object InvDevice1 extends SQLSyntaxSupport[InvDevice1] with ApiDbConfig {
   def apply(id: SyntaxProvider[InvDevice1])(rs: WrappedResultSet): InvDevice1 = autoConstruct(rs, id)
   def apply(id: ResultName[InvDevice1])(rs: WrappedResultSet): InvDevice1 = autoConstruct(rs, id)
 
-  val id_ = InvDevice1.syntax("id") /* alexanderfefelov
-                                        type mismatch;
-                                         found   : Int
-                                         required: scalikejdbc.QuerySQLSyntaxProvider[scalikejdbc.SQLSyntaxSupport[...] */
+  val id = InvDevice1.syntax("id")
 
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[InvDevice1] = {
     withSQL {
-      select.from(InvDevice1 as id_).where.eq(id_.id, id)
-    }.map(InvDevice1(id_.resultName)).single.apply()
+      select.from(InvDevice1 as id).where.eq(id.id, id)
+    }.map(InvDevice1(id.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[InvDevice1] = {
-    withSQL(select.from(InvDevice1 as id_)).map(InvDevice1(id_.resultName)).list.apply()
+    withSQL(select.from(InvDevice1 as id)).map(InvDevice1(id.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(InvDevice1 as id_)).map(rs => rs.long(1)).single.apply().get
+    withSQL(select(sqls.count).from(InvDevice1 as id)).map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[InvDevice1] = {
     withSQL {
-      select.from(InvDevice1 as id_).where.append(where)
-    }.map(InvDevice1(id_.resultName)).single.apply()
+      select.from(InvDevice1 as id).where.append(where)
+    }.map(InvDevice1(id.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[InvDevice1] = {
     withSQL {
-      select.from(InvDevice1 as id_).where.append(where)
-    }.map(InvDevice1(id_.resultName)).list.apply()
+      select.from(InvDevice1 as id).where.append(where)
+    }.map(InvDevice1(id.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
     withSQL {
-      select(sqls.count).from(InvDevice1 as id_).where.append(where)
+      select(sqls.count).from(InvDevice1 as id).where.append(where)
     }.map(_.long(1)).single.apply().get
   }
 
