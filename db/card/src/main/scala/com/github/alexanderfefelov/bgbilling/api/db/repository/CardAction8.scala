@@ -3,6 +3,8 @@ package com.github.alexanderfefelov.bgbilling.api.db.repository
 import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class CardAction8(
   id: Int,

@@ -5,7 +5,7 @@ import scalikejdbc._
 
 case class CardActionCard8(
   actionId: Int,
-  cardId: Int) {
+  cardId: Long) {
 
   def save()(implicit session: DBSession = CardActionCard8.autoSession): CardActionCard8 = CardActionCard8.save(this)(session)
 
@@ -27,7 +27,7 @@ object CardActionCard8 extends SQLSyntaxSupport[CardActionCard8] with ApiDbConfi
 
   override val autoSession = AutoSession
 
-  def find(actionId: Int, cardId: Int)(implicit session: DBSession = autoSession): Option[CardActionCard8] = {
+  def find(actionId: Int, cardId: Long)(implicit session: DBSession = autoSession): Option[CardActionCard8] = {
     withSQL {
       select.from(CardActionCard8 as cac).where.eq(cac.actionId, actionId).and.eq(cac.cardId, cardId)
     }.map(CardActionCard8(cac.resultName)).single.apply()
@@ -61,7 +61,7 @@ object CardActionCard8 extends SQLSyntaxSupport[CardActionCard8] with ApiDbConfi
 
   def create(
     actionId: Int,
-    cardId: Int)(implicit session: DBSession = autoSession): CardActionCard8 = {
+    cardId: Long)(implicit session: DBSession = autoSession): CardActionCard8 = {
     withSQL {
       insert.into(CardActionCard8).namedValues(
         column.actionId -> actionId,

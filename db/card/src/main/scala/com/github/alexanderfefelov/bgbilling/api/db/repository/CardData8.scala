@@ -3,10 +3,12 @@ package com.github.alexanderfefelov.bgbilling.api.db.repository
 import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 import org.joda.time.{LocalDate, DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class CardData8(
-  id: Int,
-  cardCode: Int,
+  id: Long,
+  cardCode: Long,
   csId: Int,
   cardPinCode: String,
   summa: Float,
@@ -42,7 +44,7 @@ object CardData8 extends SQLSyntaxSupport[CardData8] with ApiDbConfig {
 
   override val autoSession = AutoSession
 
-  def find(id: Int)(implicit session: DBSession = autoSession): Option[CardData8] = {
+  def find(id: Long)(implicit session: DBSession = autoSession): Option[CardData8] = {
     withSQL {
       select.from(CardData8 as cd).where.eq(cd.id, id)
     }.map(CardData8(cd.resultName)).single.apply()
@@ -75,7 +77,7 @@ object CardData8 extends SQLSyntaxSupport[CardData8] with ApiDbConfig {
   }
 
   def create(
-    cardCode: Int,
+    cardCode: Long,
     csId: Int,
     cardPinCode: String,
     summa: Float,
@@ -111,7 +113,7 @@ object CardData8 extends SQLSyntaxSupport[CardData8] with ApiDbConfig {
     }.updateAndReturnGeneratedKey.apply()
 
     CardData8(
-      id = generatedKey.toInt,
+      id = generatedKey,
       cardCode = cardCode,
       csId = csId,
       cardPinCode = cardPinCode,
