@@ -1,3 +1,3 @@
 # bgbilling-api-db-bonus
 
-7.1_93
+7.1_96
