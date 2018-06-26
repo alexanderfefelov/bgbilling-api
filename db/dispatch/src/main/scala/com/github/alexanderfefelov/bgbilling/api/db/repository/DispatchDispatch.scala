@@ -2,6 +2,8 @@ package com.github.alexanderfefelov.bgbilling.api.db.repository
 
 import scalikejdbc._
 import org.joda.time.{DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class DispatchDispatch(
   id: Int,
@@ -16,7 +18,8 @@ case class DispatchDispatch(
   lastModifyDate: Option[DateTime] = None,
   repeatTime: String,
   contactTypeId: Int,
-  conditions: Array[Byte]) {
+  conditions: Array[Byte],
+  woContactType: Boolean) {
 
   def save()(implicit session: DBSession = DispatchDispatch.autoSession): DispatchDispatch = DispatchDispatch.save(this)(session)
 
@@ -29,7 +32,7 @@ object DispatchDispatch extends SQLSyntaxSupport[DispatchDispatch] {
 
   override val tableName = "dispatch_dispatch"
 
-  override val columns = Seq("id", "title", "sender_type_id", "active", "personal", "do_not_mark_sended", "only_one_contact", "user", "create_date", "last_modify_date", "repeat_time", "contact_type_id", "conditions")
+  override val columns = Seq("id", "title", "sender_type_id", "active", "personal", "do_not_mark_sended", "only_one_contact", "user", "create_date", "last_modify_date", "repeat_time", "contact_type_id", "conditions", "wo_contact_type")
 
   def apply(dd: SyntaxProvider[DispatchDispatch])(rs: WrappedResultSet): DispatchDispatch = autoConstruct(rs, dd)
   def apply(dd: ResultName[DispatchDispatch])(rs: WrappedResultSet): DispatchDispatch = autoConstruct(rs, dd)
@@ -82,7 +85,8 @@ object DispatchDispatch extends SQLSyntaxSupport[DispatchDispatch] {
     lastModifyDate: Option[DateTime] = None,
     repeatTime: String,
     contactTypeId: Int,
-    conditions: Array[Byte])(implicit session: DBSession = autoSession): DispatchDispatch = {
+    conditions: Array[Byte],
+    woContactType: Boolean)(implicit session: DBSession = autoSession): DispatchDispatch = {
     val generatedKey = withSQL {
       insert.into(DispatchDispatch).namedValues(
         column.title -> title,
@@ -96,7 +100,8 @@ object DispatchDispatch extends SQLSyntaxSupport[DispatchDispatch] {
         column.lastModifyDate -> lastModifyDate,
         column.repeatTime -> repeatTime,
         column.contactTypeId -> contactTypeId,
-        column.conditions -> conditions
+        column.conditions -> conditions,
+        column.woContactType -> woContactType
       )
     }.updateAndReturnGeneratedKey.apply()
 
@@ -113,7 +118,8 @@ object DispatchDispatch extends SQLSyntaxSupport[DispatchDispatch] {
       lastModifyDate = lastModifyDate,
       repeatTime = repeatTime,
       contactTypeId = contactTypeId,
-      conditions = conditions)
+      conditions = conditions,
+      woContactType = woContactType)
   }
 
   def batchInsert(entities: Seq[DispatchDispatch])(implicit session: DBSession = autoSession): List[Int] = {
@@ -130,7 +136,8 @@ object DispatchDispatch extends SQLSyntaxSupport[DispatchDispatch] {
         'lastModifyDate -> entity.lastModifyDate,
         'repeatTime -> entity.repeatTime,
         'contactTypeId -> entity.contactTypeId,
-        'conditions -> entity.conditions))
+        'conditions -> entity.conditions,
+        'woContactType -> entity.woContactType))
     SQL("""insert into dispatch_dispatch(
       title,
       sender_type_id,
@@ -143,7 +150,8 @@ object DispatchDispatch extends SQLSyntaxSupport[DispatchDispatch] {
       last_modify_date,
       repeat_time,
       contact_type_id,
-      conditions
+      conditions,
+      wo_contact_type
     ) values (
       {title},
       {senderTypeId},
@@ -156,7 +164,8 @@ object DispatchDispatch extends SQLSyntaxSupport[DispatchDispatch] {
       {lastModifyDate},
       {repeatTime},
       {contactTypeId},
-      {conditions}
+      {conditions},
+      {woContactType}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -175,7 +184,8 @@ object DispatchDispatch extends SQLSyntaxSupport[DispatchDispatch] {
         column.lastModifyDate -> entity.lastModifyDate,
         column.repeatTime -> entity.repeatTime,
         column.contactTypeId -> entity.contactTypeId,
-        column.conditions -> entity.conditions
+        column.conditions -> entity.conditions,
+        column.woContactType -> entity.woContactType
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity

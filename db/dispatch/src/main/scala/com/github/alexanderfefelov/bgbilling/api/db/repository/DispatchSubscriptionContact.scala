@@ -4,7 +4,8 @@ import scalikejdbc._
 
 case class DispatchSubscriptionContact(
   subscriptionId: Int,
-  contactId: Int) {
+  contactId: Int,
+  hash: Option[String] = None) {
 
   def save()(implicit session: DBSession = DispatchSubscriptionContact.autoSession): DispatchSubscriptionContact = DispatchSubscriptionContact.save(this)(session)
 
@@ -17,7 +18,7 @@ object DispatchSubscriptionContact extends SQLSyntaxSupport[DispatchSubscription
 
   override val tableName = "dispatch_subscription_contact"
 
-  override val columns = Seq("subscription_id", "contact_id")
+  override val columns = Seq("subscription_id", "contact_id", "hash")
 
   def apply(dsc: SyntaxProvider[DispatchSubscriptionContact])(rs: WrappedResultSet): DispatchSubscriptionContact = autoConstruct(rs, dsc)
   def apply(dsc: ResultName[DispatchSubscriptionContact])(rs: WrappedResultSet): DispatchSubscriptionContact = autoConstruct(rs, dsc)
@@ -60,30 +61,36 @@ object DispatchSubscriptionContact extends SQLSyntaxSupport[DispatchSubscription
 
   def create(
     subscriptionId: Int,
-    contactId: Int)(implicit session: DBSession = autoSession): DispatchSubscriptionContact = {
+    contactId: Int,
+    hash: Option[String] = None)(implicit session: DBSession = autoSession): DispatchSubscriptionContact = {
     withSQL {
       insert.into(DispatchSubscriptionContact).namedValues(
         column.subscriptionId -> subscriptionId,
-        column.contactId -> contactId
+        column.contactId -> contactId,
+        column.hash -> hash
       )
     }.update.apply()
 
     DispatchSubscriptionContact(
       subscriptionId = subscriptionId,
-      contactId = contactId)
+      contactId = contactId,
+      hash = hash)
   }
 
   def batchInsert(entities: Seq[DispatchSubscriptionContact])(implicit session: DBSession = autoSession): List[Int] = {
     val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'subscriptionId -> entity.subscriptionId,
-        'contactId -> entity.contactId))
+        'contactId -> entity.contactId,
+        'hash -> entity.hash))
     SQL("""insert into dispatch_subscription_contact(
       subscription_id,
-      contact_id
+      contact_id,
+      hash
     ) values (
       {subscriptionId},
-      {contactId}
+      {contactId},
+      {hash}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -91,7 +98,8 @@ object DispatchSubscriptionContact extends SQLSyntaxSupport[DispatchSubscription
     withSQL {
       update(DispatchSubscriptionContact).set(
         column.subscriptionId -> entity.subscriptionId,
-        column.contactId -> entity.contactId
+        column.contactId -> entity.contactId,
+        column.hash -> entity.hash
       ).where.eq(column.contactId, entity.contactId).and.eq(column.subscriptionId, entity.subscriptionId)
     }.update.apply()
     entity
