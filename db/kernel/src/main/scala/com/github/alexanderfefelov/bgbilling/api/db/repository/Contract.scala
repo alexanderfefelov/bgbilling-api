@@ -2,6 +2,8 @@ package com.github.alexanderfefelov.bgbilling.api.db.repository
 
 import scalikejdbc._
 import org.joda.time.{LocalDate, DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class Contract(
   id: Int,
@@ -24,7 +26,8 @@ case class Contract(
   status: Byte,
   statusDate: Option[LocalDate] = None,
   lastTariffChange: Option[DateTime] = None,
-  crmCustomerId: Int) {
+  crmCustomerId: Int,
+  domainid: Int) {
 
   def save()(implicit session: DBSession = Contract.autoSession): Contract = Contract.save(this)(session)
 
@@ -37,7 +40,7 @@ object Contract extends SQLSyntaxSupport[Contract] {
 
   override val tableName = "contract"
 
-  override val columns = Seq("id", "gr", "title", "title_pattern_id", "pswd", "date1", "date2", "mode", "closesumma", "pgid", "pfid", "fc", "comment", "del", "scid", "sub_list", "sub_mode", "status", "status_date", "last_tariff_change", "crm_customer_id")
+  override val columns = Seq("id", "gr", "title", "title_pattern_id", "pswd", "date1", "date2", "mode", "closesumma", "pgid", "pfid", "fc", "comment", "del", "scid", "sub_list", "sub_mode", "status", "status_date", "last_tariff_change", "crm_customer_id", "domainId")
 
   def apply(c: SyntaxProvider[Contract])(rs: WrappedResultSet): Contract = autoConstruct(rs, c)
   def apply(c: ResultName[Contract])(rs: WrappedResultSet): Contract = autoConstruct(rs, c)
@@ -98,7 +101,8 @@ object Contract extends SQLSyntaxSupport[Contract] {
     status: Byte,
     statusDate: Option[LocalDate] = None,
     lastTariffChange: Option[DateTime] = None,
-    crmCustomerId: Int)(implicit session: DBSession = autoSession): Contract = {
+    crmCustomerId: Int,
+    domainid: Int)(implicit session: DBSession = autoSession): Contract = {
     val generatedKey = withSQL {
       insert.into(Contract).namedValues(
         column.gr -> gr,
@@ -120,7 +124,8 @@ object Contract extends SQLSyntaxSupport[Contract] {
         column.status -> status,
         column.statusDate -> statusDate,
         column.lastTariffChange -> lastTariffChange,
-        column.crmCustomerId -> crmCustomerId
+        column.crmCustomerId -> crmCustomerId,
+        column.domainid -> domainid
       )
     }.updateAndReturnGeneratedKey.apply()
 
@@ -145,7 +150,8 @@ object Contract extends SQLSyntaxSupport[Contract] {
       status = status,
       statusDate = statusDate,
       lastTariffChange = lastTariffChange,
-      crmCustomerId = crmCustomerId)
+      crmCustomerId = crmCustomerId,
+      domainid = domainid)
   }
 
   def batchInsert(entities: Seq[Contract])(implicit session: DBSession = autoSession): List[Int] = {
@@ -170,7 +176,8 @@ object Contract extends SQLSyntaxSupport[Contract] {
         'status -> entity.status,
         'statusDate -> entity.statusDate,
         'lastTariffChange -> entity.lastTariffChange,
-        'crmCustomerId -> entity.crmCustomerId))
+        'crmCustomerId -> entity.crmCustomerId,
+        'domainid -> entity.domainid))
     SQL("""insert into contract(
       gr,
       title,
@@ -191,7 +198,8 @@ object Contract extends SQLSyntaxSupport[Contract] {
       status,
       status_date,
       last_tariff_change,
-      crm_customer_id
+      crm_customer_id,
+      domainId
     ) values (
       {gr},
       {title},
@@ -212,7 +220,8 @@ object Contract extends SQLSyntaxSupport[Contract] {
       {status},
       {statusDate},
       {lastTariffChange},
-      {crmCustomerId}
+      {crmCustomerId},
+      {domainid}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -239,7 +248,8 @@ object Contract extends SQLSyntaxSupport[Contract] {
         column.status -> entity.status,
         column.statusDate -> entity.statusDate,
         column.lastTariffChange -> entity.lastTariffChange,
-        column.crmCustomerId -> entity.crmCustomerId
+        column.crmCustomerId -> entity.crmCustomerId,
+        column.domainid -> entity.domainid
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity

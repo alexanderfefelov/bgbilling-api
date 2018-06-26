@@ -2,6 +2,8 @@ package com.github.alexanderfefelov.bgbilling.api.db.repository
 
 import scalikejdbc._
 import org.joda.time.{DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class User(
   id: Int,
@@ -21,7 +23,8 @@ case class User(
   config: String,
   crmUserId: Int,
   cgrMode: Byte,
-  chPswd: Byte) {
+  chPswd: Byte,
+  domainids: String) {
 
   def save()(implicit session: DBSession = User.autoSession): User = User.save(this)(session)
 
@@ -34,7 +37,7 @@ object User extends SQLSyntaxSupport[User] {
 
   override val tableName = "user"
 
-  override val columns = Seq("id", "login", "name", "email", "descr", "pswd", "dt", "gr", "status", "cgr", "pids", "opids", "contract_pid", "contract_cid", "config", "crm_user_id", "cgr_mode", "ch_pswd")
+  override val columns = Seq("id", "login", "name", "email", "descr", "pswd", "dt", "gr", "status", "cgr", "pids", "opids", "contract_pid", "contract_cid", "config", "crm_user_id", "cgr_mode", "ch_pswd", "domainIds")
 
   def apply(u: SyntaxProvider[User])(rs: WrappedResultSet): User = autoConstruct(rs, u)
   def apply(u: ResultName[User])(rs: WrappedResultSet): User = autoConstruct(rs, u)
@@ -92,7 +95,8 @@ object User extends SQLSyntaxSupport[User] {
     config: String,
     crmUserId: Int,
     cgrMode: Byte,
-    chPswd: Byte)(implicit session: DBSession = autoSession): User = {
+    chPswd: Byte,
+    domainids: String)(implicit session: DBSession = autoSession): User = {
     val generatedKey = withSQL {
       insert.into(User).namedValues(
         column.login -> login,
@@ -111,7 +115,8 @@ object User extends SQLSyntaxSupport[User] {
         column.config -> config,
         column.crmUserId -> crmUserId,
         column.cgrMode -> cgrMode,
-        column.chPswd -> chPswd
+        column.chPswd -> chPswd,
+        column.domainids -> domainids
       )
     }.updateAndReturnGeneratedKey.apply()
 
@@ -133,7 +138,8 @@ object User extends SQLSyntaxSupport[User] {
       config = config,
       crmUserId = crmUserId,
       cgrMode = cgrMode,
-      chPswd = chPswd)
+      chPswd = chPswd,
+      domainids = domainids)
   }
 
   def batchInsert(entities: Seq[User])(implicit session: DBSession = autoSession): List[Int] = {
@@ -155,7 +161,8 @@ object User extends SQLSyntaxSupport[User] {
         'config -> entity.config,
         'crmUserId -> entity.crmUserId,
         'cgrMode -> entity.cgrMode,
-        'chPswd -> entity.chPswd))
+        'chPswd -> entity.chPswd,
+        'domainids -> entity.domainids))
     SQL("""insert into user(
       login,
       name,
@@ -173,7 +180,8 @@ object User extends SQLSyntaxSupport[User] {
       config,
       crm_user_id,
       cgr_mode,
-      ch_pswd
+      ch_pswd,
+      domainIds
     ) values (
       {login},
       {name},
@@ -191,7 +199,8 @@ object User extends SQLSyntaxSupport[User] {
       {config},
       {crmUserId},
       {cgrMode},
-      {chPswd}
+      {chPswd},
+      {domainids}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -215,7 +224,8 @@ object User extends SQLSyntaxSupport[User] {
         column.config -> entity.config,
         column.crmUserId -> entity.crmUserId,
         column.cgrMode -> entity.cgrMode,
-        column.chPswd -> entity.chPswd
+        column.chPswd -> entity.chPswd,
+        column.domainids -> entity.domainids
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity

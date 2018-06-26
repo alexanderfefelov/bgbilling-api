@@ -18,7 +18,8 @@ case class ContractPattern(
   namePattern: String,
   data: Option[Array[Byte]] = None,
   patid: Int,
-  status: Int) {
+  status: Int,
+  domainid: Int) {
 
   def save()(implicit session: DBSession = ContractPattern.autoSession): ContractPattern = ContractPattern.save(this)(session)
 
@@ -31,7 +32,7 @@ object ContractPattern extends SQLSyntaxSupport[ContractPattern] {
 
   override val tableName = "contract_pattern"
 
-  override val columns = Seq("id", "title", "closesumma", "tpid", "groups", "mode", "pgid", "pfid", "fc", "dtl", "tgid", "scrid", "name_pattern", "data", "patid", "status")
+  override val columns = Seq("id", "title", "closesumma", "tpid", "groups", "mode", "pgid", "pfid", "fc", "dtl", "tgid", "scrid", "name_pattern", "data", "patid", "status", "domainId")
 
   def apply(cp: SyntaxProvider[ContractPattern])(rs: WrappedResultSet): ContractPattern = autoConstruct(rs, cp)
   def apply(cp: ResultName[ContractPattern])(rs: WrappedResultSet): ContractPattern = autoConstruct(rs, cp)
@@ -87,7 +88,8 @@ object ContractPattern extends SQLSyntaxSupport[ContractPattern] {
     namePattern: String,
     data: Option[Array[Byte]] = None,
     patid: Int,
-    status: Int)(implicit session: DBSession = autoSession): ContractPattern = {
+    status: Int,
+    domainid: Int)(implicit session: DBSession = autoSession): ContractPattern = {
     val generatedKey = withSQL {
       insert.into(ContractPattern).namedValues(
         column.title -> title,
@@ -104,7 +106,8 @@ object ContractPattern extends SQLSyntaxSupport[ContractPattern] {
         column.namePattern -> namePattern,
         column.data -> data,
         column.patid -> patid,
-        column.status -> status
+        column.status -> status,
+        column.domainid -> domainid
       )
     }.updateAndReturnGeneratedKey.apply()
 
@@ -124,7 +127,8 @@ object ContractPattern extends SQLSyntaxSupport[ContractPattern] {
       namePattern = namePattern,
       data = data,
       patid = patid,
-      status = status)
+      status = status,
+      domainid = domainid)
   }
 
   def batchInsert(entities: Seq[ContractPattern])(implicit session: DBSession = autoSession): List[Int] = {
@@ -144,7 +148,8 @@ object ContractPattern extends SQLSyntaxSupport[ContractPattern] {
         'namePattern -> entity.namePattern,
         'data -> entity.data,
         'patid -> entity.patid,
-        'status -> entity.status))
+        'status -> entity.status,
+        'domainid -> entity.domainid))
     SQL("""insert into contract_pattern(
       title,
       closesumma,
@@ -160,7 +165,8 @@ object ContractPattern extends SQLSyntaxSupport[ContractPattern] {
       name_pattern,
       data,
       patid,
-      status
+      status,
+      domainId
     ) values (
       {title},
       {closesumma},
@@ -176,7 +182,8 @@ object ContractPattern extends SQLSyntaxSupport[ContractPattern] {
       {namePattern},
       {data},
       {patid},
-      {status}
+      {status},
+      {domainid}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -198,7 +205,8 @@ object ContractPattern extends SQLSyntaxSupport[ContractPattern] {
         column.namePattern -> entity.namePattern,
         column.data -> entity.data,
         column.patid -> entity.patid,
-        column.status -> entity.status
+        column.status -> entity.status,
+        column.domainid -> entity.domainid
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity

@@ -2,6 +2,8 @@ package com.github.alexanderfefelov.bgbilling.api.db.repository
 
 import scalikejdbc._
 import org.joda.time.{LocalDate, DateTime}
+import scalikejdbc.jodatime.JodaParameterBinderFactory._
+import scalikejdbc.jodatime.JodaTypeBinder._
 
 case class Service(
   id: Int,
