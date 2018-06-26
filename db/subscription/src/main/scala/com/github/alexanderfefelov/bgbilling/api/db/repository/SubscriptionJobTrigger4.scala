@@ -1,6 +1,5 @@
 package com.github.alexanderfefelov.bgbilling.api.db.repository
 
-import com.github.alexanderfefelov.bgbilling.api.db.util._
 import scalikejdbc._
 
 case class SubscriptionJobTrigger4(
@@ -23,9 +22,9 @@ case class SubscriptionJobTrigger4(
 }
 
 
-object SubscriptionJobTrigger4 extends SQLSyntaxSupport[SubscriptionJobTrigger4] with ApiDbConfig {
+object SubscriptionJobTrigger4 extends SQLSyntaxSupport[SubscriptionJobTrigger4] {
 
-  override val tableName = s"subscription_job_trigger_${bgBillingModuleId("subscription")}"
+  override val tableName = "subscription_job_trigger_4"
 
   override val columns = Seq("id", "jobId", "timeFromMillis", "timeToMillis", "persistent", "type", "data", "fireTimePrevMillis", "fireTimeNextMillis", "fireCount", "version")
 

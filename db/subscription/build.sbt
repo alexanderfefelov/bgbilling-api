@@ -1,1 +1,1 @@
-packageOptions += Package.ManifestAttributes(java.util.jar.Attributes.Name.SPECIFICATION_VERSION -> "7.1_11")
+packageOptions += Package.ManifestAttributes(java.util.jar.Attributes.Name.SPECIFICATION_VERSION -> "7.1_14")
