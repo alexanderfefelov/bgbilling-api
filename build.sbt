@@ -5,13 +5,14 @@ lazy val scalaV = "2.11.12"
 
 lazy val dispatchV = "0.11.3"
 lazy val httpClientV = "4.5.5"
-lazy val jodaV = "2.9.9"
+lazy val jodaV = "2.10"
 lazy val logbackClassicV = "1.2.3"
 lazy val mysqlConnectorJavaV = "5.1.45"
 lazy val scalaParserCombinatorsV = "1.0.6"
 lazy val scalaXmlV = "1.0.6"
-lazy val scalikejdbcV = "3.1.0"
-lazy val scalikejdbcSyntaxSupportMacro = scalikejdbcV
+lazy val scalikejdbcV = "3.2.3"
+lazy val scalikejdbcSyntaxSupportMacroV = scalikejdbcV
+lazy val scalikejdbcJodaTimeV = scalikejdbcV
 lazy val typesafeConfigV = "1.3.1"
 
 lazy val root = (project in file("."))
@@ -209,7 +210,8 @@ lazy val dbUtil = (project in file("db/util"))
     buildInfoPackage := dbUtilTargetPackage,
     libraryDependencies ++= Seq(
       "org.scalikejdbc" %% "scalikejdbc" % scalikejdbcV,
-      "org.scalikejdbc" %% "scalikejdbc-syntax-support-macro" % scalikejdbcSyntaxSupportMacro,
+      "org.scalikejdbc" %% "scalikejdbc-syntax-support-macro" % scalikejdbcSyntaxSupportMacroV,
+      "org.scalikejdbc" %% "scalikejdbc-joda-time" % scalikejdbcJodaTimeV,
       "mysql" % "mysql-connector-java" % mysqlConnectorJavaV,
       "ch.qos.logback" % "logback-classic" % logbackClassicV
     )
