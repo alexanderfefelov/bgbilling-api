@@ -13,7 +13,7 @@ object ContractStatusModule extends BaseModule {
   case class StatusListRecord(id: Long, title: String)
 
   def statusList(onlyManual: Int): List[StatusListRecord] = {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "StatusList",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "StatusList",
       "onlyManual" -> onlyManual.toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -38,7 +38,7 @@ object ContractStatusModule extends BaseModule {
   case class ContractStatusTableRecord(id: Long, status: String, period: String, comment: String)
 
   def contractStatusTable(cid: Long): List[ContractStatusTableRecord]= {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "ContractStatusTable",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "ContractStatusTable",
       "cid" -> cid.toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -65,7 +65,7 @@ object ContractStatusModule extends BaseModule {
   case class ContractStatusLogRecord(dateTime: DateTime, user: String, status: String, period: String, comment: String)
 
   def contractStatusLog(cid: Long): List[ContractStatusLogRecord] = {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "ContractStatusLog",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "ContractStatusLog",
       "cid" -> cid.toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>

@@ -10,7 +10,7 @@ object ContractModule extends BaseModule {
   override def module = "contract"
 
   def newContract(date: DateTime, pattern_id: Long, super_id: Long, sub_mode: Int, params: String, title: String, custom_title: String): Long = {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "NewContract",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "NewContract",
       "date" -> date.formatted("dd.MM.yyyy"),
       "pattern_id" -> pattern_id.toString,
       "super_id" -> super_id.toString,
@@ -23,7 +23,7 @@ object ContractModule extends BaseModule {
   }
 
   def updateContractMode(cid: Long, value: String): Boolean = {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "UpdateContractMode",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "UpdateContractMode",
       "cid" -> cid.toString,
       "value" -> value
     )
@@ -31,7 +31,7 @@ object ContractModule extends BaseModule {
   }
 
   def contractModuleAdd(cid: Long, module_ids: List[Long]): Boolean = {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "ContractModuleAdd",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "ContractModuleAdd",
       "cid" -> cid.toString,
       "module_ids" -> module_ids.mkString(",")
     )

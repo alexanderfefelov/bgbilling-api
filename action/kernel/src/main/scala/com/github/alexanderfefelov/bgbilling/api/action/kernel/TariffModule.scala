@@ -9,16 +9,17 @@ object TariffModule extends BaseModule {
   override def module = "tariff"
 
   def addTariffPlan(used: Int): (Long, Long) = {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "AddTariffPlan",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "AddTariffPlan",
       "used" -> used.toString
     )
-    val id = (XML.loadString(responseText) \ "data" \ "tariffPlan" \ "@id").text.toLong
-    val tree_id = (XML.loadString(responseText) \ "data" \ "tariffPlan" \ "@tree_id").text.toLong
+    val responceXml = XML.loadString(responseText)
+    val id = (responceXml \ "data" \ "tariffPlan" \ "@id").text.toLong
+    val tree_id = (responceXml \ "data" \ "tariffPlan" \ "@tree_id").text.toLong
     (id, tree_id)
   }
 
   def updateTariffPlan(tpid: Long, face: Int, title: String, title_web: String, use_title_in_web: Int, values: String, tpused: Int, config: String, mask: String): Boolean = {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "UpdateTariffPlan",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "UpdateTariffPlan",
       "tpid" -> tpid.toString,
       "face" -> face.toString,
       "title" -> title,
@@ -33,7 +34,7 @@ object TariffModule extends BaseModule {
   }
 
   def createMtree(mid: Long, parent_tree: Long, tree: Long): Boolean = {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "CreateMtree",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "CreateMtree",
       "mid" -> mid.toString,
       "parent_tree" -> parent_tree.toString,
       "tree" -> tree.toString
@@ -42,7 +43,7 @@ object TariffModule extends BaseModule {
   }
 
   def modifTariffNode_create(parent: Long, mtree_id: Long, typ: String): Unit = {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "ModifTariffNode",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "create",
       "parent" -> parent.toString,
       "mtree_id" -> mtree_id.toString,
@@ -52,7 +53,7 @@ object TariffModule extends BaseModule {
   }
 
   def modifTariffNode_update(id: Long, data: String): Unit = {
-    val (responseStatusCode, responseText, headers) = executeHttpPostRequest("action" -> "ModifTariffNode",
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "update",
       "id" -> id.toString,
       "data" -> data

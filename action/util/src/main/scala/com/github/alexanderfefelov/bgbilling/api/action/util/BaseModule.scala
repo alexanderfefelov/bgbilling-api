@@ -37,12 +37,12 @@ trait BaseModule extends ApiActionConfig {
     val response = httpClient.execute(request)
     val responseStatusCode = response.getStatusLine.getStatusCode
     val responseText = EntityUtils.toString(response.getEntity)
-    val headers = response.getAllHeaders
+    val responseHeaders = response.getAllHeaders
 
     response.close()
     httpClient.close()
 
-    (responseStatusCode, responseText, headers)
+    (responseStatusCode, responseText, responseHeaders)
   }
 
   private def createHttpRequestParameters(args: (String, String)*): util.ArrayList[NameValuePair] = {
