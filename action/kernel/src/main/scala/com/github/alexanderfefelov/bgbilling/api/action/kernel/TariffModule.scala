@@ -12,9 +12,15 @@ object TariffModule extends BaseModule {
     val (_, responseText, _) = executeHttpPostRequest("action" -> "AddTariffPlan",
       "used" -> used.toString
     )
-    val responceXml = XML.loadString(responseText)
-    val id = (responceXml \ "data" \ "tariffPlan" \ "@id").text.toLong
-    val tree_id = (responceXml \ "data" \ "tariffPlan" \ "@tree_id").text.toLong
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <tariffPlan face="0" id="4" mask="" title="New tariff plan" titleWeb="New tariff plan" tree_id="4" useTitleInWeb="1" used="0">
+    //        <config/>
+    //    </tariffPlan>
+    //</data>
+    val tariffPlan = XML.loadString(responseText) \\ "tariffPlan"
+    val id = (tariffPlan \ "@id").text.toLong
+    val tree_id = (tariffPlan \ "@tree_id").text.toLong
     (id, tree_id)
   }
 
@@ -30,6 +36,8 @@ object TariffModule extends BaseModule {
       "config" -> config,
       "mask" -> mask
     )
+    // <?xml version="1.0" encoding="UTF-8"?>
+    // <data status="ok"/>
     (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
   }
 
@@ -39,25 +47,31 @@ object TariffModule extends BaseModule {
       "parent_tree" -> parent_tree.toString,
       "tree" -> tree.toString
     )
+    // <?xml version="1.0" encoding="UTF-8"?>
+    // <data status="ok"/>
     (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
   }
 
-  def modifTariffNode_create(parent: Long, mtree_id: Long, typ: String): Unit = {
+  def modifTariffNode_create(parent: Long, mtree_id: Long, typ: String): Boolean = {
     val (_, responseText, _) = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "create",
       "parent" -> parent.toString,
       "mtree_id" -> mtree_id.toString,
       "type" -> typ
     )
-    (XML.loadString(responseText) \ "data" \ "@id").text.toLong
+    // <?xml version="1.0" encoding="UTF-8"?>
+    // <data status="ok"/>
+    (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
   }
 
-  def modifTariffNode_update(id: Long, data: String): Unit = {
+  def modifTariffNode_update(id: Long, data: String): Boolean = {
     val (_, responseText, _) = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "update",
       "id" -> id.toString,
       "data" -> data
     )
+    // <?xml version="1.0" encoding="UTF-8"?>
+    // <data status="ok"/>
     (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
   }
 

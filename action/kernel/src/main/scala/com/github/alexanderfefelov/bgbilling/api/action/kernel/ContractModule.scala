@@ -19,7 +19,11 @@ object ContractModule extends BaseModule {
       "title" -> title,
       "custom_title" -> custom_title
     )
-    (XML.loadString(responseText) \ "data" \ "contract" \ "@id").text.toLong
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <contract id="4" title="20160315-001"/>
+    //</data>
+    (XML.loadString(responseText) \\ "contract" \ "@id").text.toLong
   }
 
   def updateContractMode(cid: Long, value: String): Boolean = {
@@ -27,6 +31,8 @@ object ContractModule extends BaseModule {
       "cid" -> cid.toString,
       "value" -> value
     )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    // <data status="ok"/>
     (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
   }
 
@@ -35,6 +41,8 @@ object ContractModule extends BaseModule {
       "cid" -> cid.toString,
       "module_ids" -> module_ids.mkString(",")
     )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    // <data status="ok"/>
     (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
   }
 
