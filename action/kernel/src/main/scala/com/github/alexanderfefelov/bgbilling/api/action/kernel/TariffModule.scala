@@ -36,9 +36,25 @@ object TariffModule extends BaseModule {
       "config" -> config,
       "mask" -> mask
     )
-    // <?xml version="1.0" encoding="UTF-8"?>
-    // <data status="ok"/>
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
     (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
+  }
+
+  def copyTariffPlan(tpid: Long): (Long, Long) = {
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "CopyTariffPlan",
+      "tpid" -> tpid.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <tariffPlan face="0" id="5" mask="" title="Internet-1 copy" titleWeb="Internet-1 copy" tree_id="5" useTitleInWeb="1" used="1">
+    //        <config/>
+    //    </tariffPlan>
+    //</data>
+    val tariffPlan = XML.loadString(responseText) \\ "tariffPlan"
+    val id = (tariffPlan \ "@id").text.toLong
+    val tree_id = (tariffPlan \ "@tree_id").text.toLong
+    (id, tree_id)
   }
 
   def createMtree(mid: Long, parent_tree: Long, tree: Long): Boolean = {
@@ -47,21 +63,21 @@ object TariffModule extends BaseModule {
       "parent_tree" -> parent_tree.toString,
       "tree" -> tree.toString
     )
-    // <?xml version="1.0" encoding="UTF-8"?>
-    // <data status="ok"/>
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
     (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
   }
 
-  def modifTariffNode_create(parent: Long, mtree_id: Long, typ: String): Boolean = {
+  def modifTariffNode_create(parent: Long, mtree_id: Long, typ: String): Long = {
     val (_, responseText, _) = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "create",
       "parent" -> parent.toString,
       "mtree_id" -> mtree_id.toString,
       "type" -> typ
     )
-    // <?xml version="1.0" encoding="UTF-8"?>
-    // <data status="ok"/>
-    (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data id="31" status="ok"/>
+    (XML.loadString(responseText) \ "data" \ "@id").text.toLong
   }
 
   def modifTariffNode_update(id: Long, data: String): Boolean = {
@@ -70,9 +86,37 @@ object TariffModule extends BaseModule {
       "id" -> id.toString,
       "data" -> data
     )
-    // <?xml version="1.0" encoding="UTF-8"?>
-    // <data status="ok"/>
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
     (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
+  }
+
+  case class GetMtreeRecord(id: Long, parent: Long, typ: String, data: String, deep: Int, editable: Boolean)
+
+  def getMtree(tree_id: Long, mid: Long): List[GetMtreeRecord] = {
+    val (_, responseText, _) = executeHttpPostRequest("action" -> "GetMTree",
+      "tree_id" -> tree_id.toString,
+      "mid" -> mid.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data id="1" status="ok">
+    //    <item data="" deep="0" editable="true" id="1" parent="0" type="root"/>
+    //    <item data="trafficTypeId&amp;0,1,2" deep="0" editable="true" id="2" parent="1" type="trafficType"/>
+    //    <item data="serviceId&amp;1" deep="0" editable="true" id="3" parent="2" type="serviceSet"/>
+    //    <item data="type&amp;2%col&amp;1%cost&amp;0.0" deep="0" editable="true" id="4" parent="2" type="cost"/>
+    //    <item data="type&amp;5%col&amp;1%cost&amp;0.0" deep="0" editable="true" id="5" parent="2" type="cost"/>
+    //    <item data="inetOptionId&amp;2" deep="0" editable="true" id="6" parent="2" type="optionAdd"/>
+    //</data>
+    (XML.loadString(responseText) \\ "item").map(x =>
+      GetMtreeRecord(
+        (x \ "@id").text.toLong,
+        (x \ "@parent").text.toLong,
+        (x \ "@type").text,
+        (x \ "@data").text,
+        (x \ "@deep").text.toInt,
+        (x \ "@editable").text.toBoolean
+      )
+    ).toList
   }
 
 }

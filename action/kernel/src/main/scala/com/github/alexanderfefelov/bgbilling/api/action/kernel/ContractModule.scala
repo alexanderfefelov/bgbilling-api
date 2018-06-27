@@ -32,7 +32,7 @@ object ContractModule extends BaseModule {
       "value" -> value
     )
     //<?xml version="1.0" encoding="UTF-8"?>
-    // <data status="ok"/>
+    //<data status="ok"/>
     (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
   }
 
@@ -42,7 +42,7 @@ object ContractModule extends BaseModule {
       "module_ids" -> module_ids.mkString(",")
     )
     //<?xml version="1.0" encoding="UTF-8"?>
-    // <data status="ok"/>
+    //<data status="ok"/>
     (XML.loadString(responseText) \ "data" \ "@status").text == "ok"
   }
 
