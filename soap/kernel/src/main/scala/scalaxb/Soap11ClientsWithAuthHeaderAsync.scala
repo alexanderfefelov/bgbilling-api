@@ -1,7 +1,6 @@
-package com.github.alexanderfefelov.bgbilling.api.soap.scalaxb
+package scalaxb
 
 import com.github.alexanderfefelov.bgbilling.api.soap.util.ApiSoapConfig
-import scalaxb._
 import soapenvelope11._
 
 import scala.concurrent.Future
