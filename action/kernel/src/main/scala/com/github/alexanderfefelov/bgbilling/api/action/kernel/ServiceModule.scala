@@ -7,11 +7,11 @@ object ServiceModule extends BaseModule {
   override def module = "service"
 
   case class AboutServer(
-    version: String, buildNumber: String, buildTime: String, versionString: String,
-    serverFull: String, memory: String, serverLocale: String, serverTime: String, uptimetatus: String,
-    serverDbCharset: String, serverDbTime: String
+    version: String, build_number: String, build_time: String, versionstring: String,
+    serverfull: String, memory: String, serverlocale: String, servertime: String, uptimetatus: String,
+    serverdbcharset: String, serverdbtime: String
   )
-  case class AboutModuleRecord(name: String, version: String, buildNumber: String, buildTime: String, versionString: String)
+  case class AboutModuleRecord(name: String, version: String, build_number: String, build_time: String, versionstring: String)
 
   def about: (AboutServer, List[AboutModuleRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "About")

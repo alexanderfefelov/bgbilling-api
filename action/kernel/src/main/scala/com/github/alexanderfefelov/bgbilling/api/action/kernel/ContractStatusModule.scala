@@ -60,7 +60,7 @@ object ContractStatusModule extends BaseModule {
     ).toList
   }
 
-  case class ContractStatusLogRecord(dateTime: DateTime, user: String, status: String, period: String, comment: String)
+  case class ContractStatusLogRecord(date: DateTime, user: String, status: String, period: String, comment: String)
 
   def contractStatusLog(cid: Long): List[ContractStatusLogRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ContractStatusLog",

@@ -67,12 +67,12 @@ object ContractModule extends BaseModule {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def updateListParameter(cid: Long, pid: Long, value: Long, customValue: String): Boolean = { // Значение из списка
+  def updateListParameter(cid: Long, pid: Long, value: Long, custom_value: String): Boolean = { // Значение из списка
     val responseXml = executeHttpPostRequest("action" -> "UpdateListParameterType",
       "cid" -> cid.toString,
       "pid" -> pid.toString,
       "value" -> value.toString,
-      "custom_value" -> customValue
+      "custom_value" -> custom_value
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
