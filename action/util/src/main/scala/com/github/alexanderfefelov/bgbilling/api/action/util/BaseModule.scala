@@ -28,7 +28,7 @@ trait BaseModule extends ApiActionConfig {
     httpClient.close()
 
     val responseXml = XML.loadString(responseText)
-    if ((responseXml \\ "data" \ "@status").text != "ok") throw ApiActionException(responseText)
+    if (!List("ok", "message").contains((responseXml \\ "data" \ "@status").text)) throw ApiActionException(responseText)
 
     responseXml
   }

@@ -9,7 +9,7 @@ object ContractModule extends BaseModule {
 
   def newContract(date: DateTime, pattern_id: Long, super_id: Long, sub_mode: Int, params: String, title: String, custom_title: String): Long = {
     val responseXml = executeHttpPostRequest("action" -> "NewContract",
-      "date" -> date.formatted("dd.MM.yyyy"),
+      "date" -> date.formatted(DATE_FORMAT),
       "pattern_id" -> pattern_id.toString,
       "super_id" -> super_id.toString,
       "sub_mode" -> sub_mode.toString,
@@ -60,7 +60,7 @@ object ContractModule extends BaseModule {
     val responseXml = executeHttpPostRequest("action" -> "UpdateParameterType6",
       "cid" -> cid.toString,
       "pid" -> pid.toString,
-      "value" -> value.formatted("dd.MM.yyyy")
+      "value" -> value.formatted(DATE_FORMAT)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
@@ -68,7 +68,7 @@ object ContractModule extends BaseModule {
   }
 
   def updateListParameter(cid: Long, pid: Long, value: Long, custom_value: String): Boolean = { // Значение из списка
-    val responseXml = executeHttpPostRequest("action" -> "UpdateListParameterType",
+    val responseXml = executeHttpPostRequest("action" -> "UpdateListParam",
       "cid" -> cid.toString,
       "pid" -> pid.toString,
       "value" -> value.toString,
