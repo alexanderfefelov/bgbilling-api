@@ -4,8 +4,6 @@ import com.github.alexanderfefelov.bgbilling.api.action.util.BaseModule
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
-import scala.xml.XML
-
 object ContractStatusModule extends BaseModule {
 
   override def module = "contract.status"
@@ -13,7 +11,7 @@ object ContractStatusModule extends BaseModule {
   case class StatusListRecord(id: Long, title: String)
 
   def statusList(onlyManual: Int): List[StatusListRecord] = {
-    val (_, responseText, _) = executeHttpPostRequest("action" -> "StatusList",
+    val responseXml = executeHttpPostRequest("action" -> "StatusList",
       "onlyManual" -> onlyManual.toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -27,7 +25,7 @@ object ContractStatusModule extends BaseModule {
     //        <item id="5" title="В подключении"/>
     //    </list>
     //</data>
-    (XML.loadString(responseText) \\ "item").map(x =>
+    (responseXml \\ "item").map(x =>
       StatusListRecord(
         (x \ "@id").text.toInt,
         (x \ "@title").text
@@ -38,7 +36,7 @@ object ContractStatusModule extends BaseModule {
   case class ContractStatusTableRecord(id: Long, status: String, period: String, comment: String)
 
   def contractStatusTable(cid: Long): List[ContractStatusTableRecord]= {
-    val (_, responseText, _) = executeHttpPostRequest("action" -> "ContractStatusTable",
+    val responseXml = executeHttpPostRequest("action" -> "ContractStatusTable",
       "cid" -> cid.toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -52,7 +50,7 @@ object ContractStatusModule extends BaseModule {
     //        </data>
     //    </table>
     //</data>
-    (XML.loadString(responseText) \\ "row").map(x =>
+    (responseXml \\ "row").map(x =>
       ContractStatusTableRecord(
         (x \ "@id").text.toLong,
         (x \ "@status").text,
@@ -65,7 +63,7 @@ object ContractStatusModule extends BaseModule {
   case class ContractStatusLogRecord(dateTime: DateTime, user: String, status: String, period: String, comment: String)
 
   def contractStatusLog(cid: Long): List[ContractStatusLogRecord] = {
-    val (_, responseText, _) = executeHttpPostRequest("action" -> "ContractStatusLog",
+    val responseXml = executeHttpPostRequest("action" -> "ContractStatusLog",
       "cid" -> cid.toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -78,7 +76,7 @@ object ContractStatusModule extends BaseModule {
     //        </data>
     //    </table>
     //</data>
-    (XML.loadString(responseText) \\ "row").map(x =>
+    (responseXml \\ "row").map(x =>
       ContractStatusLogRecord(
         DateTime.parse((x \ "@date").text, DateTimeFormat.forPattern("dd.MM.yyyy HH:mm:ss")),
         (x \ "@user").text,

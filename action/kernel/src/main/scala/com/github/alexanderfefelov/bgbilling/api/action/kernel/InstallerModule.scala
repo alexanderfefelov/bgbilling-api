@@ -2,8 +2,6 @@ package com.github.alexanderfefelov.bgbilling.api.action.kernel
 
 import com.github.alexanderfefelov.bgbilling.api.action.util.BaseModule
 
-import scala.xml.XML
-
 object InstallerModule extends BaseModule {
 
   override def module = "installer"
@@ -11,7 +9,7 @@ object InstallerModule extends BaseModule {
   case class GetInstalledModulesRecord(name: String, module_name: String, version: String, build: String)
 
   def getInstalledModules: List[GetInstalledModulesRecord] = {
-    val (_, responseText, _) = executeHttpPostRequest("action" -> "GetInstalledModules")
+    val responseXml = executeHttpPostRequest("action" -> "GetInstalledModules")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
     //    <installed_modules serverversion="7.1">
@@ -28,7 +26,7 @@ object InstallerModule extends BaseModule {
     //        <item build="14" module_name="subscription" name="subscription" version="7.1"/>
     //    </installed_modules>
     //</data>
-    (XML.loadString(responseText) \\ "item").map(x =>
+    (responseXml \\ "item").map(x =>
       GetInstalledModulesRecord(
         (x \ "@name").text,
         (x \ "@module_name").text,
@@ -41,7 +39,7 @@ object InstallerModule extends BaseModule {
   case class GetInstalledPluginsRecord(id: String)
 
   def getInstalledPlugins: List[GetInstalledPluginsRecord] = {
-    val (_, responseText, _) = executeHttpPostRequest("action" -> "GetInstalledPlugins")
+    val responseXml = executeHttpPostRequest("action" -> "GetInstalledPlugins")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
     //    <plugin_list>
@@ -49,7 +47,7 @@ object InstallerModule extends BaseModule {
     //        <plugin id="ru.bitel.bgbilling.plugins.bonus"/>
     //    </plugin_list>
     //</data>
-    (XML.loadString(responseText) \\ "plugin").map(x =>
+    (responseXml \\ "plugin").map(x =>
       GetInstalledPluginsRecord(
         (x \ "@id").text
       )

@@ -2,10 +2,11 @@ package com.github.alexanderfefelov.bgbilling.api.action.util
 
 import java.util
 
+import scala.xml.{Elem, XML}
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.{HttpPost, HttpUriRequest, RequestBuilder}
 import org.apache.http.impl.client.{CloseableHttpClient, HttpClients}
-import org.apache.http.{Header, NameValuePair}
+import org.apache.http.NameValuePair
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.util.EntityUtils
 
@@ -13,7 +14,7 @@ trait BaseModule extends ApiActionConfig {
 
   def module: String
 
-  def executeHttpGetRequest(args: (String, String)*): (Int, String, Array[Header]) = {
+  def executeHttpGetRequest(args: (String, String)*): Elem = {
     val parameters = createHttpRequestParameters(args: _*)
     val httpClient = createHttpClient()
     val request = createUriGetRequest(parameters)
@@ -26,10 +27,13 @@ trait BaseModule extends ApiActionConfig {
     response.close()
     httpClient.close()
 
-    (responseStatusCode, responseText, headers)
+    val responseXml = XML.loadString(responseText)
+    if ((responseXml \\ "data" \ "@status").text != "ok") throw ApiActionException(responseText)
+
+    responseXml
   }
 
-  def executeHttpPostRequest(args: (String, String)*): (Int, String, Array[Header]) = {
+  def executeHttpPostRequest(args: (String, String)*): Elem = {
     val parameters = createHttpRequestParameters(args: _*)
     val httpClient = createHttpClient()
     val request = createPostRequest(parameters)
@@ -42,7 +46,10 @@ trait BaseModule extends ApiActionConfig {
     response.close()
     httpClient.close()
 
-    (responseStatusCode, responseText, responseHeaders)
+    val responseXml = XML.loadString(responseText)
+    if ((responseXml \\ "data" \ "@status").text != "ok") throw ApiActionException(responseText)
+
+    responseXml
   }
 
   private def createHttpRequestParameters(args: (String, String)*): util.ArrayList[NameValuePair] = {
@@ -75,7 +82,7 @@ trait BaseModule extends ApiActionConfig {
     val request = new HttpPost(actionUrl)
     request.addHeader("Content-Type", "application/x-www-form-urlencoded")
     request.addHeader("User-Agent", actionUserAgent)
-    request.setEntity(new UrlEncodedFormEntity(parameters))
+    request.setEntity(new UrlEncodedFormEntity(parameters, "utf-8"))
     request
   }
 

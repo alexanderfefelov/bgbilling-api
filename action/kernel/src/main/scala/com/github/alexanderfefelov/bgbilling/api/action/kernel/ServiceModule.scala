@@ -2,8 +2,6 @@ package com.github.alexanderfefelov.bgbilling.api.action.kernel
 
 import com.github.alexanderfefelov.bgbilling.api.action.util.BaseModule
 
-import scala.xml.XML
-
 object ServiceModule extends BaseModule {
 
   override def module = "service"
@@ -16,7 +14,7 @@ object ServiceModule extends BaseModule {
   case class AboutModuleRecord(name: String, version: String, buildNumber: String, buildTime: String, versionString: String)
 
   def about: (AboutServer, List[AboutModuleRecord]) = {
-    val (_, responseText, _) = executeHttpPostRequest("action" -> "About")
+    val responseXml = executeHttpPostRequest("action" -> "About")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
     //    <modules>
@@ -41,7 +39,6 @@ object ServiceModule extends BaseModule {
     //            uptimestatus="Started: 26.06.2018 03:27:38 Uptime: 1 d 05:22:30" version="7.1"
     //            versionstring="7.1.986 / 20.06.2018 19:21:09"/>
     //</data>
-    val responseXml = XML.loadString(responseText)
     val server = (responseXml \\ "server").map(x =>
       AboutServer(
         (x \ "@version").text,

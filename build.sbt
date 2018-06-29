@@ -67,6 +67,7 @@ lazy val actionUtil = (project in file("action/util"))
     commonSettings,
     buildInfoPackage := actionUtilTargetPackage,
     libraryDependencies ++= Seq(
+      "org.scala-lang.modules" %% "scala-xml" % scalaXmlV,
       "org.apache.httpcomponents" % "httpclient" % httpClientV
     )
   )
