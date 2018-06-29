@@ -89,6 +89,16 @@ object TariffModule extends BaseModule {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
+  def modifTariffNode_delete(id: Long): Boolean = { // Удаляет ветку, начинающуюся с id
+    val responseXml = executeHttpPostRequest("action" -> "ModifTariffNode",
+      "command" -> "delete",
+      "id" -> id.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
   case class GetMtreeRecord(id: Long, parent: Long, typ: String, data: String, deep: Int, editable: Boolean)
 
   def getMtree(tree_id: Long, mid: Long): List[GetMtreeRecord] = {
