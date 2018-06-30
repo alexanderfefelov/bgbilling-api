@@ -2,7 +2,7 @@ package com.github.alexanderfefelov.bgbilling.api.action.kernel
 
 import com.github.alexanderfefelov.bgbilling.api.action.util.BaseModule
 
-object TariffModule extends BaseModule {
+object TariffActions extends BaseModule {
 
   override def module = "tariff"
 

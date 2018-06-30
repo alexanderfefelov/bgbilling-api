@@ -4,7 +4,7 @@ import com.github.alexanderfefelov.bgbilling.api.action.util.BaseModule
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
-object ContractStatusModule extends BaseModule {
+object ContractStatusActions extends BaseModule {
 
   override def module = "contract.status"
 

@@ -2,7 +2,7 @@ package com.github.alexanderfefelov.bgbilling.api.action.kernel
 
 import com.github.alexanderfefelov.bgbilling.api.action.util.BaseModule
 
-object ServiceModule extends BaseModule {
+object ServiceActions extends BaseModule {
 
   override def module = "service"
 

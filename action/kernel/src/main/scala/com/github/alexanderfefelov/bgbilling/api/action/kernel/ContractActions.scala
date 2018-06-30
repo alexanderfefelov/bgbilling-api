@@ -3,7 +3,7 @@ package com.github.alexanderfefelov.bgbilling.api.action.kernel
 import com.github.alexanderfefelov.bgbilling.api.action.util.BaseModule
 import org.joda.time.DateTime
 
-object ContractModule extends BaseModule {
+object ContractActions extends BaseModule {
 
   override def module = "contract"
 
