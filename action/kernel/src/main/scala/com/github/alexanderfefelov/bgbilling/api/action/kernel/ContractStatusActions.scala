@@ -1,10 +1,10 @@
 package com.github.alexanderfefelov.bgbilling.api.action.kernel
 
-import com.github.alexanderfefelov.bgbilling.api.action.util.BaseModule
+import com.github.alexanderfefelov.bgbilling.api.action.util.BaseActions
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
 
-object ContractStatusActions extends BaseModule {
+object ContractStatusActions extends BaseActions {
 
   override def module = "contract.status"
 

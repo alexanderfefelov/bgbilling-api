@@ -1,13 +1,14 @@
 package com.github.alexanderfefelov.bgbilling.api.action.kernel
 
-import com.github.alexanderfefelov.bgbilling.api.action.util.BaseModule
+import com.github.alexanderfefelov.bgbilling.api.action.util.BaseActions
 import org.joda.time.DateTime
 
-object ContractActions extends BaseModule {
+object ContractActions extends BaseActions {
 
   override def module = "contract"
 
   def newContract(date: DateTime, pattern_id: Long, super_id: Long, sub_mode: Int, params: String, title: String, custom_title: String): Long = {
+    // Шаблон имени здесь не работает. Все договоры, созданные этим методом, называются "New contract".
     val responseXml = executeHttpPostRequest("action" -> "NewContract",
       "date" -> date.formatted(DATE_FORMAT),
       "pattern_id" -> pattern_id.toString,

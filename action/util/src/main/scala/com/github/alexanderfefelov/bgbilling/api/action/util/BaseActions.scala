@@ -10,7 +10,7 @@ import org.apache.http.NameValuePair
 import org.apache.http.message.BasicNameValuePair
 import org.apache.http.util.EntityUtils
 
-trait BaseModule extends ApiActionConfig {
+trait BaseActions extends ApiActionConfig {
 
   def module: String
 

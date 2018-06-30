@@ -1,9 +1,9 @@
 package com.github.alexanderfefelov.bgbilling.api.action.kernel
 
-import com.github.alexanderfefelov.bgbilling.api.action.util.BaseModule
+import com.github.alexanderfefelov.bgbilling.api.action.util.BaseActions
 import org.joda.time.DateTime
 
-object AdminActions extends BaseModule {
+object AdminActions extends BaseActions {
 
   override def module = "admin"
 
