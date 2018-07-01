@@ -7,16 +7,15 @@ object ContractActions extends BaseActions {
 
   override def module = "contract"
 
-  def newContract(date: DateTime, pattern_id: Long, super_id: Long, sub_mode: Int, params: String, title: String, custom_title: String): Long = {
-    // Шаблон имени здесь не работает. Все договоры, созданные этим методом, называются "New contract".
+  def newContract(date: DateTime, pattern_id: Long, super_id: Long, sub_mode: Int, params: String, title: Option[String], custom_title: Option[String]): Long = {
     val responseXml = executeHttpPostRequest("action" -> "NewContract",
       "date" -> date.formatted(DATE_FORMAT),
       "pattern_id" -> pattern_id.toString,
       "super_id" -> super_id.toString,
       "sub_mode" -> sub_mode.toString,
       "params" -> params,
-      "title" -> title,
-      "custom_title" -> custom_title
+      optionalArg("title", title),
+      optionalArg("custom_title", custom_title)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -68,12 +67,12 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def updateListParameter(cid: Long, pid: Long, value: Long, custom_value: String): Boolean = { // Значение из списка
+  def updateListParameter(cid: Long, pid: Long, value: Long, custom_value: Option[String]): Boolean = { // Значение из списка
     val responseXml = executeHttpPostRequest("action" -> "UpdateListParam",
       "cid" -> cid.toString,
       "pid" -> pid.toString,
       "value" -> value.toString,
-      "custom_value" -> custom_value
+      optionalArg("custom_value", custom_value)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
