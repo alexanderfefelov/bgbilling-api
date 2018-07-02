@@ -6,7 +6,7 @@ object TariffActions extends BaseActions {
 
   override def module = "tariff"
 
-  def addTariffPlan(used: Int): (Long, Long) = {
+  def addTariffPlan(used: Int): (Int, Int) = {
     val responseXml = executeHttpPostRequest("action" -> "AddTariffPlan",
       "used" -> used.toString
     )
@@ -17,12 +17,12 @@ object TariffActions extends BaseActions {
     //    </tariffPlan>
     //</data>
     val tariffPlan = responseXml \\ "tariffPlan"
-    val id = (tariffPlan \ "@id").text.toLong
-    val tree_id = (tariffPlan \ "@tree_id").text.toLong
+    val id = (tariffPlan \ "@id").text.toInt
+    val tree_id = (tariffPlan \ "@tree_id").text.toInt
     (id, tree_id)
   }
 
-  def updateTariffPlan(tpid: Long, face: Int, title: String, title_web: String, use_title_in_web: Int, values: String, tpused: Int, config: String, mask: String): Boolean = {
+  def updateTariffPlan(tpid: Int, face: Int, title: String, title_web: String, use_title_in_web: Int, values: String, tpused: Int, config: String, mask: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateTariffPlan",
       "tpid" -> tpid.toString,
       "face" -> face.toString,
@@ -39,7 +39,7 @@ object TariffActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def copyTariffPlan(tpid: Long): (Long, Long) = {
+  def copyTariffPlan(tpid: Int): (Int, Int) = {
     val responseXml = executeHttpPostRequest("action" -> "CopyTariffPlan",
       "tpid" -> tpid.toString
     )
@@ -50,12 +50,12 @@ object TariffActions extends BaseActions {
     //    </tariffPlan>
     //</data>
     val tariffPlan = responseXml \\ "tariffPlan"
-    val id = (tariffPlan \ "@id").text.toLong
-    val tree_id = (tariffPlan \ "@tree_id").text.toLong
+    val id = (tariffPlan \ "@id").text.toInt
+    val tree_id = (tariffPlan \ "@tree_id").text.toInt
     (id, tree_id)
   }
 
-  def createMtree(mid: Long, parent_tree: Long, tree: Long): Boolean = {
+  def createMtree(mid: Int, parent_tree: Int, tree: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "CreateMtree",
       "mid" -> mid.toString,
       "parent_tree" -> parent_tree.toString,
@@ -66,7 +66,7 @@ object TariffActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def modifTariffNode_create(parent: Long, mtree_id: Long, typ: String): Long = {
+  def modifTariffNode_create(parent: Int, mtree_id: Int, typ: String): Int = {
     val responseXml = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "create",
       "parent" -> parent.toString,
@@ -75,10 +75,10 @@ object TariffActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data id="31" status="ok"/>
-    (responseXml \\ "data" \ "@id").text.toLong
+    (responseXml \\ "data" \ "@id").text.toInt
   }
 
-  def modifTariffNode_update(id: Long, data: String): Boolean = {
+  def modifTariffNode_update(id: Int, data: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "update",
       "id" -> id.toString,
@@ -89,7 +89,7 @@ object TariffActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def modifTariffNode_delete(id: Long): Boolean = { // Удаляет ветку, начинающуюся с id
+  def modifTariffNode_delete(id: Int): Boolean = { // Удаляет ветку, начинающуюся с id
     val responseXml = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "delete",
       "id" -> id.toString
@@ -99,9 +99,9 @@ object TariffActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  case class GetMtreeRecord(id: Long, parent: Long, typ: String, data: String, deep: Int, editable: Boolean)
+  case class GetMtreeRecord(id: Int, parent: Int, typ: String, data: String, deep: Int, editable: Boolean)
 
-  def getMtree(tree_id: Long, mid: Long): List[GetMtreeRecord] = {
+  def getMtree(tree_id: Int, mid: Int): List[GetMtreeRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetMTree",
       "tree_id" -> tree_id.toString,
       "mid" -> mid.toString
@@ -117,8 +117,8 @@ object TariffActions extends BaseActions {
     //</data>
     (responseXml \\ "item").map(x =>
       GetMtreeRecord(
-        (x \ "@id").text.toLong,
-        (x \ "@parent").text.toLong,
+        (x \ "@id").text.toInt,
+        (x \ "@parent").text.toInt,
         (x \ "@type").text,
         (x \ "@data").text,
         (x \ "@deep").text.toInt,

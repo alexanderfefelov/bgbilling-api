@@ -7,7 +7,7 @@ object AdminActions extends BaseActions {
 
   override def module = "admin"
 
-  def runScheduledTask(id: Long): String = {
+  def runScheduledTask(id: Int): String = {
     val responseXml = executeHttpPostRequest("action" -> "RunScheduledTask",
       "id" -> id.toString
     )
@@ -16,8 +16,8 @@ object AdminActions extends BaseActions {
     (responseXml \\ "data").text
   }
 
-  case class ShowCurrentTasksQueueRecord(id: Long, description: String, status: String, startTime: Option[DateTime])
-  case class ShowCurrentTasksPeriodicRecord(id: Long, description: String, amount: Int)
+  case class ShowCurrentTasksQueueRecord(id: Int, description: String, status: String, startTime: Option[DateTime])
+  case class ShowCurrentTasksPeriodicRecord(id: Int, description: String, amount: Int)
 
   def ShowCurrentTasks: (List[ShowCurrentTasksQueueRecord], List[ShowCurrentTasksPeriodicRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "ShowCurrentTasks")
@@ -39,7 +39,7 @@ object AdminActions extends BaseActions {
     //</data>
     val queueTable = (responseXml \\ "data" \ "queue_table" \ "data" \ "row").map(x =>
       ShowCurrentTasksQueueRecord(
-        (x \ "@id").text.toLong,
+        (x \ "@id").text.toInt,
         (x \ "@description").text,
         (x \ "@status").text,
         (x \ "@startTime").text match {
@@ -50,7 +50,7 @@ object AdminActions extends BaseActions {
     ).toList
     val periodicTable = (responseXml \\ "data" \ "periodic_table" \ "data" \ "row").map(x =>
       ShowCurrentTasksPeriodicRecord(
-        (x \ "@id").text.toLong,
+        (x \ "@id").text.toInt,
         (x \ "@description").text,
         (x \ "@amount").text.toInt
       )
@@ -97,7 +97,7 @@ def getClosedDate: Option[DateTime] = {
     ).toList
   }
 
-  case class UserListRecord(id: Long, login: String, status: Int, name: String, title: String, descr: String)
+  case class UserListRecord(id: Int, login: String, status: Int, name: String, title: String, descr: String)
 
   def userList: List[UserListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "UserList")
@@ -109,7 +109,7 @@ def getClosedDate: Option[DateTime] = {
     //</data>
     (responseXml \\ "user").map(x =>
       UserListRecord(
-        (x \ "@id").text.toLong,
+        (x \ "@id").text.toInt,
         (x \ "@login").text,
         (x \ "@status").text.toInt,
         (x \ "@name").text,

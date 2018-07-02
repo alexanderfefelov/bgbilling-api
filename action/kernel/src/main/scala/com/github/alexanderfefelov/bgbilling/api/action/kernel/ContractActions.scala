@@ -7,7 +7,7 @@ object ContractActions extends BaseActions {
 
   override def module = "contract"
 
-  def newContract(date: DateTime, pattern_id: Long, super_id: Long = 0, sub_mode: Int = 0, params: String = "", title: Option[String] = None, custom_title: Option[String] = None): Long = {
+  def newContract(date: DateTime, pattern_id: Int, super_id: Int = 0, sub_mode: Int = 0, params: String = "", title: Option[String] = None, custom_title: Option[String] = None): Int = {
     val responseXml = executeHttpPostRequest("action" -> "NewContract",
       "date" -> date.toString(DATE_FORMAT),
       "pattern_id" -> pattern_id.toString,
@@ -21,12 +21,12 @@ object ContractActions extends BaseActions {
     //<data status="ok">
     //    <contract id="4" title="20160315-001"/>
     //</data>
-    (responseXml \\ "contract" \ "@id").text.toLong
+    (responseXml \\ "contract" \ "@id").text.toInt
   }
 
   case class GetParameterHistoryRecord(when: DateTime, who: String, value: String)
 
-  def getParameterHistory(cid: Long, pid: Long): List[GetParameterHistoryRecord] = {
+  def getParameterHistory(cid: Int, pid: Int): List[GetParameterHistoryRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetParameterHistory",
       "cid" -> cid.toString,
       "pid" -> pid.toString
@@ -49,7 +49,7 @@ object ContractActions extends BaseActions {
     ).toList
   }
 
-  def updateContractMode(cid: Long, value: String): Boolean = {
+  def updateContractMode(cid: Int, value: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractMode",
       "cid" -> cid.toString,
       "value" -> value
@@ -59,7 +59,7 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def updateContractTariffPlan(id: Long, cid: Long, tpid: Long, date1: DateTime, date2: Option[DateTime] = None, comment: String = ""): Boolean = {
+  def updateContractTariffPlan(id: Int, cid: Int, tpid: Int, date1: DateTime, date2: Option[DateTime] = None, comment: String = ""): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractTariffPlan",
       "id" -> id.toString,
       "cid" -> cid.toString,
@@ -73,7 +73,7 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def updateParameterType1(cid: Long, pid: Long, value: String): Boolean = { // Текстовое поле
+  def updateParameterType1(cid: Int, pid: Int, value: String): Boolean = { // Текстовое поле
     val responseXml = executeHttpPostRequest("action" -> "UpdateParameterType1",
       "cid" -> cid.toString,
       "pid" -> pid.toString,
@@ -84,7 +84,7 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def updateParameterType5(cid: Long, pid: Long, value: Int): Boolean = { // Флаг
+  def updateParameterType5(cid: Int, pid: Int, value: Int): Boolean = { // Флаг
     val responseXml = executeHttpPostRequest("action" -> "UpdateParameterType5",
       "cid" -> cid.toString,
       "pid" -> pid.toString,
@@ -95,7 +95,7 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def updateParameterType6(cid: Long, pid: Long, value: DateTime): Boolean = { // Дата
+  def updateParameterType6(cid: Int, pid: Int, value: DateTime): Boolean = { // Дата
     val responseXml = executeHttpPostRequest("action" -> "UpdateParameterType6",
       "cid" -> cid.toString,
       "pid" -> pid.toString,
@@ -106,7 +106,7 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def updateListParameter(cid: Long, pid: Long, value: Long, custom_value: Option[String]): Boolean = { // Значение из списка
+  def updateListParameter(cid: Int, pid: Int, value: Int, custom_value: Option[String] = None): Boolean = { // Значение из списка
     val responseXml = executeHttpPostRequest("action" -> "UpdateListParam",
       "cid" -> cid.toString,
       "pid" -> pid.toString,
@@ -118,9 +118,26 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  case class ContractParametersRecord(pid: Long, pt: Int, title: String, value: String)
+  def updateAddressInfo(cid: Int, pid: Int, hid: Int, pod: Int, floor: Int, flat: String, room: String = "", comment: String = "", formatKey: Int = 0): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "UpdateAddressInfo",
+      "cid" -> cid.toString,
+      "pid" -> pid.toString,
+      "hid" -> hid.toString,
+      "pod" -> pod.toString,
+      "floor" -> floor.toString,
+      "flat" -> flat,
+      "room" -> room,
+      "comment" -> comment,
+      "formatKey" -> formatKey.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
 
-  def contractParameters(cid: Long): List[ContractParametersRecord] = {
+  case class ContractParametersRecord(pid: Int, pt: Int, title: String, value: String)
+
+  def contractParameters(cid: Int): List[ContractParametersRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ContractParameters",
       "cid" -> cid.toString
     )
@@ -146,7 +163,7 @@ object ContractActions extends BaseActions {
     //</data>
     (responseXml \\ "item").map(x =>
       ContractParametersRecord(
-        (x \ "@pid").text.toLong,
+        (x \ "@pid").text.toInt,
         (x \ "@pt").text.toInt,
         (x \ "@title").text,
         (x \ "@value").text
@@ -154,7 +171,7 @@ object ContractActions extends BaseActions {
     ).toList
   }
 
-  def contractModuleAdd(cid: Long, module_ids: List[Long]): Boolean = {
+  def contractModuleAdd(cid: Int, module_ids: List[Int]): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "ContractModuleAdd",
       "cid" -> cid.toString,
       "module_ids" -> module_ids.mkString(",")
@@ -164,7 +181,7 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  case class GetPatternListRecord(id: Long, title: String)
+  case class GetPatternListRecord(id: Int, title: String)
 
   def getPatternList: List[GetPatternListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetPatternList")
@@ -178,7 +195,7 @@ object ContractActions extends BaseActions {
     //</data>
     (responseXml \\ "item").map(x =>
       GetPatternListRecord(
-        (x \ "@id").text.toLong,
+        (x \ "@id").text.toInt,
         (x \ "@title").text
       )
     ).toList

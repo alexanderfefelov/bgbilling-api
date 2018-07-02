@@ -8,7 +8,7 @@ object ContractStatusActions extends BaseActions {
 
   override def module = "contract.status"
 
-  case class StatusListRecord(id: Long, title: String)
+  case class StatusListRecord(id: Int, title: String)
 
   def statusList(onlyManual: Int): List[StatusListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "StatusList",
@@ -33,9 +33,9 @@ object ContractStatusActions extends BaseActions {
     ).toList
   }
 
-  case class ContractStatusTableRecord(id: Long, status: String, period: String, comment: String)
+  case class ContractStatusTableRecord(id: Int, status: String, period: String, comment: String)
 
-  def contractStatusTable(cid: Long): List[ContractStatusTableRecord]= {
+  def contractStatusTable(cid: Int): List[ContractStatusTableRecord]= {
     val responseXml = executeHttpPostRequest("action" -> "ContractStatusTable",
       "cid" -> cid.toString
     )
@@ -52,7 +52,7 @@ object ContractStatusActions extends BaseActions {
     //</data>
     (responseXml \\ "row").map(x =>
       ContractStatusTableRecord(
-        (x \ "@id").text.toLong,
+        (x \ "@id").text.toInt,
         (x \ "@status").text,
         (x \ "@period").text,
         (x \ "@comment").text
@@ -62,7 +62,7 @@ object ContractStatusActions extends BaseActions {
 
   case class ContractStatusLogRecord(date: DateTime, user: String, status: String, period: String, comment: String)
 
-  def contractStatusLog(cid: Long): List[ContractStatusLogRecord] = {
+  def contractStatusLog(cid: Int): List[ContractStatusLogRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ContractStatusLog",
       "cid" -> cid.toString
     )
