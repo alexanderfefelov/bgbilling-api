@@ -97,4 +97,26 @@ def getClosedDate: Option[DateTime] = {
     ).toList
   }
 
+  case class UserListRecord(id: Long, login: String, status: Int, name: String, title: String, descr: String)
+
+  def userList: List[UserListRecord] = {
+    val responseXml = executeHttpPostRequest("action" -> "UserList")
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <users>
+    //        <user descr="" id="1" login="admin" name="admin" status="0" title="admin"/>
+    //    </users>
+    //</data>
+    (responseXml \\ "user").map(x =>
+      UserListRecord(
+        (x \ "@id").text.toLong,
+        (x \ "@login").text,
+        (x \ "@status").text.toInt,
+        (x \ "@name").text,
+        (x \ "@title").text,
+        (x \ "@descr").text
+      )
+    ).toList
+  }
+
 }

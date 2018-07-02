@@ -24,10 +24,49 @@ object ContractActions extends BaseActions {
     (responseXml \\ "contract" \ "@id").text.toLong
   }
 
+  case class GetParameterHistoryRecord(when: DateTime, who: String, value: String)
+
+  def getParameterHistory(cid: Long, pid: Long): List[GetParameterHistoryRecord] = {
+    val responseXml = executeHttpPostRequest("action" -> "GetParameterHistory",
+      "cid" -> cid.toString,
+      "pid" -> pid.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <table>
+    //        <data>
+    //            <row value="Швейк" when="01.07.2018 10:38:56" who="admin"/>
+    //            <row value="Тихий" when="01.07.2018 13:26:50" who="admin"/>
+    //        </data>
+    //    </table>
+    //</data>
+    (responseXml \\ "row").map(x =>
+      GetParameterHistoryRecord(
+        DateTime.parse((x \ "@when").text, dateTimeFormatter),
+        (x \ "@who").text,
+        (x \ "@value").text
+      )
+    ).toList
+  }
+
   def updateContractMode(cid: Long, value: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractMode",
       "cid" -> cid.toString,
       "value" -> value
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
+  def updateContractTariffPlan(id: Long, cid: Long, tpid: Long, date1: DateTime, date2: Option[DateTime], comment: String = ""): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "UpdateContractTariffPlan",
+      "id" -> id.toString,
+      "cid" -> cid.toString,
+      "tpid" -> tpid.toString,
+      "date1" -> date1.formatted(DATE_FORMAT),
+      optionalDateArg("date2", date2),
+      "comment" -> comment
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
