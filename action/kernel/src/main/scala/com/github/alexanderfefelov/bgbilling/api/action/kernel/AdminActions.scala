@@ -119,4 +119,14 @@ def getClosedDate: Option[DateTime] = {
     ).toList
   }
 
+  def deleteAddressParameter(cid: Int, pid: Int): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "DeleteAddressParameter",
+      "cid" -> cid.toString,
+      "pid" -> pid.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
 }
