@@ -71,7 +71,7 @@ def getClosedDate: Option[DateTime] = {
 
   def setClosedDate(date: DateTime, typeId: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "SetClosedDate",
-      "date" -> date.formatted(DATE_FORMAT),
+      "date" -> date.toString(DATE_FORMAT),
       "typeId" -> typeId.toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>

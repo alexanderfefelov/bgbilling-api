@@ -20,7 +20,7 @@ package object kernel {
 
   def optionalDateArg(name: String, valueOption: Option[DateTime]): (String, String) = {
     valueOption match {
-      case Some(value) => name -> value.formatted(DATE_FORMAT)
+      case Some(value) => name -> value.toString(DATE_FORMAT)
       case _ => "" -> ""
     }
   }

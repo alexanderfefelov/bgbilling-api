@@ -7,9 +7,9 @@ object ContractActions extends BaseActions {
 
   override def module = "contract"
 
-  def newContract(date: DateTime, pattern_id: Long, super_id: Long, sub_mode: Int, params: String, title: Option[String], custom_title: Option[String]): Long = {
+  def newContract(date: DateTime, pattern_id: Long, super_id: Long = 0, sub_mode: Int = 0, params: String = "", title: Option[String] = None, custom_title: Option[String] = None): Long = {
     val responseXml = executeHttpPostRequest("action" -> "NewContract",
-      "date" -> date.formatted(DATE_FORMAT),
+      "date" -> date.toString(DATE_FORMAT),
       "pattern_id" -> pattern_id.toString,
       "super_id" -> super_id.toString,
       "sub_mode" -> sub_mode.toString,
@@ -59,12 +59,12 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
-  def updateContractTariffPlan(id: Long, cid: Long, tpid: Long, date1: DateTime, date2: Option[DateTime], comment: String = ""): Boolean = {
+  def updateContractTariffPlan(id: Long, cid: Long, tpid: Long, date1: DateTime, date2: Option[DateTime] = None, comment: String = ""): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractTariffPlan",
       "id" -> id.toString,
       "cid" -> cid.toString,
       "tpid" -> tpid.toString,
-      "date1" -> date1.formatted(DATE_FORMAT),
+      "date1" -> date1.toString(DATE_FORMAT),
       optionalDateArg("date2", date2),
       "comment" -> comment
     )
@@ -99,7 +99,7 @@ object ContractActions extends BaseActions {
     val responseXml = executeHttpPostRequest("action" -> "UpdateParameterType6",
       "cid" -> cid.toString,
       "pid" -> pid.toString,
-      "value" -> value.formatted(DATE_FORMAT)
+      "value" -> value.toString(DATE_FORMAT)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
