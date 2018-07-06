@@ -106,6 +106,33 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
+  def updateEmailInfo(cid: Int, pid: Int, email: String, comment: Option[String] = None): Boolean = {
+    val data = s"${comment.getOrElse("").trim} <${email.trim}>".trim
+    val responseXml = executeHttpPostRequest("action" -> "UpdateEmailInfo",
+      "cid" -> cid.toString,
+      "pid" -> pid.toString,
+      "e-mail" -> data, // ОПИСАНИЕ1 <email1@acme.com>\nОПИСАНИЕ2 <email2@acme.com>\n...ОПИСАНИЕN <emailN@acme.com>
+                        // Любое описание может быть пустым
+      "buf" -> ""
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
+  def updatePhoneInfo(cid: Int, pid: Int, phone: String, comment: Option[String] = None): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "UpdatePhoneInfo",
+      "cid" -> cid.toString,
+      "pid" -> pid.toString,
+      "count" -> "1",
+      "phone1" -> phone,
+      "comment1" -> comment.getOrElse("")
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
   def updateListParameter(cid: Int, pid: Int, value: Int, custom_value: Option[String] = None): Boolean = { // Значение из списка
     val responseXml = executeHttpPostRequest("action" -> "UpdateListParam",
       "cid" -> cid.toString,
@@ -148,7 +175,7 @@ object ContractActions extends BaseActions {
     //        <parameter alwaysVisible="false" history="loopa" pid="2" pt="1" title="Лицевой счёт" value=""/>
     //        <parameter alwaysVisible="false" history="loopa" pid="3" pt="2" title="Адрес подключения" value=", г. Звенигород, ул. Мира, д. 1Б"/>
     //        <parameter alwaysVisible="false" history="loopa" pid="4" pt="9" title="Телефон" value="12345678980[zzzzzzzzzzzzzzz]"/>
-    //        <parameter alwaysVisible="false" history="loopa" pid="5" pt="3" title="Email" value=""/>
+    //        <parameter alwaysVisible="false" history="loopa" pid="5" pt="3" title="Email" value="Бухгалтерия &lt;account@acme.com&gt;; Сисадмин &lt;admin@acme.com&gt;; "/>
     //        <parameter alwaysVisible="false" history="loopa" pid="6" pt="1" title="Фамилия" value=""/>
     //        <parameter alwaysVisible="false" history="loopa" pid="7" pt="1" title="Имя" value=""/>
     //        <parameter alwaysVisible="false" history="loopa" pid="8" pt="1" title="Отчество" value=""/>
