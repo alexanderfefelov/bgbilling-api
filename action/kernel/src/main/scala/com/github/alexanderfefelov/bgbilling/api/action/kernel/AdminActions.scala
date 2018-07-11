@@ -130,4 +130,13 @@ object AdminActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
+  def deleteAddressHouse(id: Int): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "DeleteAddressHouse",
+      "id" -> id.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
 }
