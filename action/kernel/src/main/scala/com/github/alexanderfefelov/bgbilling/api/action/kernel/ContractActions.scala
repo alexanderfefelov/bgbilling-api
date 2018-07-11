@@ -24,6 +24,26 @@ object ContractActions extends BaseActions {
     (responseXml \\ "contract" \ "@id").text.toInt
   }
 
+  def deleteContract(cid: Int, save: Int, folder: String): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "DeleteContract",
+      "cid" -> cid.toString,
+      "save" -> save.toString,
+      "folder" -> folder
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
+  def deleteContractMemo(id: Int): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "DeleteContractMemo",
+      "id" -> id.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
   case class GetParameterHistoryRecord(when: DateTime, who: String, value: String)
 
   def getParameterHistory(cid: Int, pid: Int): List[GetParameterHistoryRecord] = {
