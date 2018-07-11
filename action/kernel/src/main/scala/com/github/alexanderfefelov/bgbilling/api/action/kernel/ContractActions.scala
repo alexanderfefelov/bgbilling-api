@@ -69,6 +69,26 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
+  def updateContractDate1(cid: Int, date: DateTime): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "UpdateContractDate1",
+      "id" -> cid.toString,
+      "value" -> date.toString(DATE_FORMAT)
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
+  def updateContractDate2(cid: Int, date: DateTime): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "UpdateContractDate2",
+      "id" -> cid.toString,
+      "value" -> date.toString(DATE_FORMAT)
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
   def updateContractTariffPlan(id: Int, cid: Int, tpid: Int, date1: DateTime, date2: Option[DateTime] = None, comment: String = ""): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractTariffPlan",
       "id" -> id.toString,
