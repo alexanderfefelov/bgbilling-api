@@ -57,7 +57,8 @@ object AdminActions extends BaseActions {
     ).toList
     (queueTable, periodicTable)
   }
-def getClosedDate: Option[DateTime] = {
+
+  def getClosedDate: Option[DateTime] = {
     val responseXml = executeHttpPostRequest("action" -> "GetClosedDate")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
