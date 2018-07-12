@@ -36,7 +36,7 @@ object TariffActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def copyTariffPlan(tpid: Int): (Int, Int) = {
@@ -63,7 +63,7 @@ object TariffActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def modifTariffNode_create(parent: Int, mtree_id: Int, typ: String): Int = {
@@ -86,7 +86,7 @@ object TariffActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def modifTariffNode_delete(id: Int): Boolean = { // Удаляет ветку, начинающуюся с id
@@ -96,7 +96,7 @@ object TariffActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   case class GetMtreeRecord(id: Int, parent: Int, typ: String, data: String, deep: Int, editable: Boolean)

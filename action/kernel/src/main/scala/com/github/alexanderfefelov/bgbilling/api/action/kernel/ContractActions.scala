@@ -32,7 +32,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   case class ContractBalance(summa1: Float, summa2: Float, summa3: Float, summa4: Float, summa5: Float)
@@ -68,7 +68,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   case class GetParameterHistoryRecord(when: DateTime, who: String, value: String)
@@ -103,7 +103,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateContractLimit(cid: Int, value: Double, comment: String): Boolean = {
@@ -114,7 +114,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateContractMode(cid: Int, value: String): Boolean = {
@@ -124,7 +124,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateContractDate1(cid: Int, date: DateTime): Boolean = {
@@ -134,7 +134,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateContractDate2(cid: Int, date: DateTime): Boolean = {
@@ -144,7 +144,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateContractTariffPlan(id: Int, cid: Int, tpid: Int, date1: DateTime, date2: Option[DateTime] = None, comment: String = ""): Boolean = {
@@ -158,7 +158,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateParameterType1(cid: Int, pid: Int, value: String): Boolean = { // Текстовое поле
@@ -169,7 +169,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateParameterType5(cid: Int, pid: Int, value: Int): Boolean = { // Флаг
@@ -180,7 +180,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateParameterType6(cid: Int, pid: Int, value: DateTime): Boolean = { // Дата
@@ -191,7 +191,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateEmailInfo(cid: Int, pid: Int, email: String, comment: Option[String] = None): Boolean = {
@@ -205,7 +205,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updatePhoneInfo(cid: Int, pid: Int, phone: String, comment: Option[String] = None): Boolean = {
@@ -218,7 +218,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateListParameter(cid: Int, pid: Int, value: Int, custom_value: Option[String] = None): Boolean = { // Значение из списка
@@ -230,7 +230,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def updateAddressInfo(cid: Int, pid: Int, hid: Int, pod: Int, floor: Int, flat: String, room: String = "", comment: String = "", formatKey: Int = 0): Boolean = {
@@ -247,7 +247,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   case class ContractParametersRecord(pid: Int, pt: Int, title: String, value: String)
@@ -276,7 +276,7 @@ object ContractActions extends BaseActions {
     //    </parameters>
     //    <condel pgid="1"/>
     //</data>
-    (responseXml \\ "item").map(x =>
+    (responseXml \\ "parameter").map(x =>
       ContractParametersRecord(
         (x \ "@pid").text.toInt,
         (x \ "@pt").text.toInt,
@@ -293,7 +293,7 @@ object ContractActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   case class GetPatternListRecord(id: Int, title: String)

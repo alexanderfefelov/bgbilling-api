@@ -77,7 +77,7 @@ object AdminActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   case class ClosedDateTypeListRecord(id: Int, title: String)
@@ -127,7 +127,7 @@ object AdminActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
   def deleteAddressHouse(id: Int): Boolean = {
@@ -136,7 +136,7 @@ object AdminActions extends BaseActions {
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
-    (responseXml \\ "data" \ "@status").text == "ok"
+    (responseXml \ "@status").text == "ok"
   }
 
 }
