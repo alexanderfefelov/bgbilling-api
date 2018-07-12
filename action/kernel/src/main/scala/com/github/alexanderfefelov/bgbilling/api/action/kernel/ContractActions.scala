@@ -35,6 +35,33 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
+  case class ContractBalance(summa1: Float, summa2: Float, summa3: Float, summa4: Float, summa5: Float)
+
+  def contractBalance(cid: Int): ContractBalance = {
+    val responseXml = executeHttpPostRequest("action" -> "ContractBalance",
+      "cid" -> cid.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <table summa1="0.00" summa2="0.00" summa3="0.00" summa4="90.00" summa5="90.00">
+    //        <data>
+    //            <row f0="июль 2018" f1="Входящий остаток на начало месяца" f2="0.00"/>
+    //            <row f0="июль 2018" f1="Приход за месяц" f2="90.00"/>
+    //            <row f0="июль 2018" f1="Наработка за месяц" f2="0.00"/>
+    //            <row f0="июль 2018" f1="Расход за месяц" f2="0.00"/>
+    //            <row f0="июль 2018" f1="Исходящий остаток на конец месяца" f2="90.00"/>
+    //        </data>
+    //    </table>
+    //</data>
+    ContractBalance(
+      (responseXml \\ "table" \ "@summa1").text.toFloat,
+      (responseXml \\ "table" \ "@summa2").text.toFloat,
+      (responseXml \\ "table" \ "@summa3").text.toFloat,
+      (responseXml \\ "table" \ "@summa4").text.toFloat,
+      (responseXml \\ "table" \ "@summa5").text.toFloat
+    )
+  }
+
   def deleteContractMemo(id: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "DeleteContractMemo",
       "id" -> id.toString
