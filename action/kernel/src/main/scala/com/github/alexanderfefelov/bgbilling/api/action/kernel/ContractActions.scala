@@ -79,6 +79,17 @@ object ContractActions extends BaseActions {
     (responseXml \\ "data" \ "@status").text == "ok"
   }
 
+  def updateContractLimit(cid: Int, value: Double, comment: String): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "UpdateContractLimit",
+      "cid" -> cid.toString,
+      "value" -> value.toString,
+      "comment" -> comment
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \\ "data" \ "@status").text == "ok"
+  }
+
   def updateContractMode(cid: Int, value: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractMode",
       "cid" -> cid.toString,
