@@ -14,8 +14,8 @@ object ContractActions extends BaseActions {
       "super_id" -> super_id.toString,
       "sub_mode" -> sub_mode.toString,
       "params" -> params,
-      optionalArg("title", title),
-      optionalArg("custom_title", custom_title)
+      optionalStringArg("title", title),
+      optionalStringArg("custom_title", custom_title)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -106,11 +106,11 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
-  def updateContractLimit(cid: Int, value: Double, comment: String): Boolean = {
+  def updateContractLimit(cid: Int, value: Double, comment: Option[String] = None): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractLimit",
       "cid" -> cid.toString,
       "value" -> value.toString,
-      "comment" -> comment
+      optionalStringArg("comment", comment)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
@@ -121,6 +121,18 @@ object ContractActions extends BaseActions {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractMode",
       "cid" -> cid.toString,
       "value" -> value
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \ "@status").text == "ok"
+  }
+
+  def updateContractTitleAndComment(cid: Int, title: String, comment: Option[String] = None, patid: Option[Int] = None): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "UpdateContractTitleAndComment",
+      "cid" -> cid.toString,
+      "title" -> title,
+      optionalStringArg("comment", comment),
+      optionalIntArg("patid", patid)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
@@ -147,7 +159,7 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
-  def updateContractTariffPlan(id: Int, cid: Int, tpid: Int, date1: DateTime, date2: Option[DateTime] = None, comment: String = ""): Boolean = {
+  def updateContractTariffPlan(id: Int, cid: Int, tpid: Int, comment: String = "", date1: DateTime, date2: Option[DateTime] = None): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractTariffPlan",
       "id" -> id.toString,
       "cid" -> cid.toString,
@@ -226,7 +238,7 @@ object ContractActions extends BaseActions {
       "cid" -> cid.toString,
       "pid" -> pid.toString,
       "value" -> value.toString,
-      optionalArg("custom_value", custom_value)
+      optionalStringArg("custom_value", custom_value)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
