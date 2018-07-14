@@ -35,6 +35,16 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  def setDelContract(cid: Int, del: Int): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "SetDelContract",
+      "cid" -> cid.toString,
+      "del" -> del.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \ "@status").text == "ok"
+  }
+
   case class ContractBalance(summa1: Float, summa2: Float, summa3: Float, summa4: Float, summa5: Float)
 
   def contractBalance(cid: Int): ContractBalance = {
