@@ -6,6 +6,16 @@ object ServiceActions extends BaseActions {
 
   override def module = "service"
 
+  def setModuleConfig(mid: Int, config_id: Int): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "SetModuleConfig",
+      "mid" -> mid.toString,
+      "config_id" -> config_id.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \ "@status").text == "ok"
+  }
+
   case class AboutServer(
     version: String, build_number: String, build_time: String, versionstring: String,
     serverfull: String, memory: String, serverlocale: String, servertime: String, uptimetatus: String,
