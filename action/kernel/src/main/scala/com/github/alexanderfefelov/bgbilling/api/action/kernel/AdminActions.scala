@@ -120,6 +120,20 @@ object AdminActions extends BaseActions {
     ).toList
   }
 
+  def userUpdate(id: Int, login: String, name: String, descr: String, user_pswd: String): Boolean = {
+    def md5Hash(text: String) : String = java.security.MessageDigest.getInstance("MD5").digest(text.getBytes("UTF-8")).map(0xff & _).map { "%02x".format(_) }.foldLeft(""){_ + _}
+    val responseXml = executeHttpPostRequest("action" -> "UserUpdate",
+      "id" -> (if (id == 0) "new" else id.toString),
+      "login" -> login,
+      "name" -> name,
+      "descr" -> descr,
+      "user_pswd" -> md5Hash(user_pswd)
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \ "@status").text == "ok"
+  }
+
   def deleteAddressParameter(cid: Int, pid: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "DeleteAddressParameter",
       "cid" -> cid.toString,
