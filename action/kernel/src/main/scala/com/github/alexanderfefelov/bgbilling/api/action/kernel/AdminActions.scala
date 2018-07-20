@@ -127,7 +127,7 @@ object AdminActions extends BaseActions {
       "login" -> login,
       "name" -> name,
       "descr" -> descr,
-      "user_pswd" -> md5Hash(user_pswd)
+      "user_pswd" -> md5Hash(user_pswd).toUpperCase
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
