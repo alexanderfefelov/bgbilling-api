@@ -338,4 +338,26 @@ object ContractActions extends BaseActions {
     ).toList
   }
 
+  case class ContractGroupRecord(id: Int, title: String, editable: Boolean)
+
+  def contractGroup(cid: Int): List[ContractGroupRecord] = {
+    val responseXml = executeHttpPostRequest("action" -> "ContractGroup",
+      "cid" -> cid.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <groups selected="1125899906842625">
+    //        <group editable="1" id="50" title="Группа 50"/>
+    //        <group editable="1" id="0" title="Служебный"/>
+    //    </groups>
+    //</data>
+    (responseXml \\ "group").map(x =>
+      ContractGroupRecord(
+        (x \ "@id").text.toInt,
+        (x \ "@title").text,
+        (x \ "@editable").text.toInt == 1
+      )
+    ).toList
+  }
+
 }

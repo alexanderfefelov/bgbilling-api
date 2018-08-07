@@ -153,9 +153,9 @@ object AdminActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
-  case class ContractGroupListRecord(id: Int, enabled: Boolean, title: String, editable: Boolean, comment: String, contractCount: Int)
+  case class GetContractGroupListRecord(id: Int, enabled: Boolean, title: String, editable: Boolean, comment: String, contractCount: Int)
 
-  def getContractGroupList(contracts: Boolean): List[ContractGroupListRecord] = {
+  def getContractGroupList(contracts: Boolean): List[GetContractGroupListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetContractGroupList",
       "contracts" -> contracts.toString
     )
@@ -175,7 +175,7 @@ object AdminActions extends BaseActions {
     //    </table>
     //</data>
     (responseXml \\ "row").map(x =>
-      ContractGroupListRecord(
+      GetContractGroupListRecord(
         (x \ "@f0").text.toInt,
         (x \ "@f1").text.toBoolean,
         (x \ "@f2").text,
