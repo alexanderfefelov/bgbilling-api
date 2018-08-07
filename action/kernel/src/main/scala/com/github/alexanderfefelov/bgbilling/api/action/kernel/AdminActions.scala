@@ -153,4 +153,37 @@ object AdminActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  case class ContractGroupListRecord(id: Int, enabled: Boolean, title: String, editable: Boolean, comment: String, contractCount: Int)
+
+  def getContractGroupList(contracts: Boolean): List[ContractGroupListRecord] = {
+    val responseXml = executeHttpPostRequest("action" -> "GetContractGroupList",
+      "contracts" -> contracts.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <table>
+    //        <data>
+    //            <row f0="1" f1="false" f2="Группа 01" f3="false" f4="" f5="0"/>
+    // ...
+    //            <row f0="49" f1="false" f2="Группа 49" f3="false" f4="" f5="0"/>
+    //            <row f0="50" f1="true" f2="Группа 50" f3="true" f4="" f5="1"/>
+    //            <row f0="51" f1="false" f2="Группа 51" f3="false" f4="" f5="0"/>
+    // ...
+    //            <row f0="62" f1="false" f2="Группа 62" f3="false" f4="" f5="0"/>
+    //            <row f0="0" f1="true" f2="Служебный" f3="true" f4="" f5="1"/>
+    //        </data>
+    //    </table>
+    //</data>
+    (responseXml \\ "row").map(x =>
+      ContractGroupListRecord(
+        (x \ "@f0").text.toInt,
+        (x \ "@f1").text.toBoolean,
+        (x \ "@f2").text,
+        (x \ "@f3").text.toBoolean,
+        (x \ "@f4").text,
+        (x \ "@f5").text.toInt
+      )
+    ).toList
+  }
+
 }
