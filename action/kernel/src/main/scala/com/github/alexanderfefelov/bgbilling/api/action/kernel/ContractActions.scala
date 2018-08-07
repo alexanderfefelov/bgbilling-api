@@ -360,4 +360,36 @@ object ContractActions extends BaseActions {
     ).toList
   }
 
+  case class ContractTariffPlansRecord(id: Int, tpid: Int, title: String, date1: DateTime, date2: Option[DateTime], period: String, comment: String, pos: Int)
+
+  def contractTariffPlans(cid: Int): List[ContractTariffPlansRecord] = {
+    val responseXml = executeHttpPostRequest("action" -> "ContractTariffPlans",
+      "cid" -> cid.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <table>
+    //        <data>
+    //            <row comment="" date1="01.02.1835" date2="" f0="15" f1="4" f2="Разовые услуги" f3="01.02.1835-…" f4="" f5="0" id="15" period="01.02.1835-…" pos="0" title="Разовые услуги" tpid="4"/>
+    //            <row comment="" date1="01.02.1835" date2="" f0="16" f1="5" f2="Товары" f3="01.02.1835-…" f4="" f5="0" id="16" period="01.02.1835-…" pos="0" title="Товары" tpid="5"/>
+    //        </data>
+    //    </table>
+    //</data>
+    (responseXml \\ "row").map(x =>
+      ContractTariffPlansRecord(
+        (x \ "@id").text.toInt,
+        (x \ "@tpid").text.toInt,
+        (x \ "@title").text,
+        DateTime.parse((x \ "@date1").text, dateFormatter),
+        (x \ "@date2").text match {
+          case s if s != "" => Some(DateTime.parse(s, dateFormatter))
+          case _ => None
+        },
+        (x \ "@period").text,
+        (x \ "@comment").text,
+        (x \ "@pos").text.toInt
+      )
+    ).toList
+  }
+
 }
