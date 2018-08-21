@@ -169,20 +169,6 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
-  def updateContractTariffPlan(id: Int, cid: Int, tpid: Int, comment: String = "", date1: DateTime, date2: Option[DateTime] = None): Boolean = {
-    val responseXml = executeHttpPostRequest("action" -> "UpdateContractTariffPlan",
-      "id" -> id.toString,
-      "cid" -> cid.toString,
-      "tpid" -> tpid.toString,
-      "date1" -> date1.toString(DATE_FORMAT),
-      optionalDateArg("date2", date2),
-      "comment" -> comment
-    )
-    //<?xml version="1.0" encoding="UTF-8"?>
-    //<data status="ok"/>
-    (responseXml \ "@status").text == "ok"
-  }
-
   def updateParameterType1(cid: Int, pid: Int, value: String): Boolean = { // Текстовое поле
     val responseXml = executeHttpPostRequest("action" -> "UpdateParameterType1",
       "cid" -> cid.toString,
@@ -390,6 +376,30 @@ object ContractActions extends BaseActions {
         (x \ "@pos").text.toInt
       )
     ).toList
+  }
+
+  def updateContractTariffPlan(id: Int, cid: Int, tpid: Int, comment: String = "", date1: DateTime, date2: Option[DateTime] = None): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "UpdateContractTariffPlan",
+      "id" -> id.toString,
+      "cid" -> cid.toString,
+      "tpid" -> tpid.toString,
+      "date1" -> date1.toString(DATE_FORMAT),
+      optionalDateArg("date2", date2),
+      "comment" -> comment
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \ "@status").text == "ok"
+  }
+
+  def deleteContractTariffPlan(id: Int, cid: Int): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "DeleteContractTariffPlan",
+      "id" -> id.toString,
+      "cid" -> cid.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \ "@status").text == "ok"
   }
 
 }
