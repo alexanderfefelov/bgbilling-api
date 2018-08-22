@@ -319,13 +319,13 @@ object ContractActions extends BaseActions {
     val listSelect = (responseXml \\ "data" \ "list_select" \ "item").map(x =>
       ContractModuleListRecord(
         (x \ "@id").text.toInt,
-        (x \ "title").text
+        (x \ "@title").text
       )
     ).toList
     val listAvailable = (responseXml \\ "data" \ "list_available" \ "item").map(x =>
       ContractModuleListRecord(
         (x \ "@id").text.toInt,
-        (x \ "title").text
+        (x \ "@title").text
       )
     ).toList
     (listSelect, listAvailable)
