@@ -402,4 +402,17 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  def changeStatus(cids: List[Int], status: Int, comment: String = "", date1: DateTime, date2: Option[DateTime] = None): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "ContractGroupOperation",
+      "type" -> "changeStatus",
+      "cids" -> cids.mkString(","),
+      "date1" -> date1.toString(DATE_FORMAT),
+      optionalDateArg("date2", date2),
+      "comment" -> comment
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \ "@status").text == "ok"
+  }
+
 }
