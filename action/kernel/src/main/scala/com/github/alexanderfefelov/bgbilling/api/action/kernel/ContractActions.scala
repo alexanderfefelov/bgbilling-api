@@ -294,10 +294,57 @@ object ContractActions extends BaseActions {
     ).toList
   }
 
+  case class ContractModuleListRecord(id: Int, title: String)
+
+  def contractModuleList(cid: Int): (List[ContractModuleListRecord], List[ContractModuleListRecord]) = {
+    val responseXml = executeHttpPostRequest("action" -> "ContractModuleList",
+      "cid" -> cid.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <list_select>
+    //        <item id="1" title="Интернет"/>
+    //        <item id="2" title="Периодические услуги"/>
+    //        <item id="3" title="Товары и разовые услуги"/>
+    //    </list_select>
+    //    <list_avaliable>
+    //        <item id="6" title="Moneta"/>
+    //        <item id="9" title="MPS"/>
+    //        <item id="7" title="Qiwi"/>
+    //        <item id="8" title="Карты"/>
+    //        <item id="4" title="Подписки"/>
+    //        <item id="5" title="Счета"/>
+    //    </list_avaliable>
+    //</data>
+    val listSelect = (responseXml \\ "data" \ "list_select" \ "item").map(x =>
+      ContractModuleListRecord(
+        (x \ "@id").text.toInt,
+        (x \ "title").text
+      )
+    ).toList
+    val listAvailable = (responseXml \\ "data" \ "list_available" \ "item").map(x =>
+      ContractModuleListRecord(
+        (x \ "@id").text.toInt,
+        (x \ "title").text
+      )
+    ).toList
+    (listSelect, listAvailable)
+  }
+
   def contractModuleAdd(cid: Int, module_ids: List[Int]): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "ContractModuleAdd",
       "cid" -> cid.toString,
       "module_ids" -> module_ids.mkString(",")
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \ "@status").text == "ok"
+  }
+
+  def contractModuleDelete(cid: Int, module_id: Int): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "ContractModuleDelete",
+      "cid" -> cid.toString,
+      "module_id" -> module_id.toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
