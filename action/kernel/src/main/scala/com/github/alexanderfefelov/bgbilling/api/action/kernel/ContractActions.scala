@@ -72,6 +72,25 @@ object ContractActions extends BaseActions {
     )
   }
 
+  case class GetContractMemo(subject: String, visibled: Boolean, row: String)
+
+  def getContractMemo(id: Int): GetContractMemo = {
+    val responseXml = executeHttpPostRequest("action" -> "GetContractMemo",
+      "id" -> id.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <comment subject="foo" visibled="false">
+    //        <row>bar</row>
+    //    </comment>
+    //</data>
+    GetContractMemo(
+      (responseXml \ "data" \ "comment" \ "@subject").text,
+      (responseXml \ "data" \ "comment" \ "@visibled").text.toBoolean,
+      (responseXml \ "data" \ "comment" \ "row").text,
+    )
+  }
+
   def updateContractMemo(id: Int, cid: Int, subject: String, comment: String, visibled: Boolean): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractMemo",
       "id" -> id.toString,
