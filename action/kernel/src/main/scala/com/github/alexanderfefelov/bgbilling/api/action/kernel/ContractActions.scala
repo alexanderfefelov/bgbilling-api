@@ -72,6 +72,19 @@ object ContractActions extends BaseActions {
     )
   }
 
+  def updateContractMemo(id: Int, cid: Int, subject: String, comment: String, visibled: Boolean): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "UpdateContractMemo",
+      "id" -> id.toString,
+      "cid" -> cid.toString,
+      "subject" -> subject,
+      "comment" -> comment,
+      "visibled" -> visibled.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok"/>
+    (responseXml \ "@status").text == "ok"
+  }
+
   def deleteContractMemo(id: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "DeleteContractMemo",
       "id" -> id.toString
