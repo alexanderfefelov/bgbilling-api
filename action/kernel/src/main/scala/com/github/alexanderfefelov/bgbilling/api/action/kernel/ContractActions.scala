@@ -87,7 +87,7 @@ object ContractActions extends BaseActions {
     GetContractMemo(
       (responseXml \ "data" \ "comment" \ "@subject").text,
       (responseXml \ "data" \ "comment" \ "@visibled").text.toBoolean,
-      (responseXml \ "data" \ "comment" \ "row").text,
+      (responseXml \ "data" \ "comment" \ "row").text
     )
   }
 
@@ -363,9 +363,10 @@ object ContractActions extends BaseActions {
     (listSelect, listAvailable)
   }
 
-  def contractModuleAdd(cid: Int, module_ids: List[Int]): Boolean = {
+  def contractModuleAdd(cid: Int, module_id: Int, module_ids: List[Int] = List()): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "ContractModuleAdd",
       "cid" -> cid.toString,
+      "module_id" -> module_id.toString,
       "module_ids" -> module_ids.mkString(",")
     )
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -421,6 +422,30 @@ object ContractActions extends BaseActions {
         (x \ "@id").text.toInt,
         (x \ "@title").text,
         (x \ "@editable").text.toInt == 1
+      )
+    ).toList
+  }
+
+  case class ContractTariffPlanRecord(id: Int, title: String)
+
+  def contractTariffPlan(cid: Option[Int] = None): List[ContractTariffPlanRecord] = { // TODO есть ещё параметры
+    val responseXml = executeHttpPostRequest("action" -> "ContractTariffPlan",
+      optionalIntArg("cid", cid)
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <tariffPlans>
+    //        <item id="1" title="Интернет-1"/>
+    //        <item id="2" title="Интернет-2"/>
+    //        <item id="3" title="Канал L2"/>
+    //        <item id="4" title="Разовые услуги"/>
+    //        <item id="5" title="Товары"/>
+    //    </tariffPlans>
+    //</data>
+    (responseXml \\ "item").map(x =>
+      ContractTariffPlanRecord(
+        (x \ "@id").text.toInt,
+        (x \ "@title").text
       )
     ).toList
   }
