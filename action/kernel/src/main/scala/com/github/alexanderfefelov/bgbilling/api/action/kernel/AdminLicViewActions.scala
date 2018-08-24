@@ -9,6 +9,11 @@ object AdminLicViewActions extends BaseActions {
 
   case class LicViewRecord(name: String, dateavail: DateTime, maxclient: Int, curclient: Int)
 
+  /**
+    * Получает данные о лицензиях.
+    *
+    * @return данные о лицензиях
+    */
   def licView: List[LicViewRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "LicView")
     //<?xml version="1.0" encoding="UTF-8"?>

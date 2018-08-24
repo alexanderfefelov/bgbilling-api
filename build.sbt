@@ -26,7 +26,6 @@ lazy val commonSettings = Seq(
   organization := "com.github.alexanderfefelov",
   scalaVersion := scalaV,
   version := "0.1.0-SNAPSHOT",
-  doc in Compile := target.map(_ / "none").value,
   buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion,
     "builtBy" -> {System.getProperty("user.name")},
     "builtOn" -> {java.net.InetAddress.getLocalHost.getHostName},

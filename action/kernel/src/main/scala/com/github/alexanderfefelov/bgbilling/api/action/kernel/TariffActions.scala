@@ -6,6 +6,12 @@ object TariffActions extends BaseActions {
 
   override def module = "tariff"
 
+  /**
+    * Создаёт тариф.
+    *
+    * @param used тариф используется? 0 - нет, 1 - да
+    * @return (идентификатор тарифа, идентификатор тарифного дерева)
+    */
   def addTariffPlan(used: Int): (Int, Int) = {
     val responseXml = executeHttpPostRequest("action" -> "AddTariffPlan",
       "used" -> used.toString
@@ -22,6 +28,20 @@ object TariffActions extends BaseActions {
     (id, tree_id)
   }
 
+  /**
+    * Изменяет тариф.
+    *
+    * @param tpid идентификатор тарифа
+    * @param face 0 - физ. лицо, 1 - юр. лицо
+    * @param title основное название тарифа
+    * @param title_web название тарифа в личном кабинете
+    * @param use_title_in_web использовать основное название тарифа в личном кабинете? 0 - нет, 1 - да
+    * @param values ???
+    * @param tpused тариф используется? 0 - нет, 1 - да
+    * @param config конфигурация тарифа
+    * @param mask ???
+    * @return
+    */
   def updateTariffPlan(tpid: Int, face: Int, title: String, title_web: String, use_title_in_web: Int, values: String, tpused: Int, config: String, mask: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateTariffPlan",
       "tpid" -> tpid.toString,
@@ -39,6 +59,12 @@ object TariffActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Клонирует тариф.
+    *
+    * @param tpid идентификатор тарифа-источника
+    * @return (идентификатор тарифа, идентификатор тарифного дерева)
+    */
   def copyTariffPlan(tpid: Int): (Int, Int) = {
     val responseXml = executeHttpPostRequest("action" -> "CopyTariffPlan",
       "tpid" -> tpid.toString
@@ -55,6 +81,14 @@ object TariffActions extends BaseActions {
     (id, tree_id)
   }
 
+  /**
+    * ???
+    *
+    * @param mid идентификатор модуля
+    * @param parent_tree ???
+    * @param tree ???
+    * @return
+    */
   def createMtree(mid: Int, parent_tree: Int, tree: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "CreateMtree",
       "mid" -> mid.toString,
@@ -66,6 +100,14 @@ object TariffActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Создаёт узел тарифного дерева.
+    *
+    * @param parent ???
+    * @param mtree_id ???
+    * @param typ тип узла тарифного дерева
+    * @return идентификатор узла тарифного дерева
+    */
   def modifTariffNode_create(parent: Int, mtree_id: Int, typ: String): Int = {
     val responseXml = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "create",
@@ -78,6 +120,13 @@ object TariffActions extends BaseActions {
     (responseXml \\ "data" \ "@id").text.toInt
   }
 
+  /**
+    * Изменяет узел тарифного дерева.
+    *
+    * @param id идентификатор узла тарифного дерева
+    * @param data данные узла тарифного дерева
+    * @return
+    */
   def modifTariffNode_update(id: Int, data: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "update",
@@ -89,6 +138,12 @@ object TariffActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Удаляет узел тарифного дерева.
+    *
+    * @param id идентификатор узла тарифного дерева
+    * @return
+    */
   def modifTariffNode_delete(id: Int): Boolean = { // Удаляет ветку, начинающуюся с id
     val responseXml = executeHttpPostRequest("action" -> "ModifTariffNode",
       "command" -> "delete",
@@ -101,6 +156,13 @@ object TariffActions extends BaseActions {
 
   case class GetMtreeRecord(id: Int, parent: Int, typ: String, data: String, deep: Int, editable: Boolean)
 
+  /**
+    * ???
+    *
+    * @param tree_id ???
+    * @param mid ???
+    * @return ???
+    */
   def getMtree(tree_id: Int, mid: Int): List[GetMtreeRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetMTree",
       "tree_id" -> tree_id.toString,

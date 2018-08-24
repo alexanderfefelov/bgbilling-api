@@ -10,6 +10,12 @@ object ContractStatusActions extends BaseActions {
 
   case class StatusListRecord(id: Int, title: String)
 
+  /**
+    * Получает список статусов договоров.
+    *
+    * @param onlyManual 0 - все статусы, 1 - только статусы, которые можно установить руками
+    * @return список статусов договоров
+    */
   def statusList(onlyManual: Int): List[StatusListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "StatusList",
       "onlyManual" -> onlyManual.toString
@@ -35,6 +41,12 @@ object ContractStatusActions extends BaseActions {
 
   case class ContractStatusTableRecord(id: Int, status: String, period: String, comment: String)
 
+  /**
+    * Получает список статусов договора.
+    *
+    * @param cid идентификатор договора
+    * @return список статусов договора
+    */
   def contractStatusTable(cid: Int): List[ContractStatusTableRecord]= {
     val responseXml = executeHttpPostRequest("action" -> "ContractStatusTable",
       "cid" -> cid.toString
@@ -62,6 +74,12 @@ object ContractStatusActions extends BaseActions {
 
   case class ContractStatusLogRecord(date: DateTime, user: String, status: String, period: String, comment: String)
 
+  /**
+    * Получает историю изменения статуса договора.
+    *
+    * @param cid идентификатор договора
+    * @return история изменения статуса договора
+    */
   def contractStatusLog(cid: Int): List[ContractStatusLogRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ContractStatusLog",
       "cid" -> cid.toString

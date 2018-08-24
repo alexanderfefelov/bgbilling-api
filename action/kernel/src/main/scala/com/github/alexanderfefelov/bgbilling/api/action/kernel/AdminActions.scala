@@ -7,6 +7,12 @@ object AdminActions extends BaseActions {
 
   override def module = "admin"
 
+  /**
+    * Ставит задание в очередь на выполнение.
+    *
+    * @param id идентификатор задания
+    * @return текстовое описание результата
+    */
   def runScheduledTask(id: Int): String = {
     val responseXml = executeHttpPostRequest("action" -> "RunScheduledTask",
       "id" -> id.toString
@@ -19,6 +25,11 @@ object AdminActions extends BaseActions {
   case class ShowCurrentTasksQueueRecord(id: Int, description: String, status: String, startTime: Option[DateTime])
   case class ShowCurrentTasksPeriodicRecord(id: Int, description: String, amount: Int)
 
+  /**
+    * Получает информацию о состоянии планировщика.
+    *
+    * @return ???
+    */
   def ShowCurrentTasks: (List[ShowCurrentTasksQueueRecord], List[ShowCurrentTasksPeriodicRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "ShowCurrentTasks")
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -58,6 +69,11 @@ object AdminActions extends BaseActions {
     (queueTable, periodicTable)
   }
 
+  /**
+    * Получает дату окончания закрытого периода.
+    *
+    * @return дата окончания закрытого периода
+    */
   def getClosedDate: Option[DateTime] = {
     val responseXml = executeHttpPostRequest("action" -> "GetClosedDate")
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -70,6 +86,13 @@ object AdminActions extends BaseActions {
     }
   }
 
+  /**
+    * Устанавливает дату окончания закрытого периода.
+    *
+    * @param date дата окончания закрытого периода
+    * @param typeId тип зарытого периода
+    * @return
+    */
   def setClosedDate(date: DateTime, typeId: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "SetClosedDate",
       "date" -> date.toString(DATE_FORMAT),
@@ -82,6 +105,11 @@ object AdminActions extends BaseActions {
 
   case class ClosedDateTypeListRecord(id: Int, title: String)
 
+  /**
+    * Получает список типов закрытых периодов.
+    *
+    * @return список типов закрытых периодов
+    */
   def closedDateTypeList: List[ClosedDateTypeListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ClosedDateTypeList")
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -100,6 +128,11 @@ object AdminActions extends BaseActions {
 
   case class UserListRecord(id: Int, login: String, status: Int, name: String, title: String, descr: String)
 
+  /**
+    * Получает список учётных записей пользователей.
+    *
+    * @return список учётных записей
+    */
   def userList: List[UserListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "UserList")
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -120,6 +153,16 @@ object AdminActions extends BaseActions {
     ).toList
   }
 
+  /**
+    * Создаёт или обновляет учётную запись пользователей.
+    *
+    * @param id идентификатор учётной записи
+    * @param login логин
+    * @param name имя пользователя
+    * @param descr описание учётной записи
+    * @param user_pswd пароль (plain text)
+    * @return
+    */
   def userUpdate(id: Int, login: String, name: String, descr: String, user_pswd: String): Boolean = {
     def md5Hash(text: String) : String = java.security.MessageDigest.getInstance("MD5").digest(text.getBytes("UTF-8")).map(0xff & _).map { "%02x".format(_) }.foldLeft(""){_ + _}
     val responseXml = executeHttpPostRequest("action" -> "UserUpdate",
@@ -134,6 +177,13 @@ object AdminActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Удаляет значение параметра типа "Адрес".
+    *
+    * @param cid идентификатор договора
+    * @param pid идентификатор значения параметра
+    * @return
+    */
   def deleteAddressParameter(cid: Int, pid: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "DeleteAddressParameter",
       "cid" -> cid.toString,
@@ -144,6 +194,12 @@ object AdminActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Удаляет дом из справочника домов.
+    *
+    * @param id идентификатор дома
+    * @return
+    */
   def deleteAddressHouse(id: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "DeleteAddressHouse",
       "id" -> id.toString
@@ -155,6 +211,12 @@ object AdminActions extends BaseActions {
 
   case class GetContractGroupListRecord(id: Int, enabled: Boolean, title: String, editable: Boolean, comment: String, contractCount: Int)
 
+  /**
+    * Получает список групп договоров.
+    *
+    * @param contracts считать договора, входящие в группы?
+    * @return список групп договоров
+    */
   def getContractGroupList(contracts: Boolean): List[GetContractGroupListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetContractGroupList",
       "contracts" -> contracts.toString

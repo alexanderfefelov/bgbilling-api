@@ -7,6 +7,18 @@ object ContractActions extends BaseActions {
 
   override def module = "contract"
 
+  /**
+    * Создаёт договор.
+    *
+    * @param date дата начала действия договора
+    * @param pattern_id идентификатор шаблона договора
+    * @param super_id идентификатор родительского договора
+    * @param sub_mode режим работы с родительским договором
+    * @param params ???
+    * @param title ???
+    * @param custom_title ???
+    * @return идентификатор договора
+    */
   def newContract(date: DateTime, pattern_id: Int, super_id: Int = 0, sub_mode: Int = 0, params: String = "", title: Option[String] = None, custom_title: Option[String] = None): Int = {
     val responseXml = executeHttpPostRequest("action" -> "NewContract",
       "date" -> date.toString(DATE_FORMAT),
@@ -24,6 +36,14 @@ object ContractActions extends BaseActions {
     (responseXml \\ "contract" \ "@id").text.toInt
   }
 
+  /**
+    * Удаляет договор.
+    *
+    * @param cid идентификатор договора
+    * @param save
+    * @param folder
+    * @return
+    */
   def deleteContract(cid: Int, save: Int, folder: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "DeleteContract",
       "cid" -> cid.toString,
@@ -35,6 +55,13 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Делает договор скрытым/открытым.
+    *
+    * @param cid идентификатор договора
+    * @param del скрыть/открыть?
+    * @return
+    */
   def setDelContract(cid: Int, del: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "SetDelContract",
       "cid" -> cid.toString,
@@ -47,6 +74,12 @@ object ContractActions extends BaseActions {
 
   case class ContractBalance(summa1: Float, summa2: Float, summa3: Float, summa4: Float, summa5: Float)
 
+  /**
+    * Получает данные о состоянии баланса договора.
+    *
+    * @param cid идентификатор договора
+    * @return данные о состоянии баланса договора
+    */
   def contractBalance(cid: Int): ContractBalance = {
     val responseXml = executeHttpPostRequest("action" -> "ContractBalance",
       "cid" -> cid.toString
@@ -74,6 +107,12 @@ object ContractActions extends BaseActions {
 
   case class GetContractMemo(subject: String, visibled: Boolean, row: String)
 
+  /**
+    * Получает примечание к договору.
+    *
+    * @param id идентификатор примечания
+    * @return примечание к договору
+    */
   def getContractMemo(id: Int): GetContractMemo = {
     val responseXml = executeHttpPostRequest("action" -> "GetContractMemo",
       "id" -> id.toString
@@ -91,6 +130,16 @@ object ContractActions extends BaseActions {
     )
   }
 
+  /**
+    * Создаёт или обновляет примечание к договору.
+    *
+    * @param id идентификатор примечания к договору, -1 - для создания примечания
+    * @param cid идентификатор договора
+    * @param subject тема примечания
+    * @param comment текст примечания
+    * @param visibled клиент может видеть примечание?
+    * @return
+    */
   def updateContractMemo(id: Int, cid: Int, subject: String, comment: String, visibled: Boolean): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractMemo",
       "id" -> id.toString,
@@ -104,6 +153,12 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Удаляет примечание к договору.
+    *
+    * @param id идентификатор примечания к договору
+    * @return
+    */
   def deleteContractMemo(id: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "DeleteContractMemo",
       "id" -> id.toString
@@ -115,6 +170,13 @@ object ContractActions extends BaseActions {
 
   case class GetParameterHistoryRecord(when: DateTime, who: String, value: String)
 
+  /**
+    * Получает историю изменения значения параметра любого типа.
+    *
+    * @param cid идентификатор договора
+    * @param pid идентификатор параметра
+    * @return история изменения значения параметра
+    */
   def getParameterHistory(cid: Int, pid: Int): List[GetParameterHistoryRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetParameterHistory",
       "cid" -> cid.toString,
@@ -138,6 +200,13 @@ object ContractActions extends BaseActions {
     ).toList
   }
 
+  /**
+    * Устанавливает пароль для договора.
+    *
+    * @param cid идентификатор договора
+    * @param value пароль (plain text)
+    * @return
+    */
   def updateContractPassword(cid: Int, value: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractPassword",
       "cid" -> cid.toString,
@@ -148,6 +217,14 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Устанавливает значение лимита для договора
+    *
+    * @param cid идентификатор договора
+    * @param value значение лимита
+    * @param comment опциональный комментарий к операции
+    * @return
+    */
   def updateContractLimit(cid: Int, value: Double, comment: Option[String] = None): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractLimit",
       "cid" -> cid.toString,
@@ -159,6 +236,13 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Изменяет режим договора.
+    *
+    * @param cid идентификатор договора
+    * @param value режим, debet - авансовая оплата, любое другое значение - кредитная оплата
+    * @return
+    */
   def updateContractMode(cid: Int, value: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractMode",
       "cid" -> cid.toString,
@@ -169,6 +253,15 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Устанавливает значения номера и комментария для договора.
+    *
+    * @param cid идентификатор договора
+    * @param title номер договора
+    * @param comment опциональный комментарий к договору
+    * @param patid опциональный идентификатор шаблона договора
+    * @return
+    */
   def updateContractTitleAndComment(cid: Int, title: String, comment: Option[String] = None, patid: Option[Int] = None): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractTitleAndComment",
       "cid" -> cid.toString,
@@ -181,26 +274,48 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
-  def updateContractDate1(cid: Int, date: DateTime): Boolean = {
+  /**
+    * Устанавливает дату начала срока действия договора.
+    *
+    * @param cid идентификатор договора
+    * @param value дата начала срока действия договора
+    * @return
+    */
+  def updateContractDate1(cid: Int, value: DateTime): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractDate1",
       "id" -> cid.toString,
-      "value" -> date.toString(DATE_FORMAT)
+      "value" -> value.toString(DATE_FORMAT)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
     (responseXml \ "@status").text == "ok"
   }
 
-  def updateContractDate2(cid: Int, date: DateTime): Boolean = {
+  /**
+    * Устанавливает дату окончания срока действия договора.
+    *
+    * @param cid идентификатор договора
+    * @param value дата окончания срока действия договора
+    * @return
+    */
+  def updateContractDate2(cid: Int, value: DateTime): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractDate2",
       "id" -> cid.toString,
-      "value" -> date.toString(DATE_FORMAT)
+      "value" -> value.toString(DATE_FORMAT)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Устанавливает значение параметра типа "Текст".
+    *
+    * @param cid идентификатор договора
+    * @param pid идентификатор параметра
+    * @param value значение параметра
+    * @return
+    */
   def updateParameterType1(cid: Int, pid: Int, value: String): Boolean = { // Текстовое поле
     val responseXml = executeHttpPostRequest("action" -> "UpdateParameterType1",
       "cid" -> cid.toString,
@@ -212,6 +327,14 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Устанавливает значение параметра типа "Флаг".
+    *
+    * @param cid идентификатор договора
+    * @param pid идентификатор параметра
+    * @param value значение параметра
+    * @return
+    */
   def updateParameterType5(cid: Int, pid: Int, value: Int): Boolean = { // Флаг
     val responseXml = executeHttpPostRequest("action" -> "UpdateParameterType5",
       "cid" -> cid.toString,
@@ -223,6 +346,14 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Устанавливает значение параметра типа "Дата".
+    *
+    * @param cid идентификатор договора
+    * @param pid идентификатор параметра
+    * @param value значение параметра
+    * @return
+    */
   def updateParameterType6(cid: Int, pid: Int, value: DateTime): Boolean = { // Дата
     val responseXml = executeHttpPostRequest("action" -> "UpdateParameterType6",
       "cid" -> cid.toString,
@@ -234,13 +365,23 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Устанавливает значение параметра типа "Email".
+    *
+    * @param cid идентификатор договора
+    * @param pid идентификатор параметра
+    * @param email значение параметра в виде
+    *              ОПИСАНИЕ1 <email1@acme.com>\nОПИСАНИЕ2 <email2@acme.com>\n...ОПИСАНИЕN <emailN@acme.com>
+    *              любое описание может быть пустым
+    * @param comment опцинальный комментарий к значению параметра
+    * @return
+    */
   def updateEmailInfo(cid: Int, pid: Int, email: String, comment: Option[String] = None): Boolean = {
     val data = s"${comment.getOrElse("").trim} <${email.trim}>".trim
     val responseXml = executeHttpPostRequest("action" -> "UpdateEmailInfo",
       "cid" -> cid.toString,
       "pid" -> pid.toString,
-      "e-mail" -> data, // ОПИСАНИЕ1 <email1@acme.com>\nОПИСАНИЕ2 <email2@acme.com>\n...ОПИСАНИЕN <emailN@acme.com>
-                        // Любое описание может быть пустым
+      "e-mail" -> data,
       "buf" -> ""
     )
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -248,6 +389,15 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Устанавливает значение параметра типа "Телефон".
+    *
+    * @param cid идентификатор договора
+    * @param pid идентификатор параметра
+    * @param phone значение параметра
+    * @param comment опцинальный комментарий к значению параметра
+    * @return
+    */
   def updatePhoneInfo(cid: Int, pid: Int, phone: String, comment: Option[String] = None): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdatePhoneInfo",
       "cid" -> cid.toString,
@@ -261,6 +411,15 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Устанавливает значение параметра типа "Список".
+    *
+    * @param cid идентификатор договора
+    * @param pid идентификатор параметра
+    * @param value значение параметра из списка
+    * @param custom_value опциональное значение параметра вне списка
+    * @return
+    */
   def updateListParameter(cid: Int, pid: Int, value: Int, custom_value: Option[String] = None): Boolean = { // Значение из списка
     val responseXml = executeHttpPostRequest("action" -> "UpdateListParam",
       "cid" -> cid.toString,
@@ -273,6 +432,20 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Устанавливает значение параметра типа "Адрес".
+    *
+    * @param cid идентификатор договора
+    * @param pid идентификатор параметра
+    * @param hid идентификатор дома
+    * @param pod номер подъезда
+    * @param floor номер этажа
+    * @param flat номер квартиры/офиса
+    * @param room комер комнаты/помещения
+    * @param comment комментарий к значению параметра
+    * @param formatKey идентификатор формата преобразования значения в строку
+    * @return
+    */
   def updateAddressInfo(cid: Int, pid: Int, hid: Int, pod: Int, floor: Int, flat: String, room: String = "", comment: String = "", formatKey: Int = 0): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateAddressInfo",
       "cid" -> cid.toString,
@@ -292,6 +465,12 @@ object ContractActions extends BaseActions {
 
   case class ContractParametersRecord(pid: Int, pt: Int, title: String, value: String)
 
+  /**
+    * Получает значения всех параметров договора.
+    *
+    * @param cid идентификатор договора
+    * @return значения всех параметров договора
+    */
   def contractParameters(cid: Int): List[ContractParametersRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ContractParameters",
       "cid" -> cid.toString
@@ -328,6 +507,12 @@ object ContractActions extends BaseActions {
 
   case class ContractModuleListRecord(id: Int, title: String)
 
+  /**
+    * Получает список модулей договора.
+    *
+    * @param cid идентификатор договора
+    * @return список модулей договора
+    */
   def contractModuleList(cid: Int): (List[ContractModuleListRecord], List[ContractModuleListRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "ContractModuleList",
       "cid" -> cid.toString
@@ -363,6 +548,14 @@ object ContractActions extends BaseActions {
     (listSelect, listAvailable)
   }
 
+  /**
+    * Добавляет модуль к договору.
+    *
+    * @param cid идентификатор договора
+    * @param module_id идентификатор модуля
+    * @param module_ids список идентификаторов модулей
+    * @return
+    */
   def contractModuleAdd(cid: Int, module_id: Int, module_ids: List[Int] = List()): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "ContractModuleAdd",
       "cid" -> cid.toString,
@@ -374,6 +567,13 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Удаляет модуль из договора.
+    *
+    * @param cid идентификатор договора
+    * @param module_id идентификатор модуля
+    * @return
+    */
   def contractModuleDelete(cid: Int, module_id: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "ContractModuleDelete",
       "cid" -> cid.toString,
@@ -386,6 +586,11 @@ object ContractActions extends BaseActions {
 
   case class GetPatternListRecord(id: Int, title: String)
 
+  /**
+    * Получает список шаблонов договоров.
+    *
+    * @return список шаблонов договоров
+    */
   def getPatternList: List[GetPatternListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetPatternList")
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -406,6 +611,12 @@ object ContractActions extends BaseActions {
 
   case class ContractGroupRecord(id: Int, title: String, editable: Boolean)
 
+  /**
+    * Получает список групп для договора.
+    *
+    * @param cid идентификатор договора
+    * @return список групп для договора
+    */
   def contractGroup(cid: Int): List[ContractGroupRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ContractGroup",
       "cid" -> cid.toString
@@ -428,6 +639,12 @@ object ContractActions extends BaseActions {
 
   case class ContractTariffPlanRecord(id: Int, title: String)
 
+  /**
+    * Получает список тарифов.
+    *
+    * @param cid опциональный идентификатор договора
+    * @return список тарифов
+    */
   def contractTariffPlan(cid: Option[Int] = None): List[ContractTariffPlanRecord] = { // TODO есть ещё параметры
     val responseXml = executeHttpPostRequest("action" -> "ContractTariffPlan",
       optionalIntArg("cid", cid)
@@ -452,6 +669,12 @@ object ContractActions extends BaseActions {
 
   case class ContractTariffPlansRecord(id: Int, tpid: Int, title: String, date1: DateTime, date2: Option[DateTime], period: String, comment: String, pos: Int)
 
+  /**
+    * Получает список тарифов договора.
+    *
+    * @param cid идентификатор договора
+    * @return список тарифов
+    */
   def contractTariffPlans(cid: Int): List[ContractTariffPlansRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ContractTariffPlans",
       "cid" -> cid.toString
@@ -482,6 +705,17 @@ object ContractActions extends BaseActions {
     ).toList
   }
 
+  /**
+    * Добавляет или обновляет тариф в договоре.
+    *
+    * @param id идентификатор тарифа в договоре, 0 - для добавления
+    * @param cid идентификатор договора
+    * @param tpid идентификатор тарифа
+    * @param comment комментарий к операции
+    * @param date1 дата начала срока действия договора
+    * @param date2 опциональная дата окончания срока действия договора
+    * @return
+    */
   def updateContractTariffPlan(id: Int, cid: Int, tpid: Int, comment: String = "", date1: DateTime, date2: Option[DateTime] = None): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractTariffPlan",
       "id" -> id.toString,
@@ -496,6 +730,13 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Удаляет тариф из договора.
+    *
+    * @param id идентификатор тарифа в договоре
+    * @param cid идентификатор договора
+    * @return
+    */
   def deleteContractTariffPlan(id: Int, cid: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "DeleteContractTariffPlan",
       "id" -> id.toString,
@@ -506,6 +747,16 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
+  /**
+    * Изменяет статус договоров.
+    *
+    * @param cids список идентификаторов договоров
+    * @param status статус договора
+    * @param date1 дата начала срока действия статуса
+    * @param date2 опциональная дата окончания срока действия статуса
+    * @param comment опциональный комментарий к операции
+    * @return
+    */
   def changeStatus(cids: List[Int], status: Int, date1: DateTime, date2: Option[DateTime] = None, comment: Option[String] = None): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "ContractGroupOperation",
       "type" -> "changeStatus",

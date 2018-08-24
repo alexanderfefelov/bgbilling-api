@@ -6,6 +6,13 @@ object ServiceActions extends BaseActions {
 
   override def module = "service"
 
+  /**
+    * Получает конфигурацию модуля.
+    *
+    * @param mid идентификатор модуля
+    * @param config_id идентификатор конфигурации
+    * @return конфигурация модуля
+    */
   def setModuleConfig(mid: Int, config_id: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "SetModuleConfig",
       "mid" -> mid.toString,
@@ -23,6 +30,11 @@ object ServiceActions extends BaseActions {
   )
   case class AboutModuleRecord(name: String, version: String, build_number: String, build_time: String, versionstring: String)
 
+  /**
+    * Получает информацию о сервере.
+    *
+    * @return информация о сервере
+    */
   def about: (AboutServer, List[AboutModuleRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "About")
     //<?xml version="1.0" encoding="UTF-8"?>

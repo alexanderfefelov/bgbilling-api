@@ -8,6 +8,11 @@ object InstallerActions extends BaseActions {
 
   case class GetInstalledModulesRecord(name: String, module_name: String, version: String, build: String)
 
+  /**
+    * Получает список установленных модулей.
+    *
+    * @return список установленных модулей
+    */
   def getInstalledModules: List[GetInstalledModulesRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetInstalledModules")
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -38,6 +43,11 @@ object InstallerActions extends BaseActions {
 
   case class GetInstalledPluginsRecord(id: String)
 
+  /**
+    * Получает список установленных плагинов.
+    *
+    * @return список установленных плагинов
+    */
   def getInstalledPlugins: List[GetInstalledPluginsRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetInstalledPlugins")
     //<?xml version="1.0" encoding="UTF-8"?>
