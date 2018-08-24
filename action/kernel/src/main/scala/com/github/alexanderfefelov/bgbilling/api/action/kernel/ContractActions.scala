@@ -354,7 +354,7 @@ object ContractActions extends BaseActions {
         (x \ "@title").text
       )
     ).toList
-    val listAvailable = (responseXml \\ "data" \ "list_available" \ "item").map(x =>
+    val listAvailable = (responseXml \\ "data" \ "list_avaliable" \ "item").map(x =>
       ContractModuleListRecord(
         (x \ "@id").text.toInt,
         (x \ "@title").text
