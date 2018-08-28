@@ -649,12 +649,12 @@ object ContractActions extends BaseActions {
   case class ContractGroupRecord(id: Int, title: String, editable: Boolean)
 
   /**
-    * Получает список групп для договора.
+    * Получает информацию о группах договора.
     *
     * @param cid идентификатор договора
-    * @return список групп для договора
+    * @return (маска выбранных для договора групп, список групп договоров)
     */
-  def contractGroup(cid: Int): Seq[ContractGroupRecord] = {
+  def contractGroup(cid: Int): (Long, Seq[ContractGroupRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "ContractGroup",
       "cid" -> cid.toString
     )
@@ -665,13 +665,15 @@ object ContractActions extends BaseActions {
     //        <group editable="1" id="0" title="Служебный"/>
     //    </groups>
     //</data>
-    (responseXml \\ "group").map(x =>
+    val selected = (responseXml \\ "data" \ "groups" \ "@selected").text.toLong
+    val groups = (responseXml \\ "group").map(x =>
       ContractGroupRecord(
         (x \ "@id").text.toInt,
         (x \ "@title").text,
         (x \ "@editable").text.toInt == 1
       )
     ).toList
+    (selected, groups)
   }
 
   case class ContractTariffPlanRecord(id: Int, title: String)
