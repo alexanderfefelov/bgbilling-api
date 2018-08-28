@@ -163,7 +163,7 @@ object TariffActions extends BaseActions {
     * @param mid ???
     * @return ???
     */
-  def getMtree(tree_id: Int, mid: Int): List[GetMtreeRecord] = {
+  def getMtree(tree_id: Int, mid: Int): Seq[GetMtreeRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetMTree",
       "tree_id" -> tree_id.toString,
       "mid" -> mid.toString

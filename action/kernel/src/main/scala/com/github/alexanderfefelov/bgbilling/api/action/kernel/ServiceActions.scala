@@ -35,7 +35,7 @@ object ServiceActions extends BaseActions {
     *
     * @return информация о сервере
     */
-  def about: (AboutServer, List[AboutModuleRecord]) = {
+  def about: (AboutServer, Seq[AboutModuleRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "About")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">

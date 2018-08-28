@@ -72,10 +72,10 @@ object ContractActions extends BaseActions {
     (responseXml \ "@status").text == "ok"
   }
 
-  case class ContractBalance(summa1: Float, summa2: Float, summa3: Float, summa4: Float, summa5: Float)
+  case class ContractBalance(summa1: Double, summa2: Double, summa3: Double, summa4: Double, summa5: Double)
 
   /**
-    * Получает данные о состоянии баланса договора.
+    * Получает данные о состоянии баланса договора (итоги).
     *
     * @param cid идентификатор договора
     * @return данные о состоянии баланса договора
@@ -97,12 +97,49 @@ object ContractActions extends BaseActions {
     //    </table>
     //</data>
     ContractBalance(
-      (responseXml \\ "table" \ "@summa1").text.toFloat,
-      (responseXml \\ "table" \ "@summa2").text.toFloat,
-      (responseXml \\ "table" \ "@summa3").text.toFloat,
-      (responseXml \\ "table" \ "@summa4").text.toFloat,
-      (responseXml \\ "table" \ "@summa5").text.toFloat
+      (responseXml \\ "table" \ "@summa1").text.toDouble,
+      (responseXml \\ "table" \ "@summa2").text.toDouble,
+      (responseXml \\ "table" \ "@summa3").text.toDouble,
+      (responseXml \\ "table" \ "@summa4").text.toDouble,
+      (responseXml \\ "table" \ "@summa5").text.toDouble
     )
+  }
+
+  case class ContractBalanceDetailRecord(contractTitle: String, date: String, typ: String, summa: Double, comment: String)
+
+  /**
+    * Получает данные о состоянии баланса договора (детали).
+    *
+    * @param cid идентификатор договора
+    * @return данные о состоянии баланса договора
+    */
+  def contractBalanceDetail(cid: Int): Seq[ContractBalanceDetailRecord] = {
+    val responseXml = executeHttpPostRequest("action" -> "ContractBalanceDetail",
+      "cid" -> cid.toString
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <table summa="0.00">
+    //        <data>
+    //            <row comment="" contractTitle="" date="август 2018" summa="170.00" type="Входящий остаток на начало месяца"/>
+    //            <row comment="" contractTitle="А100" date="27.08.2018" summa="-1234.00" type="Расход &quot;Подключение частного дома&quot;"/>
+    //            <row comment="" contractTitle="А100" date="28.08.2018" summa="100.00" type="Приход &quot;Наличный платёж&quot;"/>
+    //            <row comment="" contractTitle="А100" date="28.08.2018" summa="200.00" type="Приход &quot;Банковская карта (офлайн)&quot;"/>
+    //            <row comment="" contractTitle="А100" date="31.08.2018" summa="-600.00" type="Наработка &quot;Выезд технического специалиста&quot;"/>
+    //            <row comment="" contractTitle="А100" date="31.08.2018" summa="-3000.00" type="Наработка &quot;Маршрутизатор MikroTik hAP ac2 (RBD52G-5HacD2HnD-TC)&quot;"/>
+    //            <row comment="" contractTitle="" date="август 2018" summa="-4364.00" type="Исходящий остаток на конец месяца"/>
+    //        </data>
+    //    </table>
+    //</data>
+    (responseXml \\ "row").map(x =>
+      ContractBalanceDetailRecord(
+        (responseXml \ "@contractTitle").text,
+        (responseXml \ "@date").text,
+        (responseXml \ "@type").text,
+        (responseXml \ "@summa").text.toDouble,
+        (responseXml \ "@comment").text
+      )
+    ).toList
   }
 
   case class GetContractMemo(subject: String, visibled: Boolean, row: String)
@@ -177,7 +214,7 @@ object ContractActions extends BaseActions {
     * @param pid идентификатор параметра
     * @return история изменения значения параметра
     */
-  def getParameterHistory(cid: Int, pid: Int): List[GetParameterHistoryRecord] = {
+  def getParameterHistory(cid: Int, pid: Int): Seq[GetParameterHistoryRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetParameterHistory",
       "cid" -> cid.toString,
       "pid" -> pid.toString
@@ -218,7 +255,7 @@ object ContractActions extends BaseActions {
   }
 
   /**
-    * Устанавливает значение лимита для договора
+    * Устанавливает значение лимита для договора.
     *
     * @param cid идентификатор договора
     * @param value значение лимита
@@ -471,7 +508,7 @@ object ContractActions extends BaseActions {
     * @param cid идентификатор договора
     * @return значения всех параметров договора
     */
-  def contractParameters(cid: Int): List[ContractParametersRecord] = {
+  def contractParameters(cid: Int): Seq[ContractParametersRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ContractParameters",
       "cid" -> cid.toString
     )
@@ -513,7 +550,7 @@ object ContractActions extends BaseActions {
     * @param cid идентификатор договора
     * @return список модулей договора
     */
-  def contractModuleList(cid: Int): (List[ContractModuleListRecord], List[ContractModuleListRecord]) = {
+  def contractModuleList(cid: Int): (Seq[ContractModuleListRecord], Seq[ContractModuleListRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "ContractModuleList",
       "cid" -> cid.toString
     )
@@ -556,7 +593,7 @@ object ContractActions extends BaseActions {
     * @param module_ids список идентификаторов модулей
     * @return
     */
-  def contractModuleAdd(cid: Int, module_id: Int, module_ids: List[Int] = List()): Boolean = {
+  def contractModuleAdd(cid: Int, module_id: Int, module_ids: Seq[Int] = List()): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "ContractModuleAdd",
       "cid" -> cid.toString,
       "module_id" -> module_id.toString,
@@ -591,7 +628,7 @@ object ContractActions extends BaseActions {
     *
     * @return список шаблонов договоров
     */
-  def getPatternList: List[GetPatternListRecord] = {
+  def getPatternList: Seq[GetPatternListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetPatternList")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -617,7 +654,7 @@ object ContractActions extends BaseActions {
     * @param cid идентификатор договора
     * @return список групп для договора
     */
-  def contractGroup(cid: Int): List[ContractGroupRecord] = {
+  def contractGroup(cid: Int): Seq[ContractGroupRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ContractGroup",
       "cid" -> cid.toString
     )
@@ -645,7 +682,7 @@ object ContractActions extends BaseActions {
     * @param cid опциональный идентификатор договора
     * @return список тарифов
     */
-  def contractTariffPlan(cid: Option[Int] = None): List[ContractTariffPlanRecord] = { // TODO есть ещё параметры
+  def contractTariffPlan(cid: Option[Int] = None): Seq[ContractTariffPlanRecord] = { // TODO есть ещё параметры
     val responseXml = executeHttpPostRequest("action" -> "ContractTariffPlan",
       optionalIntArg("cid", cid)
     )
@@ -675,7 +712,7 @@ object ContractActions extends BaseActions {
     * @param cid идентификатор договора
     * @return список тарифов
     */
-  def contractTariffPlans(cid: Int): List[ContractTariffPlansRecord] = {
+  def contractTariffPlans(cid: Int): Seq[ContractTariffPlansRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ContractTariffPlans",
       "cid" -> cid.toString
     )
@@ -757,7 +794,7 @@ object ContractActions extends BaseActions {
     * @param comment опциональный комментарий к операции
     * @return
     */
-  def changeStatus(cids: List[Int], status: Int, date1: DateTime, date2: Option[DateTime] = None, comment: Option[String] = None): Boolean = {
+  def changeStatus(cids: Seq[Int], status: Int, date1: DateTime, date2: Option[DateTime] = None, comment: Option[String] = None): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "ContractGroupOperation",
       "type" -> "changeStatus",
       "cids" -> cids.mkString(","),

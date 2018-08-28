@@ -14,7 +14,7 @@ object AdminLicViewActions extends BaseActions {
     *
     * @return данные о лицензиях
     */
-  def licView: List[LicViewRecord] = {
+  def licView: Seq[LicViewRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "LicView")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">

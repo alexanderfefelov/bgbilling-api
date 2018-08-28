@@ -30,7 +30,7 @@ object AdminActions extends BaseActions {
     *
     * @return ???
     */
-  def ShowCurrentTasks: (List[ShowCurrentTasksQueueRecord], List[ShowCurrentTasksPeriodicRecord]) = {
+  def ShowCurrentTasks: (Seq[ShowCurrentTasksQueueRecord], Seq[ShowCurrentTasksPeriodicRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "ShowCurrentTasks")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -110,7 +110,7 @@ object AdminActions extends BaseActions {
     *
     * @return список типов закрытых периодов
     */
-  def closedDateTypeList: List[ClosedDateTypeListRecord] = {
+  def closedDateTypeList: Seq[ClosedDateTypeListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "ClosedDateTypeList")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -133,7 +133,7 @@ object AdminActions extends BaseActions {
     *
     * @return список учётных записей
     */
-  def userList: List[UserListRecord] = {
+  def userList: Seq[UserListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "UserList")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -217,7 +217,7 @@ object AdminActions extends BaseActions {
     * @param contracts считать договора, входящие в группы?
     * @return список групп договоров
     */
-  def getContractGroupList(contracts: Boolean): List[GetContractGroupListRecord] = {
+  def getContractGroupList(contracts: Boolean): Seq[GetContractGroupListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetContractGroupList",
       "contracts" -> contracts.toString
     )

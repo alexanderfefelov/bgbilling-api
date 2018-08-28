@@ -13,7 +13,7 @@ object InstallerActions extends BaseActions {
     *
     * @return список установленных модулей
     */
-  def getInstalledModules: List[GetInstalledModulesRecord] = {
+  def getInstalledModules: Seq[GetInstalledModulesRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetInstalledModules")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -48,7 +48,7 @@ object InstallerActions extends BaseActions {
     *
     * @return список установленных плагинов
     */
-  def getInstalledPlugins: List[GetInstalledPluginsRecord] = {
+  def getInstalledPlugins: Seq[GetInstalledPluginsRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "GetInstalledPlugins")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
