@@ -9,12 +9,12 @@ object TariffActions extends BaseActions {
   /**
     * Создаёт тариф.
     *
-    * @param used тариф используется? 0 - нет, 1 - да
+    * @param used тариф используется?
     * @return (идентификатор тарифа, идентификатор тарифного дерева)
     */
-  def addTariffPlan(used: Int): (Int, Int) = {
+  def addTariffPlan(used: Boolean): (Int, Int) = {
     val responseXml = executeHttpPostRequest("action" -> "AddTariffPlan",
-      "used" -> used.toString
+      "used" -> booleanToInt(used).toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -35,22 +35,22 @@ object TariffActions extends BaseActions {
     * @param face 0 - физ. лицо, 1 - юр. лицо
     * @param title основное название тарифа
     * @param title_web название тарифа в личном кабинете
-    * @param use_title_in_web использовать основное название тарифа в личном кабинете? 0 - нет, 1 - да
+    * @param use_title_in_web использовать основное название тарифа в личном кабинете?
     * @param values ???
-    * @param tpused тариф используется? 0 - нет, 1 - да
+    * @param tpused тариф используется?
     * @param config конфигурация тарифа
     * @param mask ???
     * @return
     */
-  def updateTariffPlan(tpid: Int, face: Int, title: String, title_web: String, use_title_in_web: Int, values: String, tpused: Int, config: String, mask: String): Boolean = {
+  def updateTariffPlan(tpid: Int, face: Int, title: String, title_web: String, use_title_in_web: Boolean, values: String, tpused: Boolean, config: String, mask: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "UpdateTariffPlan",
       "tpid" -> tpid.toString,
       "face" -> face.toString,
       "title" -> title,
       "title_web" -> title_web,
-      "use_title_in_web" -> use_title_in_web.toString,
+      "use_title_in_web" -> booleanToInt(use_title_in_web).toString,
       "values" -> values,
-      "tpused" -> tpused.toString,
+      "tpused" -> booleanToInt(tpused).toString,
       "config" -> config,
       "mask" -> mask
     )

@@ -28,7 +28,7 @@ object AdminActions extends BaseActions {
   /**
     * Получает информацию о состоянии планировщика.
     *
-    * @return ???
+    * @return (???, ???)
     */
   def ShowCurrentTasks: (Seq[ShowCurrentTasksQueueRecord], Seq[ShowCurrentTasksPeriodicRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "ShowCurrentTasks")

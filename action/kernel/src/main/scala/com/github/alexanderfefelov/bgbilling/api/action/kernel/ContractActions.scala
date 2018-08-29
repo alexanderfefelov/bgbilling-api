@@ -40,14 +40,14 @@ object ContractActions extends BaseActions {
     * Удаляет договор.
     *
     * @param cid идентификатор договора
-    * @param save
+    * @param save сохранить в архиве?
     * @param folder
     * @return
     */
-  def deleteContract(cid: Int, save: Int, folder: String): Boolean = {
+  def deleteContract(cid: Int, save: Boolean, folder: String): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "DeleteContract",
       "cid" -> cid.toString,
-      "save" -> save.toString,
+      "save" -> booleanToInt(save).toString,
       "folder" -> folder
     )
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -62,10 +62,10 @@ object ContractActions extends BaseActions {
     * @param del скрыть/открыть?
     * @return
     */
-  def setDelContract(cid: Int, del: Int): Boolean = {
+  def setDelContract(cid: Int, del: Boolean): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "SetDelContract",
       "cid" -> cid.toString,
-      "del" -> del.toString
+      "del" -> booleanToInt(del).toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>

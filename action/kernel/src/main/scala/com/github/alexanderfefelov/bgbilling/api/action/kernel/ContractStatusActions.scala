@@ -13,12 +13,12 @@ object ContractStatusActions extends BaseActions {
   /**
     * Получает список статусов договоров.
     *
-    * @param onlyManual 0 - все статусы, 1 - только статусы, которые можно установить руками
+    * @param onlyManual только статусы, которые можно установить руками?
     * @return список статусов договоров
     */
-  def statusList(onlyManual: Int): Seq[StatusListRecord] = {
+  def statusList(onlyManual: Boolean): Seq[StatusListRecord] = {
     val responseXml = executeHttpPostRequest("action" -> "StatusList",
-      "onlyManual" -> onlyManual.toString
+      "onlyManual" -> booleanToInt(onlyManual).toString
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">

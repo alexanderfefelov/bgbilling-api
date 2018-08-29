@@ -32,4 +32,6 @@ package object kernel {
     }
   }
 
+  def booleanToInt(boolean: Boolean): Int = if (boolean) 1 else 0
+
 }
