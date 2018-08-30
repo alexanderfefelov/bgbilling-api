@@ -26,8 +26,8 @@ object ContractActions extends BaseActions {
       "super_id" -> super_id.toString,
       "sub_mode" -> sub_mode.toString,
       "params" -> params,
-      optionalStringArg("title", title),
-      optionalStringArg("custom_title", custom_title)
+      optionalArg("title", title),
+      optionalArg("custom_title", custom_title)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -266,7 +266,7 @@ object ContractActions extends BaseActions {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractLimit",
       "cid" -> cid.toString,
       "value" -> value.toString,
-      optionalStringArg("comment", comment)
+      optionalArg("comment", comment)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
@@ -303,8 +303,8 @@ object ContractActions extends BaseActions {
     val responseXml = executeHttpPostRequest("action" -> "UpdateContractTitleAndComment",
       "cid" -> cid.toString,
       "title" -> title,
-      optionalStringArg("comment", comment),
-      optionalIntArg("patid", patid)
+      optionalArg("comment", comment),
+      optionalArg("patid", patid)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
@@ -462,7 +462,7 @@ object ContractActions extends BaseActions {
       "cid" -> cid.toString,
       "pid" -> pid.toString,
       "value" -> value.toString,
-      optionalStringArg("custom_value", custom_value)
+      optionalArg("custom_value", custom_value)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>
@@ -686,7 +686,7 @@ object ContractActions extends BaseActions {
     */
   def contractTariffPlan(cid: Option[Int] = None): Seq[ContractTariffPlanRecord] = { // TODO есть ещё параметры
     val responseXml = executeHttpPostRequest("action" -> "ContractTariffPlan",
-      optionalIntArg("cid", cid)
+      optionalArg("cid", cid)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -761,7 +761,7 @@ object ContractActions extends BaseActions {
       "cid" -> cid.toString,
       "tpid" -> tpid.toString,
       "date1" -> date1.toString(DATE_FORMAT),
-      optionalDateArg("date2", date2),
+      optionalArg("date2", date2),
       "comment" -> comment
     )
     //<?xml version="1.0" encoding="UTF-8"?>
@@ -802,8 +802,8 @@ object ContractActions extends BaseActions {
       "cids" -> cids.mkString(","),
       "status" -> status.toString,
       "date1" -> date1.toString(DATE_FORMAT),
-      optionalDateArg("date2", date2),
-      optionalStringArg("comment", comment)
+      optionalArg("date2", date2),
+      optionalArg("comment", comment)
     )
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok"/>

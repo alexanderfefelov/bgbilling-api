@@ -11,23 +11,10 @@ package object kernel {
   val dateFormatter: DateTimeFormatter = DateTimeFormat.forPattern(DATE_FORMAT)
   val dateTimeFormatter: DateTimeFormatter = DateTimeFormat.forPattern(DATE_TIME_FORMAT)
 
-  def optionalStringArg(name: String, valueOption: Option[String]): (String, String) = {
+  def optionalArg(name: String, valueOption: Option[Any]): (String, String) = {
     valueOption match {
-      case Some(value) => name -> value
-      case _ => "" -> ""
-    }
-  }
-
-  def optionalIntArg(name: String, valueOption: Option[Int]): (String, String) = {
-    valueOption match {
+      case Some(value: DateTime) => name -> value.toString(DATE_FORMAT)
       case Some(value) => name -> value.toString
-      case _ => "" -> ""
-    }
-  }
-
-  def optionalDateArg(name: String, valueOption: Option[DateTime]): (String, String) = {
-    valueOption match {
-      case Some(value) => name -> value.toString(DATE_FORMAT)
       case _ => "" -> ""
     }
   }
