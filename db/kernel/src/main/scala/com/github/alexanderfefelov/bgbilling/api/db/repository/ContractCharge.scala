@@ -12,7 +12,7 @@ case class ContractCharge(
   pt: Int,
   uid: Int,
   summa: BigDecimal,
-  comment: String,
+  comment: Option[String] = None,
   lm: DateTime,
   payback: Boolean) {
 
@@ -74,7 +74,7 @@ object ContractCharge extends SQLSyntaxSupport[ContractCharge] {
     pt: Int,
     uid: Int,
     summa: BigDecimal,
-    comment: String,
+    comment: Option[String] = None,
     lm: DateTime,
     payback: Boolean)(implicit session: DBSession = autoSession): ContractCharge = {
     val generatedKey = withSQL {

@@ -12,7 +12,7 @@ case class ContractPaymentDeleted(
   pt: Int,
   uid: Int,
   summa: BigDecimal,
-  comment: String,
+  comment: Option[String] = None,
   lm: DateTime) {
 
   def save()(implicit session: DBSession = ContractPaymentDeleted.autoSession): ContractPaymentDeleted = ContractPaymentDeleted.save(this)(session)
@@ -35,7 +35,7 @@ object ContractPaymentDeleted extends SQLSyntaxSupport[ContractPaymentDeleted] {
 
   override val autoSession = AutoSession
 
-  def find(id: Int, dt: LocalDate, cid: Int, pt: Int, uid: Int, summa: BigDecimal, comment: String, lm: DateTime)(implicit session: DBSession = autoSession): Option[ContractPaymentDeleted] = {
+  def find(id: Int, dt: LocalDate, cid: Int, pt: Int, uid: Int, summa: BigDecimal, comment: Option[String], lm: DateTime)(implicit session: DBSession = autoSession): Option[ContractPaymentDeleted] = {
     withSQL {
       select.from(ContractPaymentDeleted as cpd).where.eq(cpd.id, id).and.eq(cpd.dt, dt).and.eq(cpd.cid, cid).and.eq(cpd.pt, pt).and.eq(cpd.uid, uid).and.eq(cpd.summa, summa).and.eq(cpd.comment, comment).and.eq(cpd.lm, lm)
     }.map(ContractPaymentDeleted(cpd.resultName)).single.apply()
@@ -74,7 +74,7 @@ object ContractPaymentDeleted extends SQLSyntaxSupport[ContractPaymentDeleted] {
     pt: Int,
     uid: Int,
     summa: BigDecimal,
-    comment: String,
+    comment: Option[String] = None,
     lm: DateTime)(implicit session: DBSession = autoSession): ContractPaymentDeleted = {
     withSQL {
       insert.into(ContractPaymentDeleted).namedValues(

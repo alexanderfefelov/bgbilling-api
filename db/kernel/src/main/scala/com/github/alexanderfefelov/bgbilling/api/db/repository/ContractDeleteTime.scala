@@ -12,7 +12,8 @@ case class ContractDeleteTime(
   gr: Long,
   date1: Option[LocalDate] = None,
   date2: Option[LocalDate] = None,
-  comment: String) {
+  comment: String,
+  params: Option[String] = None) {
 
   def save()(implicit session: DBSession = ContractDeleteTime.autoSession): ContractDeleteTime = ContractDeleteTime.save(this)(session)
 
@@ -25,7 +26,7 @@ object ContractDeleteTime extends SQLSyntaxSupport[ContractDeleteTime] {
 
   override val tableName = "contract_delete_time"
 
-  override val columns = Seq("id", "name", "time", "gr", "date1", "date2", "comment")
+  override val columns = Seq("id", "name", "time", "gr", "date1", "date2", "comment", "params")
 
   def apply(cdt: SyntaxProvider[ContractDeleteTime])(rs: WrappedResultSet): ContractDeleteTime = autoConstruct(rs, cdt)
   def apply(cdt: ResultName[ContractDeleteTime])(rs: WrappedResultSet): ContractDeleteTime = autoConstruct(rs, cdt)
@@ -72,7 +73,8 @@ object ContractDeleteTime extends SQLSyntaxSupport[ContractDeleteTime] {
     gr: Long,
     date1: Option[LocalDate] = None,
     date2: Option[LocalDate] = None,
-    comment: String)(implicit session: DBSession = autoSession): ContractDeleteTime = {
+    comment: String,
+    params: Option[String] = None)(implicit session: DBSession = autoSession): ContractDeleteTime = {
     val generatedKey = withSQL {
       insert.into(ContractDeleteTime).namedValues(
         column.name -> name,
@@ -80,7 +82,8 @@ object ContractDeleteTime extends SQLSyntaxSupport[ContractDeleteTime] {
         column.gr -> gr,
         column.date1 -> date1,
         column.date2 -> date2,
-        column.comment -> comment
+        column.comment -> comment,
+        column.params -> params
       )
     }.updateAndReturnGeneratedKey.apply()
 
@@ -91,7 +94,8 @@ object ContractDeleteTime extends SQLSyntaxSupport[ContractDeleteTime] {
       gr = gr,
       date1 = date1,
       date2 = date2,
-      comment = comment)
+      comment = comment,
+      params = params)
   }
 
   def batchInsert(entities: Seq[ContractDeleteTime])(implicit session: DBSession = autoSession): List[Int] = {
@@ -102,21 +106,24 @@ object ContractDeleteTime extends SQLSyntaxSupport[ContractDeleteTime] {
         'gr -> entity.gr,
         'date1 -> entity.date1,
         'date2 -> entity.date2,
-        'comment -> entity.comment))
+        'comment -> entity.comment,
+        'params -> entity.params))
     SQL("""insert into contract_delete_time(
       name,
       time,
       gr,
       date1,
       date2,
-      comment
+      comment,
+      params
     ) values (
       {name},
       {time},
       {gr},
       {date1},
       {date2},
-      {comment}
+      {comment},
+      {params}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -129,7 +136,8 @@ object ContractDeleteTime extends SQLSyntaxSupport[ContractDeleteTime] {
         column.gr -> entity.gr,
         column.date1 -> entity.date1,
         column.date2 -> entity.date2,
-        column.comment -> entity.comment
+        column.comment -> entity.comment,
+        column.params -> entity.params
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity

@@ -12,7 +12,7 @@ case class ContractPayment(
   pt: Int,
   uid: Int,
   summa: BigDecimal,
-  comment: String,
+  comment: Option[String] = None,
   lm: DateTime) {
 
   def save()(implicit session: DBSession = ContractPayment.autoSession): ContractPayment = ContractPayment.save(this)(session)
@@ -73,7 +73,7 @@ object ContractPayment extends SQLSyntaxSupport[ContractPayment] {
     pt: Int,
     uid: Int,
     summa: BigDecimal,
-    comment: String,
+    comment: Option[String] = None,
     lm: DateTime)(implicit session: DBSession = autoSession): ContractPayment = {
     val generatedKey = withSQL {
       insert.into(ContractPayment).namedValues(
