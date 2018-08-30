@@ -12,7 +12,6 @@ case class InvProductSpec(
   parentid: Int,
   periodic: Byte,
   notrealtime: Byte,
-  priority: Int,
   title: String,
   identifier: String,
   tariffids: Option[String] = None,
@@ -42,7 +41,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
 
   override val tableName = "inv_product_spec"
 
-  override val columns = Seq("id", "entityId", "moduleId", "parentId", "periodic", "notRealtime", "priority", "title", "identifier", "tariffIds", "contractGroups", "depends", "incompatible", "activationModeIds", "dateFrom", "dateTo", "status", "hideForCustomer", "hideForContractGroups", "hideForContractGroupsMode", "activationByCustomer", "deactivationByCustomer", "comment", "description")
+  override val columns = Seq("id", "entityId", "moduleId", "parentId", "periodic", "notRealtime", "title", "identifier", "tariffIds", "contractGroups", "depends", "incompatible", "activationModeIds", "dateFrom", "dateTo", "status", "hideForCustomer", "hideForContractGroups", "hideForContractGroupsMode", "activationByCustomer", "deactivationByCustomer", "comment", "description")
 
   def apply(ips: SyntaxProvider[InvProductSpec])(rs: WrappedResultSet): InvProductSpec = autoConstruct(rs, ips)
   def apply(ips: ResultName[InvProductSpec])(rs: WrappedResultSet): InvProductSpec = autoConstruct(rs, ips)
@@ -89,7 +88,6 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
     parentid: Int,
     periodic: Byte,
     notrealtime: Byte,
-    priority: Int,
     title: String,
     identifier: String,
     tariffids: Option[String] = None,
@@ -114,7 +112,6 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
         column.parentid -> parentid,
         column.periodic -> periodic,
         column.notrealtime -> notrealtime,
-        column.priority -> priority,
         column.title -> title,
         column.identifier -> identifier,
         column.tariffids -> tariffids,
@@ -142,7 +139,6 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
       parentid = parentid,
       periodic = periodic,
       notrealtime = notrealtime,
-      priority = priority,
       title = title,
       identifier = identifier,
       tariffids = tariffids,
@@ -170,7 +166,6 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
         'parentid -> entity.parentid,
         'periodic -> entity.periodic,
         'notrealtime -> entity.notrealtime,
-        'priority -> entity.priority,
         'title -> entity.title,
         'identifier -> entity.identifier,
         'tariffids -> entity.tariffids,
@@ -194,7 +189,6 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
       parentId,
       periodic,
       notRealtime,
-      priority,
       title,
       identifier,
       tariffIds,
@@ -218,7 +212,6 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
       {parentid},
       {periodic},
       {notrealtime},
-      {priority},
       {title},
       {identifier},
       {tariffids},
@@ -248,7 +241,6 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
         column.parentid -> entity.parentid,
         column.periodic -> entity.periodic,
         column.notrealtime -> entity.notrealtime,
-        column.priority -> entity.priority,
         column.title -> entity.title,
         column.identifier -> entity.identifier,
         column.tariffids -> entity.tariffids,
