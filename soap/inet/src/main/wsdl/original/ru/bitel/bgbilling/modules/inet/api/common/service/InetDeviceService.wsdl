@@ -132,6 +132,10 @@
 
       <xs:element name="isUniqueInterfaceResponse" type="tns:isUniqueInterfaceResponse"/>
 
+      <xs:element name="svlanResourceCategoryIds" type="tns:svlanResourceCategoryIds"/>
+
+      <xs:element name="svlanResourceCategoryIdsResponse" type="tns:svlanResourceCategoryIdsResponse"/>
+
       <xs:complexType name="inetDevice">
         <xs:complexContent>
           <xs:extension base="tns:device">
@@ -148,6 +152,7 @@
             <xs:attribute name="invHost" type="xs:string"/>
             <xs:attribute name="invIdent" type="xs:string"/>
             <xs:attribute name="invTitle" type="xs:string"/>
+            <xs:attribute name="svlan" type="xs:int" use="required"/>
           </xs:extension>
         </xs:complexContent>
       </xs:complexType>
@@ -244,6 +249,7 @@
         <xs:complexContent>
           <xs:extension base="tns:entityAttr">
             <xs:sequence/>
+            <xs:attribute name="customValue" type="xs:string"/>
             <xs:attribute name="title" type="xs:string"/>
             <xs:attribute name="value" type="xs:int" use="required"/>
           </xs:extension>
@@ -279,10 +285,17 @@
       <xs:complexType name="entityAttrEmail">
         <xs:complexContent>
           <xs:extension base="tns:entityAttr">
-            <xs:sequence/>
-            <xs:attribute name="value" type="xs:string"/>
+            <xs:sequence>
+              <xs:element name="data" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
           </xs:extension>
         </xs:complexContent>
+      </xs:complexType>
+
+      <xs:complexType name="emailContact">
+        <xs:sequence/>
+        <xs:attribute name="address" type="xs:string"/>
+        <xs:attribute name="name" type="xs:string"/>
       </xs:complexType>
 
       <xs:complexType name="entityAttrContract">
@@ -302,6 +315,29 @@
             <xs:attribute name="value" type="xs:boolean" use="required"/>
           </xs:extension>
         </xs:complexContent>
+      </xs:complexType>
+
+      <xs:complexType name="entityAttrPhone">
+        <xs:complexContent>
+          <xs:extension base="tns:entityAttr">
+            <xs:sequence>
+              <xs:element name="contactList" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="contact" type="tns:phoneContact" minOccurs="0" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="data" type="xs:string"/>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+
+      <xs:complexType name="phoneContact">
+        <xs:sequence/>
+        <xs:attribute name="comment" type="xs:string"/>
+        <xs:attribute name="phone" type="xs:string"/>
       </xs:complexType>
 
       <xs:complexType name="invDevice">
@@ -880,19 +916,15 @@
         </xs:sequence>
       </xs:complexType>
 
-      <xs:complexType name="deviceManage">
+      <xs:complexType name="svlanResourceCategoryIds">
         <xs:sequence>
-          <xs:element name="id" type="xs:int"/>
-          <xs:element name="operation" type="xs:string" minOccurs="0"/>
-          <xs:element name="servId" type="xs:int"/>
-          <xs:element name="connectionId" type="xs:int"/>
-          <xs:element name="timeout" type="xs:long"/>
+          <xs:element name="deviceId" type="xs:int"/>
         </xs:sequence>
       </xs:complexType>
 
-      <xs:complexType name="deviceManageResponse">
+      <xs:complexType name="svlanResourceCategoryIdsResponse">
         <xs:sequence>
-          <xs:element name="return" type="xs:string" minOccurs="0"/>
+          <xs:element name="return" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:complexType>
 
@@ -907,6 +939,22 @@
         <xs:sequence>
           <xs:element name="message" type="xs:string" minOccurs="0"/>
           <xs:element name="tag" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="deviceManage">
+        <xs:sequence>
+          <xs:element name="id" type="xs:int"/>
+          <xs:element name="operation" type="xs:string" minOccurs="0"/>
+          <xs:element name="servId" type="xs:int"/>
+          <xs:element name="connectionId" type="xs:int"/>
+          <xs:element name="timeout" type="xs:long"/>
+        </xs:sequence>
+      </xs:complexType>
+
+      <xs:complexType name="deviceManageResponse">
+        <xs:sequence>
+          <xs:element name="return" type="xs:string" minOccurs="0"/>
         </xs:sequence>
       </xs:complexType>
 
@@ -1054,6 +1102,12 @@
   </message>
   <message name="isUniqueInterfaceResponse">
     <part name="parameters" element="tns:isUniqueInterfaceResponse"/>
+  </message>
+  <message name="svlanResourceCategoryIds">
+    <part name="parameters" element="tns:svlanResourceCategoryIds"/>
+  </message>
+  <message name="svlanResourceCategoryIdsResponse">
+    <part name="parameters" element="tns:svlanResourceCategoryIdsResponse"/>
   </message>
   <message name="deviceTypeGet">
     <part name="parameters" element="tns:deviceTypeGet"/>
@@ -1223,6 +1277,13 @@
       <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/isUniqueInterfaceRequest" message="tns:isUniqueInterface"/>
       <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/isUniqueInterfaceResponse" message="tns:isUniqueInterfaceResponse"/>
       <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/isUniqueInterface/Fault/BGException"/>
+    </operation>
+    <operation name="svlanResourceCategoryIds">
+      <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/svlanResourceCategoryIdsRequest" message="tns:svlanResourceCategoryIds"/>
+      <output wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/svlanResourceCategoryIdsResponse" message="tns:svlanResourceCategoryIdsResponse"/>
+      <fault message="tns:BGException" name="BGException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/svlanResourceCategoryIds/Fault/BGException"/>
+      <fault message="tns:BGMessageException" name="BGMessageException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/svlanResourceCategoryIds/Fault/BGMessageException"/>
+      <fault message="tns:BGIllegalAccessException" name="BGIllegalAccessException" wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/svlanResourceCategoryIds/Fault/BGIllegalAccessException"/>
     </operation>
     <operation name="deviceTypeGet">
       <input wsam:Action="http://service.common.api.inet.modules.bgbilling.bitel.ru/InetDeviceService/deviceTypeGetRequest" message="tns:deviceTypeGet"/>
@@ -1479,6 +1540,24 @@
       </output>
       <fault name="BGException">
         <soap:fault name="BGException" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="svlanResourceCategoryIds">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="BGException">
+        <soap:fault name="BGException" use="literal"/>
+      </fault>
+      <fault name="BGMessageException">
+        <soap:fault name="BGMessageException" use="literal"/>
+      </fault>
+      <fault name="BGIllegalAccessException">
+        <soap:fault name="BGIllegalAccessException" use="literal"/>
       </fault>
     </operation>
     <operation name="deviceTypeGet">

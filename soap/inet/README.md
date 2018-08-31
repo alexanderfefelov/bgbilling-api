@@ -1,3 +1,3 @@
 # bgbilling-api-soap-inet
 
-7.1_602
+7.1_622
