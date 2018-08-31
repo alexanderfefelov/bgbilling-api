@@ -1,9 +1,9 @@
 name := "bgbilling-api"
 organization := "com.github.alexanderfefelov"
 
-lazy val scalaV = "2.11.12"
+lazy val scalaV = "2.12.6"
 
-lazy val dispatchV = "0.11.3"
+lazy val dispatchV = "0.14.0"
 lazy val httpClientV = "4.5.5"
 lazy val jodaV = "2.10"
 lazy val logbackClassicV = "1.2.3"
@@ -229,7 +229,7 @@ lazy val soapTargetPackage = "com.github.alexanderfefelov.bgbilling.api.soap"
 lazy val scalaxbLibraryDependencies = Seq(
   "org.scala-lang.modules" %% "scala-xml" % scalaXmlV,
   "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsV,
-  "net.databinder.dispatch" %% "dispatch-core" % dispatchV
+  "org.dispatchhttp" %% "dispatch-core" % dispatchV
 )
 
 lazy val soapBillTargetPackage = soapTargetPackage + ".bill"
