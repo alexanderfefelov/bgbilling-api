@@ -1,19 +1,20 @@
 package scalaxb
 
-import com.github.alexanderfefelov.bgbilling.api.soap.util.ApiSoapConfig
-import soapenvelope11._
 import java.net._
 
-import scala.concurrent.Future
+import com.github.alexanderfefelov.bgbilling.api.soap.util.ApiSoapConfig
+import soapenvelope11._
+
+import scala.concurrent.{ExecutionContext, Future}
 import scala.xml._
 
-trait Soap11ClientsWithAuthHeaderAsync extends Soap11ClientsAsync with ApiSoapConfig { this: HttpClientsAsync with ExecutionContextProvider =>
+trait Soap11ClientsWithAuthHeaderAsync extends Soap11ClientsAsync with ApiSoapConfig { this: HttpClientsAsync =>
 
   override lazy val soapClient: Soap11ClientAsync = new Soap11ClientWithAuthHeaderAsync {}
 
   trait Soap11ClientWithAuthHeaderAsync extends Soap11ClientAsync {
 
-    override def requestResponse(body: NodeSeq, headers: NodeSeq, scope: NamespaceBinding, address: URI, webMethod: String, action: Option[URI]): Future[(NodeSeq, NodeSeq)] = {
+    override def requestResponse(body: NodeSeq, headers: NodeSeq, scope: NamespaceBinding, address: URI, webMethod: String, action: Option[URI])(implicit executionContext: ExecutionContext): Future[(NodeSeq, NodeSeq)] = {
       val bodyRecords = body map { DataRecord(None, None, _) }
       val newHeaders = Seq(<auth xmlns="http://ws.base.kernel.bgbilling.bitel.ru/" pswd={soapPassword} user={soapUsername}></auth>)
       val headerOption = newHeaders.headOption map { _ =>

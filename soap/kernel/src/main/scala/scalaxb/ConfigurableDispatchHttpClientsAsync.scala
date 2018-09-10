@@ -1,10 +1,13 @@
 package scalaxb
 
+import java.net._
 import java.nio.charset.Charset
 
 import com.github.alexanderfefelov.bgbilling.api.soap.util.ApiSoapConfig
 
-trait ConfigurableDispatchHttpClientsAsync extends HttpClientsAsync with ApiSoapConfig { this: ExecutionContextProvider =>
+import scala.concurrent.ExecutionContext
+
+trait ConfigurableDispatchHttpClientsAsync extends HttpClientsAsync with ApiSoapConfig {
 
   lazy val httpClient = new ConfigurableDispatchHttpClient {}
 
@@ -18,7 +21,7 @@ trait ConfigurableDispatchHttpClientsAsync extends HttpClientsAsync with ApiSoap
       setRequestTimeout(soapHttpRequestTimeout.toMillis.toInt)
     )
 
-    def request(in: String, address: java.net.URI, headers: Map[String, String]): concurrent.Future[String] = {
+    def request(in: String, address: URI, headers: Map[String, String])(implicit executionContext: ExecutionContext): Future[String] = {
       val req = url(address.toString).setBodyEncoding(Charset.forName("UTF-8")) <:< headers << in
       http(req > as.String)
     }
