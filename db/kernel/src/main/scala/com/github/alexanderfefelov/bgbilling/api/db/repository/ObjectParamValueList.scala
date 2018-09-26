@@ -77,8 +77,8 @@ object ObjectParamValueList extends SQLSyntaxSupport[ObjectParamValueList] {
       value = value)
   }
 
-  def batchInsert(entities: Seq[ObjectParamValueList])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ObjectParamValueList])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'objectId -> entity.objectId,
         'paramId -> entity.paramId,

@@ -81,8 +81,8 @@ object ContractParameterType7 extends SQLSyntaxSupport[ContractParameterType7] {
       customValue = customValue)
   }
 
-  def batchInsert(entities: Seq[ContractParameterType7])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractParameterType7])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'pid -> entity.pid,

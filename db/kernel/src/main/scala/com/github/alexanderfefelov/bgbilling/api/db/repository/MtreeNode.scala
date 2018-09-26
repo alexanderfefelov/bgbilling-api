@@ -87,8 +87,8 @@ object MtreeNode extends SQLSyntaxSupport[MtreeNode] {
       pos = pos)
   }
 
-  def batchInsert(entities: Seq[MtreeNode])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[MtreeNode])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'parentNode -> entity.parentNode,
         'mtreeId -> entity.mtreeId,

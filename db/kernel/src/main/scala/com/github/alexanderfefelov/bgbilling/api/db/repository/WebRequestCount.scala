@@ -80,8 +80,8 @@ object WebRequestCount extends SQLSyntaxSupport[WebRequestCount] {
       count = count)
   }
 
-  def batchInsert(entities: Seq[WebRequestCount])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[WebRequestCount])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'date -> entity.date,

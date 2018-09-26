@@ -87,8 +87,8 @@ object EntitySpec extends SQLSyntaxSupport[EntitySpec] {
       entitytitlemacros = entitytitlemacros)
   }
 
-  def batchInsert(entities: Seq[EntitySpec])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[EntitySpec])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'entityspectypeid -> entity.entityspectypeid,

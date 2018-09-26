@@ -79,8 +79,8 @@ object Module extends SQLSyntaxSupport[Module] {
       configId = configId)
   }
 
-  def batchInsert(entities: Seq[Module])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[Module])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'name -> entity.name,

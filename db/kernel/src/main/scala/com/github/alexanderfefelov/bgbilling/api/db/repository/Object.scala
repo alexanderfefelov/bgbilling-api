@@ -94,8 +94,8 @@ object Object extends SQLSyntaxSupport[Object] {
       pos = pos)
   }
 
-  def batchInsert(entities: Seq[Object])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[Object])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'title -> entity.title,

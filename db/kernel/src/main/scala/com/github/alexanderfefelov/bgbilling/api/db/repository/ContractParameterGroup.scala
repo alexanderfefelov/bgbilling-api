@@ -73,8 +73,8 @@ object ContractParameterGroup extends SQLSyntaxSupport[ContractParameterGroup] {
       pid = pid)
   }
 
-  def batchInsert(entities: Seq[ContractParameterGroup])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractParameterGroup])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'gid -> entity.gid,
         'pid -> entity.pid))

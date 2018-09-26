@@ -142,8 +142,8 @@ object User extends SQLSyntaxSupport[User] {
       domainids = domainids)
   }
 
-  def batchInsert(entities: Seq[User])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[User])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'login -> entity.login,
         'name -> entity.name,

@@ -98,8 +98,8 @@ object ContractReserve extends SQLSyntaxSupport[ContractReserve] {
       comment = comment)
   }
 
-  def batchInsert(entities: Seq[ContractReserve])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractReserve])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'typeid -> entity.typeid,

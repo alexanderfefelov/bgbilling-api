@@ -75,8 +75,8 @@ object ContractReserveTypes extends SQLSyntaxSupport[ContractReserveTypes] {
       used = used)
   }
 
-  def batchInsert(entities: Seq[ContractReserveTypes])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractReserveTypes])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'used -> entity.used))

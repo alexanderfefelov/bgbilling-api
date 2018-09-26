@@ -75,8 +75,8 @@ object EntitySpecAttrList extends SQLSyntaxSupport[EntitySpecAttrList] {
       title = title)
   }
 
-  def batchInsert(entities: Seq[EntitySpecAttrList])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[EntitySpecAttrList])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'entityspecattrid -> entity.entityspecattrid,
         'title -> entity.title))

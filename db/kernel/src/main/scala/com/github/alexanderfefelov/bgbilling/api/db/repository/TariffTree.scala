@@ -71,8 +71,8 @@ object TariffTree extends SQLSyntaxSupport[TariffTree] {
       parentTree = parentTree)
   }
 
-  def batchInsert(entities: Seq[TariffTree])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[TariffTree])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'parentTree -> entity.parentTree))
     SQL("""insert into tariff_tree(

@@ -84,8 +84,8 @@ object ContractPasswordOnce extends SQLSyntaxSupport[ContractPasswordOnce] {
       password = password)
   }
 
-  def batchInsert(entities: Seq[ContractPasswordOnce])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractPasswordOnce])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'lu -> entity.lu,
         'dt -> entity.dt,

@@ -80,8 +80,8 @@ object MailTemp extends SQLSyntaxSupport[MailTemp] {
       dt = dt)
   }
 
-  def batchInsert(entities: Seq[MailTemp])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[MailTemp])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'id -> entity.id,
         'eid -> entity.eid,

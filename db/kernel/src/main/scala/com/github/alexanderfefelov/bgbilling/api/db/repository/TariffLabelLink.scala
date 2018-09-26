@@ -73,8 +73,8 @@ object TariffLabelLink extends SQLSyntaxSupport[TariffLabelLink] {
       labelId = labelId)
   }
 
-  def batchInsert(entities: Seq[TariffLabelLink])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[TariffLabelLink])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'tariffId -> entity.tariffId,
         'labelId -> entity.labelId))

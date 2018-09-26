@@ -131,8 +131,8 @@ object ContractPattern extends SQLSyntaxSupport[ContractPattern] {
       domainid = domainid)
   }
 
-  def batchInsert(entities: Seq[ContractPattern])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractPattern])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'closesumma -> entity.closesumma,

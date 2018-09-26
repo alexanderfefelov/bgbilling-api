@@ -80,8 +80,8 @@ object ContractHistoryOpenLog extends SQLSyntaxSupport[ContractHistoryOpenLog] {
       lastOpen = lastOpen)
   }
 
-  def batchInsert(entities: Seq[ContractHistoryOpenLog])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractHistoryOpenLog])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'userId -> entity.userId,
         'contractId -> entity.contractId,

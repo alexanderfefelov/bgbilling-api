@@ -79,8 +79,8 @@ object SqlTemplate extends SQLSyntaxSupport[SqlTemplate] {
       text = text)
   }
 
-  def batchInsert(entities: Seq[SqlTemplate])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[SqlTemplate])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'userId -> entity.userId,
         'title -> entity.title,

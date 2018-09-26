@@ -71,8 +71,8 @@ object ContractParameterGroupName extends SQLSyntaxSupport[ContractParameterGrou
       title = title)
   }
 
-  def batchInsert(entities: Seq[ContractParameterGroupName])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractParameterGroupName])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title))
     SQL("""insert into contract_parameter_group_name(

@@ -87,8 +87,8 @@ object PaymentRegisterItem extends SQLSyntaxSupport[PaymentRegisterItem] {
       comment = comment)
   }
 
-  def batchInsert(entities: Seq[PaymentRegisterItem])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[PaymentRegisterItem])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'rid -> entity.rid,
         'cid -> entity.cid,

@@ -83,8 +83,8 @@ object UserModuleAction extends SQLSyntaxSupport[UserModuleAction] {
       description = description)
   }
 
-  def batchInsert(entities: Seq[UserModuleAction])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[UserModuleAction])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'module -> entity.module,
         'type -> entity.`type`,

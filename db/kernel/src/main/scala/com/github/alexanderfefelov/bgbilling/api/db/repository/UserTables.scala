@@ -89,8 +89,8 @@ object UserTables extends SQLSyntaxSupport[UserTables] {
       hiddens = hiddens)
   }
 
-  def batchInsert(entities: Seq[UserTables])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[UserTables])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'userid -> entity.userid,
         'tableModule -> entity.tableModule,

@@ -73,8 +73,8 @@ object ContractPatternServices extends SQLSyntaxSupport[ContractPatternServices]
       sid = sid)
   }
 
-  def batchInsert(entities: Seq[ContractPatternServices])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractPatternServices])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'pid -> entity.pid,
         'sid -> entity.sid))

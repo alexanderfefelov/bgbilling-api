@@ -73,8 +73,8 @@ object RegisterGroupTaskType extends SQLSyntaxSupport[RegisterGroupTaskType] {
       typeId = typeId)
   }
 
-  def batchInsert(entities: Seq[RegisterGroupTaskType])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[RegisterGroupTaskType])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'gid -> entity.gid,
         'typeId -> entity.typeId))

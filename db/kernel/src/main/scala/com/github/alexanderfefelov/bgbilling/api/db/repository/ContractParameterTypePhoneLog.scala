@@ -92,8 +92,8 @@ object ContractParameterTypePhoneLog extends SQLSyntaxSupport[ContractParameterT
       userId = userId)
   }
 
-  def batchInsert(entities: Seq[ContractParameterTypePhoneLog])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractParameterTypePhoneLog])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'pid -> entity.pid,
         'cid -> entity.cid,

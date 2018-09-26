@@ -77,8 +77,8 @@ object ContractLimitManageMode extends SQLSyntaxSupport[ContractLimitManageMode]
       cnt = cnt)
   }
 
-  def batchInsert(entities: Seq[ContractLimitManageMode])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractLimitManageMode])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'mode -> entity.mode,

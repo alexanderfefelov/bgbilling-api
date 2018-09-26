@@ -114,8 +114,8 @@ object AddressHouse extends SQLSyntaxSupport[AddressHouse] {
       pod = pod)
   }
 
-  def batchInsert(entities: Seq[AddressHouse])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[AddressHouse])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'streetid -> entity.streetid,
         'house -> entity.house,

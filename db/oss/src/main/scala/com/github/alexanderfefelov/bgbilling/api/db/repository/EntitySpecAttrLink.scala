@@ -77,8 +77,8 @@ object EntitySpecAttrLink extends SQLSyntaxSupport[EntitySpecAttrLink] {
       pos = pos)
   }
 
-  def batchInsert(entities: Seq[EntitySpecAttrLink])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[EntitySpecAttrLink])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'entityspecid -> entity.entityspecid,
         'entityspecattrid -> entity.entityspecattrid,

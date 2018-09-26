@@ -86,8 +86,8 @@ object ScheduledTaskRun extends SQLSyntaxSupport[ScheduledTaskRun] {
       startTime = startTime)
   }
 
-  def batchInsert(entities: Seq[ScheduledTaskRun])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ScheduledTaskRun])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'data -> entity.data,
         'description -> entity.description,

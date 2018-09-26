@@ -83,8 +83,8 @@ object SubscrContact extends SQLSyntaxSupport[SubscrContact] {
       subject = subject)
   }
 
-  def batchInsert(entities: Seq[SubscrContact])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[SubscrContact])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'name -> entity.name,

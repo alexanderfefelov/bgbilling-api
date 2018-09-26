@@ -73,8 +73,8 @@ object Setup extends SQLSyntaxSupport[Setup] {
       value = value)
   }
 
-  def batchInsert(entities: Seq[Setup])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[Setup])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'id -> entity.id,
         'value -> entity.value))

@@ -73,8 +73,8 @@ object UserGroupEntry extends SQLSyntaxSupport[UserGroupEntry] {
       parentGrCode = parentGrCode)
   }
 
-  def batchInsert(entities: Seq[UserGroupEntry])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[UserGroupEntry])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'grCode -> entity.grCode,
         'parentGrCode -> entity.parentGrCode))

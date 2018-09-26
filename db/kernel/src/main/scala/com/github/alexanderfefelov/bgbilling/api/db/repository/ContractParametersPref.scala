@@ -11,6 +11,7 @@ case class ContractParametersPref(
   title: String,
   sort: Int,
   script: String,
+  history: Boolean,
   flags: Byte,
   lm: DateTime) {
 
@@ -25,7 +26,7 @@ object ContractParametersPref extends SQLSyntaxSupport[ContractParametersPref] {
 
   override val tableName = "contract_parameters_pref"
 
-  override val columns = Seq("id", "pt", "title", "sort", "script", "flags", "lm")
+  override val columns = Seq("id", "pt", "title", "sort", "script", "history", "flags", "lm")
 
   def apply(cpp: SyntaxProvider[ContractParametersPref])(rs: WrappedResultSet): ContractParametersPref = autoConstruct(rs, cpp)
   def apply(cpp: ResultName[ContractParametersPref])(rs: WrappedResultSet): ContractParametersPref = autoConstruct(rs, cpp)
@@ -71,6 +72,7 @@ object ContractParametersPref extends SQLSyntaxSupport[ContractParametersPref] {
     title: String,
     sort: Int,
     script: String,
+    history: Boolean,
     flags: Byte,
     lm: DateTime)(implicit session: DBSession = autoSession): ContractParametersPref = {
     val generatedKey = withSQL {
@@ -79,6 +81,7 @@ object ContractParametersPref extends SQLSyntaxSupport[ContractParametersPref] {
         column.title -> title,
         column.sort -> sort,
         column.script -> script,
+        column.history -> history,
         column.flags -> flags,
         column.lm -> lm
       )
@@ -90,17 +93,19 @@ object ContractParametersPref extends SQLSyntaxSupport[ContractParametersPref] {
       title = title,
       sort = sort,
       script = script,
+      history = history,
       flags = flags,
       lm = lm)
   }
 
-  def batchInsert(entities: Seq[ContractParametersPref])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractParametersPref])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'pt -> entity.pt,
         'title -> entity.title,
         'sort -> entity.sort,
         'script -> entity.script,
+        'history -> entity.history,
         'flags -> entity.flags,
         'lm -> entity.lm))
     SQL("""insert into contract_parameters_pref(
@@ -108,6 +113,7 @@ object ContractParametersPref extends SQLSyntaxSupport[ContractParametersPref] {
       title,
       sort,
       script,
+      history,
       flags,
       lm
     ) values (
@@ -115,6 +121,7 @@ object ContractParametersPref extends SQLSyntaxSupport[ContractParametersPref] {
       {title},
       {sort},
       {script},
+      {history},
       {flags},
       {lm}
     )""").batchByName(params: _*).apply[List]()
@@ -128,6 +135,7 @@ object ContractParametersPref extends SQLSyntaxSupport[ContractParametersPref] {
         column.title -> entity.title,
         column.sort -> entity.sort,
         column.script -> entity.script,
+        column.history -> entity.history,
         column.flags -> entity.flags,
         column.lm -> entity.lm
       ).where.eq(column.id, entity.id)

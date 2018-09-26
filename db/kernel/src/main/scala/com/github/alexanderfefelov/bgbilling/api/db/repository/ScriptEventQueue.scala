@@ -71,8 +71,8 @@ object ScriptEventQueue extends SQLSyntaxSupport[ScriptEventQueue] {
       event = event)
   }
 
-  def batchInsert(entities: Seq[ScriptEventQueue])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ScriptEventQueue])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'event -> entity.event))
     SQL("""insert into script_event_queue(

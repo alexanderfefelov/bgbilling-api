@@ -73,8 +73,8 @@ object ContractModule extends SQLSyntaxSupport[ContractModule] {
       mid = mid)
   }
 
-  def batchInsert(entities: Seq[ContractModule])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractModule])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'mid -> entity.mid))

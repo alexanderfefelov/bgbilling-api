@@ -73,8 +73,8 @@ object ScriptClassesIfaces extends SQLSyntaxSupport[ScriptClassesIfaces] {
       iface = iface)
   }
 
-  def batchInsert(entities: Seq[ScriptClassesIfaces])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ScriptClassesIfaces])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'name -> entity.name,
         'iface -> entity.iface))

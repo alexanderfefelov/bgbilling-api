@@ -73,8 +73,8 @@ object ObjectTypeModule extends SQLSyntaxSupport[ObjectTypeModule] {
       mid = mid)
   }
 
-  def batchInsert(entities: Seq[ObjectTypeModule])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ObjectTypeModule])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'typeId -> entity.typeId,
         'mid -> entity.mid))

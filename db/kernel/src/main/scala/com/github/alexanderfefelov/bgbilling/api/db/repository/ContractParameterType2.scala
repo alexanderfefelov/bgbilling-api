@@ -105,8 +105,8 @@ object ContractParameterType2 extends SQLSyntaxSupport[ContractParameterType2] {
       formatKey = formatKey)
   }
 
-  def batchInsert(entities: Seq[ContractParameterType2])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractParameterType2])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'pid -> entity.pid,

@@ -88,8 +88,8 @@ object ObjectParamValueAddressLog extends SQLSyntaxSupport[ObjectParamValueAddre
       userId = userId)
   }
 
-  def batchInsert(entities: Seq[ObjectParamValueAddressLog])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ObjectParamValueAddressLog])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'objectId -> entity.objectId,
         'paramId -> entity.paramId,

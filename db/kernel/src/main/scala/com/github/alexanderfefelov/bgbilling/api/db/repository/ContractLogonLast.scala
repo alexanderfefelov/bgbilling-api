@@ -88,8 +88,8 @@ object ContractLogonLast extends SQLSyntaxSupport[ContractLogonLast] {
       ip = ip)
   }
 
-  def batchInsert(entities: Seq[ContractLogonLast])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractLogonLast])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'lu -> entity.lu,
         'cid -> entity.cid,

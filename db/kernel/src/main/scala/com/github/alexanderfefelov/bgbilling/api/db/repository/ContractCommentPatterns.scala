@@ -75,8 +75,8 @@ object ContractCommentPatterns extends SQLSyntaxSupport[ContractCommentPatterns]
       pat = pat)
   }
 
-  def batchInsert(entities: Seq[ContractCommentPatterns])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractCommentPatterns])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'pat -> entity.pat))

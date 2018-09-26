@@ -90,8 +90,8 @@ object ContractError extends SQLSyntaxSupport[ContractError] {
       msgData = msgData)
   }
 
-  def batchInsert(entities: Seq[ContractError])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractError])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'dt -> entity.dt,
         'hh -> entity.hh,

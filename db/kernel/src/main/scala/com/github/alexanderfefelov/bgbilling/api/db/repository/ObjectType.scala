@@ -83,8 +83,8 @@ object ObjectType extends SQLSyntaxSupport[ObjectType] {
       ishidden = ishidden)
   }
 
-  def batchInsert(entities: Seq[ObjectType])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ObjectType])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'nameMacros -> entity.nameMacros,

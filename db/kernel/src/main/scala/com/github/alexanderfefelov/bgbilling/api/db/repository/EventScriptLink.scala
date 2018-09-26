@@ -83,8 +83,8 @@ object EventScriptLink extends SQLSyntaxSupport[EventScriptLink] {
       scriptId = scriptId)
   }
 
-  def batchInsert(entities: Seq[EventScriptLink])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[EventScriptLink])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'className -> entity.className,

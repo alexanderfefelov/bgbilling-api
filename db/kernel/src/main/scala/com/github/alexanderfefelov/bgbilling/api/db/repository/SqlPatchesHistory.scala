@@ -73,8 +73,8 @@ object SqlPatchesHistory extends SQLSyntaxSupport[SqlPatchesHistory] {
       versions = versions)
   }
 
-  def batchInsert(entities: Seq[SqlPatchesHistory])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[SqlPatchesHistory])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'mid -> entity.mid,
         'versions -> entity.versions))

@@ -118,8 +118,8 @@ object PaymentRegister extends SQLSyntaxSupport[PaymentRegister] {
       regtype = regtype)
   }
 
-  def batchInsert(entities: Seq[PaymentRegister])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[PaymentRegister])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'date -> entity.date,
         'title -> entity.title,

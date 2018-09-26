@@ -87,8 +87,8 @@ object TariffGroup extends SQLSyntaxSupport[TariffGroup] {
       pos = pos)
   }
 
-  def batchInsert(entities: Seq[TariffGroup])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[TariffGroup])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'tm -> entity.tm,

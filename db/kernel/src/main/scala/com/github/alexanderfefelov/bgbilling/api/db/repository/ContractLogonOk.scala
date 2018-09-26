@@ -92,8 +92,8 @@ object ContractLogonOk extends SQLSyntaxSupport[ContractLogonOk] {
       user = user)
   }
 
-  def batchInsert(entities: Seq[ContractLogonOk])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractLogonOk])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'lu -> entity.lu,
         'cid -> entity.cid,

@@ -80,8 +80,8 @@ object EntityAttrDate extends SQLSyntaxSupport[EntityAttrDate] {
       value = value)
   }
 
-  def batchInsert(entities: Seq[EntityAttrDate])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[EntityAttrDate])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'entityid -> entity.entityid,
         'entityspecattrid -> entity.entityspecattrid,

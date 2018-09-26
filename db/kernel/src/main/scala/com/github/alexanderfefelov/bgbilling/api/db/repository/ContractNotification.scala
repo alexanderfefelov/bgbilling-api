@@ -90,8 +90,8 @@ object ContractNotification extends SQLSyntaxSupport[ContractNotification] {
       isRead = isRead)
   }
 
-  def batchInsert(entities: Seq[ContractNotification])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractNotification])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'subject -> entity.subject,

@@ -118,8 +118,8 @@ object TariffOptionActivateMode extends SQLSyntaxSupport[TariffOptionActivateMod
       deleteChargeMode = deleteChargeMode)
   }
 
-  def batchInsert(entities: Seq[TariffOptionActivateMode])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[TariffOptionActivateMode])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'optionId -> entity.optionId,
         'title -> entity.title,

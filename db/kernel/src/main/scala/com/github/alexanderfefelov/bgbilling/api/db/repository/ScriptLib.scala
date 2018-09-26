@@ -90,8 +90,8 @@ object ScriptLib extends SQLSyntaxSupport[ScriptLib] {
       changeTime = changeTime)
   }
 
-  def batchInsert(entities: Seq[ScriptLib])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ScriptLib])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'name -> entity.name,
         'title -> entity.title,

@@ -75,8 +75,8 @@ object GlobalScriptLink extends SQLSyntaxSupport[GlobalScriptLink] {
       className = className)
   }
 
-  def batchInsert(entities: Seq[GlobalScriptLink])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[GlobalScriptLink])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'className -> entity.className))

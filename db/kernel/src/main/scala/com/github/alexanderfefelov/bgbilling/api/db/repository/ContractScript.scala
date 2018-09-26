@@ -90,8 +90,8 @@ object ContractScript extends SQLSyntaxSupport[ContractScript] {
       comment = comment)
   }
 
-  def batchInsert(entities: Seq[ContractScript])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractScript])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'date1 -> entity.date1,

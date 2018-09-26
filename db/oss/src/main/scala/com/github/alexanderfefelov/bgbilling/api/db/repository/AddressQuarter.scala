@@ -79,8 +79,8 @@ object AddressQuarter extends SQLSyntaxSupport[AddressQuarter] {
       cityid = cityid)
   }
 
-  def batchInsert(entities: Seq[AddressQuarter])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[AddressQuarter])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'gid -> entity.gid,

@@ -73,8 +73,8 @@ object BgsModuleAction extends SQLSyntaxSupport[BgsModuleAction] {
       data = data)
   }
 
-  def batchInsert(entities: Seq[BgsModuleAction])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[BgsModuleAction])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'module -> entity.module,
         'data -> entity.data))

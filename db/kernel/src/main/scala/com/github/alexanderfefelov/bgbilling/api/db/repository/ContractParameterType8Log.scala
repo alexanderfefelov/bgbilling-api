@@ -88,8 +88,8 @@ object ContractParameterType8Log extends SQLSyntaxSupport[ContractParameterType8
       userId = userId)
   }
 
-  def batchInsert(entities: Seq[ContractParameterType8Log])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractParameterType8Log])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'pid -> entity.pid,

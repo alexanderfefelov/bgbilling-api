@@ -96,8 +96,8 @@ object StatusLog extends SQLSyntaxSupport[StatusLog] {
       comment = comment)
   }
 
-  def batchInsert(entities: Seq[StatusLog])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[StatusLog])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'fromDate -> entity.fromDate,
         'toDate -> entity.toDate,

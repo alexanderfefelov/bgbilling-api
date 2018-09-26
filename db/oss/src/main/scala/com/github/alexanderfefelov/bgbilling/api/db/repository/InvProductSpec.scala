@@ -12,6 +12,7 @@ case class InvProductSpec(
   parentid: Int,
   periodic: Byte,
   notrealtime: Byte,
+  priority: Int,
   title: String,
   identifier: String,
   tariffids: Option[String] = None,
@@ -41,7 +42,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
 
   override val tableName = "inv_product_spec"
 
-  override val columns = Seq("id", "entityId", "moduleId", "parentId", "periodic", "notRealtime", "title", "identifier", "tariffIds", "contractGroups", "depends", "incompatible", "activationModeIds", "dateFrom", "dateTo", "status", "hideForCustomer", "hideForContractGroups", "hideForContractGroupsMode", "activationByCustomer", "deactivationByCustomer", "comment", "description")
+  override val columns = Seq("id", "entityId", "moduleId", "parentId", "periodic", "notRealtime", "priority", "title", "identifier", "tariffIds", "contractGroups", "depends", "incompatible", "activationModeIds", "dateFrom", "dateTo", "status", "hideForCustomer", "hideForContractGroups", "hideForContractGroupsMode", "activationByCustomer", "deactivationByCustomer", "comment", "description")
 
   def apply(ips: SyntaxProvider[InvProductSpec])(rs: WrappedResultSet): InvProductSpec = autoConstruct(rs, ips)
   def apply(ips: ResultName[InvProductSpec])(rs: WrappedResultSet): InvProductSpec = autoConstruct(rs, ips)
@@ -88,6 +89,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
     parentid: Int,
     periodic: Byte,
     notrealtime: Byte,
+    priority: Int,
     title: String,
     identifier: String,
     tariffids: Option[String] = None,
@@ -112,6 +114,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
         column.parentid -> parentid,
         column.periodic -> periodic,
         column.notrealtime -> notrealtime,
+        column.priority -> priority,
         column.title -> title,
         column.identifier -> identifier,
         column.tariffids -> tariffids,
@@ -132,13 +135,14 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
       )
     }.updateAndReturnGeneratedKey.apply()
 
-    new InvProductSpec(
+    InvProductSpec(
       id = generatedKey.toInt,
       entityid = entityid,
       moduleid = moduleid,
       parentid = parentid,
       periodic = periodic,
       notrealtime = notrealtime,
+      priority = priority,
       title = title,
       identifier = identifier,
       tariffids = tariffids,
@@ -158,14 +162,15 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
       description = description)
   }
 
-  def batchInsert(entities: Seq[InvProductSpec])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[InvProductSpec])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'entityid -> entity.entityid,
         'moduleid -> entity.moduleid,
         'parentid -> entity.parentid,
         'periodic -> entity.periodic,
         'notrealtime -> entity.notrealtime,
+        'priority -> entity.priority,
         'title -> entity.title,
         'identifier -> entity.identifier,
         'tariffids -> entity.tariffids,
@@ -189,6 +194,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
       parentId,
       periodic,
       notRealtime,
+      priority,
       title,
       identifier,
       tariffIds,
@@ -212,6 +218,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
       {parentid},
       {periodic},
       {notrealtime},
+      {priority},
       {title},
       {identifier},
       {tariffids},
@@ -241,6 +248,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
         column.parentid -> entity.parentid,
         column.periodic -> entity.periodic,
         column.notrealtime -> entity.notrealtime,
+        column.priority -> entity.priority,
         column.title -> entity.title,
         column.identifier -> entity.identifier,
         column.tariffids -> entity.tariffids,

@@ -75,8 +75,8 @@ object TariffLabel extends SQLSyntaxSupport[TariffLabel] {
       title = title)
   }
 
-  def batchInsert(entities: Seq[TariffLabel])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[TariffLabel])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'parentId -> entity.parentId,
         'title -> entity.title))

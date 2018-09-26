@@ -90,8 +90,8 @@ object TaskProccess extends SQLSyntaxSupport[TaskProccess] {
       startProcessTime = startProcessTime)
   }
 
-  def batchInsert(entities: Seq[TaskProccess])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[TaskProccess])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'mid -> entity.mid,
         'title -> entity.title,

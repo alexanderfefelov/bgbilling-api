@@ -84,8 +84,8 @@ object LogLoginPswd extends SQLSyntaxSupport[LogLoginPswd] {
       lid = lid)
   }
 
-  def batchInsert(entities: Seq[LogLoginPswd])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[LogLoginPswd])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'dt -> entity.dt,
         'uid -> entity.uid,

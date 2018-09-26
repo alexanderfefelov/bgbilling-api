@@ -75,8 +75,8 @@ object ScheduledPeriodicRun extends SQLSyntaxSupport[ScheduledPeriodicRun] {
       amount = amount)
   }
 
-  def batchInsert(entities: Seq[ScheduledPeriodicRun])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ScheduledPeriodicRun])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'description -> entity.description,
         'amount -> entity.amount))

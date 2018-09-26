@@ -87,8 +87,8 @@ object ContractChargeTypes extends SQLSyntaxSupport[ContractChargeTypes] {
       payback = payback)
   }
 
-  def batchInsert(entities: Seq[ContractChargeTypes])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractChargeTypes])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'flag -> entity.flag,

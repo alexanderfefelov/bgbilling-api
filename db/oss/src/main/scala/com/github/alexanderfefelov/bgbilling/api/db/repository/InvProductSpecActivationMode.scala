@@ -110,8 +110,8 @@ object InvProductSpecActivationMode extends SQLSyntaxSupport[InvProductSpecActiv
       chargeamount = chargeamount)
   }
 
-  def batchInsert(entities: Seq[InvProductSpecActivationMode])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[InvProductSpecActivationMode])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'productspecid -> entity.productspecid,
         'title -> entity.title,

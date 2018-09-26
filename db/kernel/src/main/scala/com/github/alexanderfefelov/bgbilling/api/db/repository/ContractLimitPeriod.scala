@@ -90,8 +90,8 @@ object ContractLimitPeriod extends SQLSyntaxSupport[ContractLimitPeriod] {
       status = status)
   }
 
-  def batchInsert(entities: Seq[ContractLimitPeriod])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractLimitPeriod])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'uid -> entity.uid,
         'cid -> entity.cid,

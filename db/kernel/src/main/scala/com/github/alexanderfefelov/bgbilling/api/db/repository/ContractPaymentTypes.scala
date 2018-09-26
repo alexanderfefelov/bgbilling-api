@@ -83,8 +83,8 @@ object ContractPaymentTypes extends SQLSyntaxSupport[ContractPaymentTypes] {
       flag = flag)
   }
 
-  def batchInsert(entities: Seq[ContractPaymentTypes])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractPaymentTypes])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'up -> entity.up,

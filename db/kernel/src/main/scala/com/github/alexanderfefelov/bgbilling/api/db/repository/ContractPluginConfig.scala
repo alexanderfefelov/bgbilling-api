@@ -81,8 +81,8 @@ object ContractPluginConfig extends SQLSyntaxSupport[ContractPluginConfig] {
       value = value)
   }
 
-  def batchInsert(entities: Seq[ContractPluginConfig])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractPluginConfig])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'contractId -> entity.contractId,
         'pluginId -> entity.pluginId,

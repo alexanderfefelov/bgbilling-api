@@ -71,8 +71,8 @@ object AddressCountry extends SQLSyntaxSupport[AddressCountry] {
       title = title)
   }
 
-  def batchInsert(entities: Seq[AddressCountry])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[AddressCountry])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title))
     SQL("""insert into address_country(

@@ -80,8 +80,8 @@ object LogContractPswd extends SQLSyntaxSupport[LogContractPswd] {
       cid = cid)
   }
 
-  def batchInsert(entities: Seq[LogContractPswd])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[LogContractPswd])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'dt -> entity.dt,
         'uid -> entity.uid,

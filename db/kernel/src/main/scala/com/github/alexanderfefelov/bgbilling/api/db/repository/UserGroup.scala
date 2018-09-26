@@ -71,8 +71,8 @@ object UserGroup extends SQLSyntaxSupport[UserGroup] {
       grName = grName)
   }
 
-  def batchInsert(entities: Seq[UserGroup])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[UserGroup])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'grName -> entity.grName))
     SQL("""insert into user_group(

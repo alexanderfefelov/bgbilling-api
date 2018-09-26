@@ -88,8 +88,8 @@ object ObjectParamValueDateLog extends SQLSyntaxSupport[ObjectParamValueDateLog]
       userId = userId)
   }
 
-  def batchInsert(entities: Seq[ObjectParamValueDateLog])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ObjectParamValueDateLog])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'objectId -> entity.objectId,
         'paramId -> entity.paramId,

@@ -106,8 +106,8 @@ object InvServiceSpec extends SQLSyntaxSupport[InvServiceSpec] {
       description = description)
   }
 
-  def batchInsert(entities: Seq[InvServiceSpec])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[InvServiceSpec])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'entityid -> entity.entityid,
         'moduleid -> entity.moduleid,

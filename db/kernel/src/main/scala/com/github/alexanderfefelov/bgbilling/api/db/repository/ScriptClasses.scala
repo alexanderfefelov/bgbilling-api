@@ -77,8 +77,8 @@ object ScriptClasses extends SQLSyntaxSupport[ScriptClasses] {
       data = data)
   }
 
-  def batchInsert(entities: Seq[ScriptClasses])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ScriptClasses])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'name -> entity.name,
         'lastMod -> entity.lastMod,

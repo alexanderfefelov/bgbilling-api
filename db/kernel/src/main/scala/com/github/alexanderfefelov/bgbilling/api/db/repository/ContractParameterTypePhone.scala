@@ -77,8 +77,8 @@ object ContractParameterTypePhone extends SQLSyntaxSupport[ContractParameterType
       value = value)
   }
 
-  def batchInsert(entities: Seq[ContractParameterTypePhone])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractParameterTypePhone])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'pid -> entity.pid,
         'cid -> entity.cid,

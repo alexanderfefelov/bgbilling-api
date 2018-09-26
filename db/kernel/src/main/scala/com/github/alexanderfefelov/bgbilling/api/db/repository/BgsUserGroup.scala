@@ -73,8 +73,8 @@ object BgsUserGroup extends SQLSyntaxSupport[BgsUserGroup] {
       gid = gid)
   }
 
-  def batchInsert(entities: Seq[BgsUserGroup])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[BgsUserGroup])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'uid -> entity.uid,
         'gid -> entity.gid))

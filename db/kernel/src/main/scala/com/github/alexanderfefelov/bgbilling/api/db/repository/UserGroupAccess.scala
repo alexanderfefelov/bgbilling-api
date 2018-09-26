@@ -73,8 +73,8 @@ object UserGroupAccess extends SQLSyntaxSupport[UserGroupAccess] {
       maId = maId)
   }
 
-  def batchInsert(entities: Seq[UserGroupAccess])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[UserGroupAccess])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'grCode -> entity.grCode,
         'maId -> entity.maId))

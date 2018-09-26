@@ -75,8 +75,8 @@ object ContractParameterTypeMultilistValues extends SQLSyntaxSupport[ContractPar
       title = title)
   }
 
-  def batchInsert(entities: Seq[ContractParameterTypeMultilistValues])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractParameterTypeMultilistValues])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'pid -> entity.pid,
         'title -> entity.title))

@@ -93,8 +93,8 @@ object ContractBalance extends SQLSyntaxSupport[ContractBalance] {
       summa4 = summa4)
   }
 
-  def batchInsert(entities: Seq[ContractBalance])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractBalance])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'yy -> entity.yy,
         'mm -> entity.mm,

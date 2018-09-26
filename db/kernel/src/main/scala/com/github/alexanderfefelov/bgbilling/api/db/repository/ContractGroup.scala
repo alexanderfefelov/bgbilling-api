@@ -85,8 +85,8 @@ object ContractGroup extends SQLSyntaxSupport[ContractGroup] {
       comment = comment)
   }
 
-  def batchInsert(entities: Seq[ContractGroup])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractGroup])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'id -> entity.id,
         'title -> entity.title,

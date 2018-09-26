@@ -94,8 +94,8 @@ object MessageForUsers extends SQLSyntaxSupport[MessageForUsers] {
       users = users)
   }
 
-  def batchInsert(entities: Seq[MessageForUsers])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[MessageForUsers])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'dateFrom -> entity.dateFrom,
         'dateTo -> entity.dateTo,

@@ -75,8 +75,8 @@ object EntitySpecType extends SQLSyntaxSupport[EntitySpecType] {
       `type` = `type`)
   }
 
-  def batchInsert(entities: Seq[EntitySpecType])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[EntitySpecType])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'type -> entity.`type`))

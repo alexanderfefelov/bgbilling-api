@@ -106,8 +106,8 @@ object TariffPlan extends SQLSyntaxSupport[TariffPlan] {
       config = config)
   }
 
-  def batchInsert(entities: Seq[TariffPlan])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[TariffPlan])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
         'titleWeb -> entity.titleWeb,

@@ -73,8 +73,8 @@ object ContractReserveTotal extends SQLSyntaxSupport[ContractReserveTotal] {
       sum = sum)
   }
 
-  def batchInsert(entities: Seq[ContractReserveTotal])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[ContractReserveTotal])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'cid -> entity.cid,
         'sum -> entity.sum))

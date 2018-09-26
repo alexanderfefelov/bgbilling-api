@@ -79,8 +79,8 @@ object WebMenu extends SQLSyntaxSupport[WebMenu] {
       data = data)
   }
 
-  def batchInsert(entities: Seq[WebMenu])(implicit session: DBSession = autoSession): List[Int] = {
-    val params: Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
+  def batchInsert(entities: collection.Seq[WebMenu])(implicit session: DBSession = autoSession): List[Int] = {
+    val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'default -> entity.default,
         'title -> entity.title,
