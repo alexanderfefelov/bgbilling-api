@@ -14,9 +14,7 @@ case class ContractTreeLink(
   date2: Option[LocalDate] = None,
   pos: Byte,
   emid: Int,
-  eid: Int,
-  titleWeb: Option[String] = None,
-  config: Option[String] = None) {
+  eid: Int) {
 
   def save()(implicit session: DBSession = ContractTreeLink.autoSession): ContractTreeLink = ContractTreeLink.save(this)(session)
 
@@ -29,7 +27,7 @@ object ContractTreeLink extends SQLSyntaxSupport[ContractTreeLink] {
 
   override val tableName = "contract_tree_link"
 
-  override val columns = Seq("id", "cid", "tree_id", "title", "date1", "date2", "pos", "emid", "eid", "title_web", "config")
+  override val columns = Seq("id", "cid", "tree_id", "title", "date1", "date2", "pos", "emid", "eid")
 
   def apply(ctl: SyntaxProvider[ContractTreeLink])(rs: WrappedResultSet): ContractTreeLink = autoConstruct(rs, ctl)
   def apply(ctl: ResultName[ContractTreeLink])(rs: WrappedResultSet): ContractTreeLink = autoConstruct(rs, ctl)
@@ -78,9 +76,7 @@ object ContractTreeLink extends SQLSyntaxSupport[ContractTreeLink] {
     date2: Option[LocalDate] = None,
     pos: Byte,
     emid: Int,
-    eid: Int,
-    titleWeb: Option[String] = None,
-    config: Option[String] = None)(implicit session: DBSession = autoSession): ContractTreeLink = {
+    eid: Int)(implicit session: DBSession = autoSession): ContractTreeLink = {
     val generatedKey = withSQL {
       insert.into(ContractTreeLink).namedValues(
         column.cid -> cid,
@@ -90,9 +86,7 @@ object ContractTreeLink extends SQLSyntaxSupport[ContractTreeLink] {
         column.date2 -> date2,
         column.pos -> pos,
         column.emid -> emid,
-        column.eid -> eid,
-        column.titleWeb -> titleWeb,
-        column.config -> config
+        column.eid -> eid
       )
     }.updateAndReturnGeneratedKey.apply()
 
@@ -105,9 +99,7 @@ object ContractTreeLink extends SQLSyntaxSupport[ContractTreeLink] {
       date2 = date2,
       pos = pos,
       emid = emid,
-      eid = eid,
-      titleWeb = titleWeb,
-      config = config)
+      eid = eid)
   }
 
   def batchInsert(entities: collection.Seq[ContractTreeLink])(implicit session: DBSession = autoSession): List[Int] = {
@@ -120,9 +112,7 @@ object ContractTreeLink extends SQLSyntaxSupport[ContractTreeLink] {
         'date2 -> entity.date2,
         'pos -> entity.pos,
         'emid -> entity.emid,
-        'eid -> entity.eid,
-        'titleWeb -> entity.titleWeb,
-        'config -> entity.config))
+        'eid -> entity.eid))
     SQL("""insert into contract_tree_link(
       cid,
       tree_id,
@@ -131,9 +121,7 @@ object ContractTreeLink extends SQLSyntaxSupport[ContractTreeLink] {
       date2,
       pos,
       emid,
-      eid,
-      title_web,
-      config
+      eid
     ) values (
       {cid},
       {treeId},
@@ -142,9 +130,7 @@ object ContractTreeLink extends SQLSyntaxSupport[ContractTreeLink] {
       {date2},
       {pos},
       {emid},
-      {eid},
-      {titleWeb},
-      {config}
+      {eid}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -159,9 +145,7 @@ object ContractTreeLink extends SQLSyntaxSupport[ContractTreeLink] {
         column.date2 -> entity.date2,
         column.pos -> entity.pos,
         column.emid -> entity.emid,
-        column.eid -> entity.eid,
-        column.titleWeb -> entity.titleWeb,
-        column.config -> entity.config
+        column.eid -> entity.eid
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity

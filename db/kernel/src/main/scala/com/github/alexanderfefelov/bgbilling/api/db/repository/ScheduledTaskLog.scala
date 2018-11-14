@@ -6,8 +6,7 @@ case class ScheduledTaskLog(
   id: Int,
   taskId: Int,
   start: Long,
-  finish: Long,
-  taskTitle: Option[String] = None) {
+  finish: Long) {
 
   def save()(implicit session: DBSession = ScheduledTaskLog.autoSession): ScheduledTaskLog = ScheduledTaskLog.save(this)(session)
 
@@ -20,7 +19,7 @@ object ScheduledTaskLog extends SQLSyntaxSupport[ScheduledTaskLog] {
 
   override val tableName = "scheduled_task_log"
 
-  override val columns = Seq("id", "task_id", "start", "finish", "task_title")
+  override val columns = Seq("id", "task_id", "start", "finish")
 
   def apply(stl: SyntaxProvider[ScheduledTaskLog])(rs: WrappedResultSet): ScheduledTaskLog = autoConstruct(rs, stl)
   def apply(stl: ResultName[ScheduledTaskLog])(rs: WrappedResultSet): ScheduledTaskLog = autoConstruct(rs, stl)
@@ -64,14 +63,12 @@ object ScheduledTaskLog extends SQLSyntaxSupport[ScheduledTaskLog] {
   def create(
     taskId: Int,
     start: Long,
-    finish: Long,
-    taskTitle: Option[String] = None)(implicit session: DBSession = autoSession): ScheduledTaskLog = {
+    finish: Long)(implicit session: DBSession = autoSession): ScheduledTaskLog = {
     val generatedKey = withSQL {
       insert.into(ScheduledTaskLog).namedValues(
         column.taskId -> taskId,
         column.start -> start,
-        column.finish -> finish,
-        column.taskTitle -> taskTitle
+        column.finish -> finish
       )
     }.updateAndReturnGeneratedKey.apply()
 
@@ -79,8 +76,7 @@ object ScheduledTaskLog extends SQLSyntaxSupport[ScheduledTaskLog] {
       id = generatedKey.toInt,
       taskId = taskId,
       start = start,
-      finish = finish,
-      taskTitle = taskTitle)
+      finish = finish)
   }
 
   def batchInsert(entities: collection.Seq[ScheduledTaskLog])(implicit session: DBSession = autoSession): List[Int] = {
@@ -88,18 +84,15 @@ object ScheduledTaskLog extends SQLSyntaxSupport[ScheduledTaskLog] {
       Seq(
         'taskId -> entity.taskId,
         'start -> entity.start,
-        'finish -> entity.finish,
-        'taskTitle -> entity.taskTitle))
+        'finish -> entity.finish))
     SQL("""insert into scheduled_task_log(
       task_id,
       start,
-      finish,
-      task_title
+      finish
     ) values (
       {taskId},
       {start},
-      {finish},
-      {taskTitle}
+      {finish}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -109,8 +102,7 @@ object ScheduledTaskLog extends SQLSyntaxSupport[ScheduledTaskLog] {
         column.id -> entity.id,
         column.taskId -> entity.taskId,
         column.start -> entity.start,
-        column.finish -> entity.finish,
-        column.taskTitle -> entity.taskTitle
+        column.finish -> entity.finish
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity

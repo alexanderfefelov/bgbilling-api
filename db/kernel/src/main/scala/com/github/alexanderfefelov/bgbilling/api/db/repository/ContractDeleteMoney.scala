@@ -13,8 +13,7 @@ case class ContractDeleteMoney(
   gr: Long,
   date1: Option[LocalDate] = None,
   date2: Option[LocalDate] = None,
-  comment: String,
-  params: Option[String] = None) {
+  comment: String) {
 
   def save()(implicit session: DBSession = ContractDeleteMoney.autoSession): ContractDeleteMoney = ContractDeleteMoney.save(this)(session)
 
@@ -27,7 +26,7 @@ object ContractDeleteMoney extends SQLSyntaxSupport[ContractDeleteMoney] {
 
   override val tableName = "contract_delete_money"
 
-  override val columns = Seq("id", "name", "money", "time", "gr", "date1", "date2", "comment", "params")
+  override val columns = Seq("id", "name", "money", "time", "gr", "date1", "date2", "comment")
 
   def apply(cdm: SyntaxProvider[ContractDeleteMoney])(rs: WrappedResultSet): ContractDeleteMoney = autoConstruct(rs, cdm)
   def apply(cdm: ResultName[ContractDeleteMoney])(rs: WrappedResultSet): ContractDeleteMoney = autoConstruct(rs, cdm)
@@ -75,8 +74,7 @@ object ContractDeleteMoney extends SQLSyntaxSupport[ContractDeleteMoney] {
     gr: Long,
     date1: Option[LocalDate] = None,
     date2: Option[LocalDate] = None,
-    comment: String,
-    params: Option[String] = None)(implicit session: DBSession = autoSession): ContractDeleteMoney = {
+    comment: String)(implicit session: DBSession = autoSession): ContractDeleteMoney = {
     val generatedKey = withSQL {
       insert.into(ContractDeleteMoney).namedValues(
         column.name -> name,
@@ -85,8 +83,7 @@ object ContractDeleteMoney extends SQLSyntaxSupport[ContractDeleteMoney] {
         column.gr -> gr,
         column.date1 -> date1,
         column.date2 -> date2,
-        column.comment -> comment,
-        column.params -> params
+        column.comment -> comment
       )
     }.updateAndReturnGeneratedKey.apply()
 
@@ -98,8 +95,7 @@ object ContractDeleteMoney extends SQLSyntaxSupport[ContractDeleteMoney] {
       gr = gr,
       date1 = date1,
       date2 = date2,
-      comment = comment,
-      params = params)
+      comment = comment)
   }
 
   def batchInsert(entities: collection.Seq[ContractDeleteMoney])(implicit session: DBSession = autoSession): List[Int] = {
@@ -111,8 +107,7 @@ object ContractDeleteMoney extends SQLSyntaxSupport[ContractDeleteMoney] {
         'gr -> entity.gr,
         'date1 -> entity.date1,
         'date2 -> entity.date2,
-        'comment -> entity.comment,
-        'params -> entity.params))
+        'comment -> entity.comment))
     SQL("""insert into contract_delete_money(
       name,
       money,
@@ -120,8 +115,7 @@ object ContractDeleteMoney extends SQLSyntaxSupport[ContractDeleteMoney] {
       gr,
       date1,
       date2,
-      comment,
-      params
+      comment
     ) values (
       {name},
       {money},
@@ -129,8 +123,7 @@ object ContractDeleteMoney extends SQLSyntaxSupport[ContractDeleteMoney] {
       {gr},
       {date1},
       {date2},
-      {comment},
-      {params}
+      {comment}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -144,8 +137,7 @@ object ContractDeleteMoney extends SQLSyntaxSupport[ContractDeleteMoney] {
         column.gr -> entity.gr,
         column.date1 -> entity.date1,
         column.date2 -> entity.date2,
-        column.comment -> entity.comment,
-        column.params -> entity.params
+        column.comment -> entity.comment
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity
