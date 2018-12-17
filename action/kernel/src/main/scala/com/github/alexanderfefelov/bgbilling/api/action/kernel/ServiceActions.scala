@@ -7,12 +7,13 @@ object ServiceActions extends BaseActions {
   override def module = "service"
 
   /**
-    * Получает конфигурацию модуля.
+    * Устанавливает активную конфигурацию модуля.
     *
     * @param mid идентификатор модуля
     * @param config_id идентификатор конфигурации
     * @return конфигурация модуля
     */
+  /* В 7.1_1073 этот функционал больше не доступен.
   def setModuleConfig(mid: Int, config_id: Int): Boolean = {
     val responseXml = executeHttpPostRequest("action" -> "SetModuleConfig",
       "mid" -> mid.toString,
@@ -22,6 +23,7 @@ object ServiceActions extends BaseActions {
     //<data status="ok"/>
     (responseXml \ "@status").text == "ok"
   }
+  */
 
   case class AboutServer(
     version: String, build_number: String, build_time: String, versionstring: String,
