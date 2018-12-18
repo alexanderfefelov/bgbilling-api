@@ -1,7 +1,7 @@
 name := "bgbilling-api"
 organization := "com.github.alexanderfefelov"
 
-lazy val scalaV = "2.12.6"
+lazy val scalaV = "2.12.8"
 
 lazy val dispatchV = "0.14.0"
 lazy val httpClientV = "4.5.5"
