@@ -10,6 +10,7 @@ scalikejdbcGeneratorSettings in Compile ~= { settings =>
   settings.copy(tableNameToSyntaxName = { tableName =>
     settings.tableNameToSyntaxName(tableName) match {
       case "as" => "as_" // https://github.com/scalikejdbc/scalikejdbc/issues/810
+      case "set" => "set_"
       case syntaxName => syntaxName
     }
   })
