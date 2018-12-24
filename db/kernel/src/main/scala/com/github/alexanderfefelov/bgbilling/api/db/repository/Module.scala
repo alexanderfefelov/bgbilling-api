@@ -5,8 +5,7 @@ import scalikejdbc._
 case class Module(
   id: Int,
   title: String,
-  name: String,
-  configId: Option[Int] = None) {
+  name: String) {
 
   def save()(implicit session: DBSession = Module.autoSession): Module = Module.save(this)(session)
 
@@ -19,7 +18,7 @@ object Module extends SQLSyntaxSupport[Module] {
 
   override val tableName = "module"
 
-  override val columns = Seq("id", "title", "name", "config_id")
+  override val columns = Seq("id", "title", "name")
 
   def apply(m: SyntaxProvider[Module])(rs: WrappedResultSet): Module = autoConstruct(rs, m)
   def apply(m: ResultName[Module])(rs: WrappedResultSet): Module = autoConstruct(rs, m)
@@ -62,37 +61,31 @@ object Module extends SQLSyntaxSupport[Module] {
 
   def create(
     title: String,
-    name: String,
-    configId: Option[Int] = None)(implicit session: DBSession = autoSession): Module = {
+    name: String)(implicit session: DBSession = autoSession): Module = {
     val generatedKey = withSQL {
       insert.into(Module).namedValues(
         column.title -> title,
-        column.name -> name,
-        column.configId -> configId
+        column.name -> name
       )
     }.updateAndReturnGeneratedKey.apply()
 
     Module(
       id = generatedKey.toInt,
       title = title,
-      name = name,
-      configId = configId)
+      name = name)
   }
 
   def batchInsert(entities: collection.Seq[Module])(implicit session: DBSession = autoSession): List[Int] = {
     val params: collection.Seq[Seq[(Symbol, Any)]] = entities.map(entity =>
       Seq(
         'title -> entity.title,
-        'name -> entity.name,
-        'configId -> entity.configId))
+        'name -> entity.name))
     SQL("""insert into module(
       title,
-      name,
-      config_id
+      name
     ) values (
       {title},
-      {name},
-      {configId}
+      {name}
     )""").batchByName(params: _*).apply[List]()
   }
 
@@ -101,8 +94,7 @@ object Module extends SQLSyntaxSupport[Module] {
       update(Module).set(
         column.id -> entity.id,
         column.title -> entity.title,
-        column.name -> entity.name,
-        column.configId -> entity.configId
+        column.name -> entity.name
       ).where.eq(column.id, entity.id)
     }.update.apply()
     entity

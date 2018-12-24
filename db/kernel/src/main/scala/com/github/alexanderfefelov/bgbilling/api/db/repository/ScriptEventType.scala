@@ -25,7 +25,7 @@ object ScriptEventType extends SQLSyntaxSupport[ScriptEventType] {
   def apply(set: SyntaxProvider[ScriptEventType])(rs: WrappedResultSet): ScriptEventType = autoConstruct(rs, set)
   def apply(set: ResultName[ScriptEventType])(rs: WrappedResultSet): ScriptEventType = autoConstruct(rs, set)
 
-  val set = ScriptEventType.syntax("set")
+  val set = ScriptEventType.syntax("set_")
 
   override val autoSession = AutoSession
 
