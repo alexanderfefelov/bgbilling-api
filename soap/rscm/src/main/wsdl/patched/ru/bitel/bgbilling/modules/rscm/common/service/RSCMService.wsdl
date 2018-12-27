@@ -54,7 +54,8 @@
 
       <xs:element name="updateRSCMServiceResponse" type="tns:updateRSCMServiceResponse"/>
 
-      <xs:complexType name="rscmService">
+      <!-- alexanderfefelov https://github.com/alexanderfefelov/bgbilling-api/issues/1 -->
+      <xs:complexType name="rscmServiceData">
         <xs:sequence/>
         <xs:attribute name="id" type="xs:int" use="required"/>
         <xs:attribute name="serviceId" type="xs:int" use="required"/>
@@ -139,13 +140,13 @@
 
       <xs:complexType name="getRSCMServiceResponse">
         <xs:sequence>
-          <xs:element name="return" type="tns:rscmService" minOccurs="0"/>
+          <xs:element name="return" type="tns:rscmServiceData" minOccurs="0"/>
         </xs:sequence>
       </xs:complexType>
 
       <xs:complexType name="updateRSCMService">
         <xs:sequence>
-          <xs:element name="rscmService" type="tns:rscmService" minOccurs="0"/>
+          <xs:element name="rscmService" type="tns:rscmServiceData" minOccurs="0"/>
         </xs:sequence>
       </xs:complexType>
 
