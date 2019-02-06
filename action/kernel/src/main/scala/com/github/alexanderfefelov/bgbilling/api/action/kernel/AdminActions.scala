@@ -253,7 +253,7 @@ object AdminActions extends BaseActions {
       "addressType" -> addressType,
       "recordId" -> recordId.toString,
       "key" -> key,
-      "key" -> key,
+      "value" -> value,
       "flag" -> "save"
     )
     //<?xml version="1.0" encoding="UTF-8"?>
