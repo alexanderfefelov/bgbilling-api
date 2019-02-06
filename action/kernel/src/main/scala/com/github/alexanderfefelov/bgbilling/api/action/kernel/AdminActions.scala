@@ -30,7 +30,7 @@ object AdminActions extends BaseActions {
     *
     * @return (???, ???)
     */
-  def ShowCurrentTasks: (Seq[ShowCurrentTasksQueueRecord], Seq[ShowCurrentTasksPeriodicRecord]) = {
+  def showCurrentTasks: (Seq[ShowCurrentTasksQueueRecord], Seq[ShowCurrentTasksPeriodicRecord]) = {
     val responseXml = executeHttpPostRequest("action" -> "ShowCurrentTasks")
     //<?xml version="1.0" encoding="UTF-8"?>
     //<data status="ok">
@@ -246,6 +246,25 @@ object AdminActions extends BaseActions {
         (x \ "@f5").text.toInt
       )
     ).toList
+  }
+
+  def updateAddressExtraParams(addressType: String, recordId: Int, key: String, value: String): Boolean = {
+    val responseXml = executeHttpPostRequest("action" -> "UpdateAddressExtraParams",
+      "addressType" -> addressType,
+      "recordId" -> recordId.toString,
+      "key" -> key,
+      "key" -> key,
+      "flag" -> "save"
+    )
+    //<?xml version="1.0" encoding="UTF-8"?>
+    //<data status="ok">
+    //    <table>
+    //        <data>
+    //            <row id="someDate" title="Какая-то дата" type="date" value="01.01.2019"/>
+    //        </data>
+    //    </table>
+    //</data>
+    (responseXml \ "@status").text == "ok"
   }
 
 }
