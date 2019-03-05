@@ -19,11 +19,17 @@ call :process %EXECUTER%/ru.bitel.oss.systems.inventory.product  ProductService
 call :process %EXECUTER%/ru.bitel.oss.systems.inventory.resource ResourceService
 call :process %EXECUTER%/ru.bitel.oss.systems.inventory.service  ServiceService
 
+:: kernel
+::
+set TARGET_DIR=soap\kernel\src\main\wsdl\handmade
+if not exist %TARGET_DIR%\nul mkdir %TARGET_DIR%
+call :process %EXECUTER%/ru.bitel.bgbilling.kernel.config ConfigService
+
 :: bonus
 ::
 set TARGET_DIR=soap\bonus\src\main\wsdl\handmade
 if not exist %TARGET_DIR%\nul mkdir %TARGET_DIR%
-call :process %EXECUTER%/ru.bitel.bgbilling.plugins.bonus        BonusService
+call :process %EXECUTER%/ru.bitel.bgbilling.plugins.bonus BonusService
 
 exit
 
