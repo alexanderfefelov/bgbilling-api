@@ -19,7 +19,11 @@ object AddressConfig extends SQLSyntaxSupport[AddressConfig] {
 
   override val tableName = "address_config"
 
-  override val columns = Seq("table_id", "record_id", "key", "value")
+  override val columns = Seq("table_id", "record_id", "`key`", "value")
+
+  override val nameConverters = Map(
+    "^key$" -> "`key`"
+  )
 
   def apply(ac: SyntaxProvider[AddressConfig])(rs: WrappedResultSet): AddressConfig = autoConstruct(rs, ac)
   def apply(ac: ResultName[AddressConfig])(rs: WrappedResultSet): AddressConfig = autoConstruct(rs, ac)
