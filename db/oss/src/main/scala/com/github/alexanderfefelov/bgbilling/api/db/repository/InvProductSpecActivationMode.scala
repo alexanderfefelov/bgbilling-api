@@ -39,35 +39,31 @@ object InvProductSpecActivationMode extends SQLSyntaxSupport[InvProductSpecActiv
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[InvProductSpecActivationMode] = {
-    withSQL {
-      select.from(InvProductSpecActivationMode as ipsam).where.eq(ipsam.id, id)
-    }.map(InvProductSpecActivationMode(ipsam.resultName)).single.apply()
+    sql"""select ${ipsam.result.*} from ${InvProductSpecActivationMode as ipsam} where ${ipsam.id} = ${id}"""
+      .map(InvProductSpecActivationMode(ipsam.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[InvProductSpecActivationMode] = {
-    withSQL(select.from(InvProductSpecActivationMode as ipsam)).map(InvProductSpecActivationMode(ipsam.resultName)).list.apply()
+    sql"""select ${ipsam.result.*} from ${InvProductSpecActivationMode as ipsam}""".map(InvProductSpecActivationMode(ipsam.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(InvProductSpecActivationMode as ipsam)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${InvProductSpecActivationMode.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[InvProductSpecActivationMode] = {
-    withSQL {
-      select.from(InvProductSpecActivationMode as ipsam).where.append(where)
-    }.map(InvProductSpecActivationMode(ipsam.resultName)).single.apply()
+    sql"""select ${ipsam.result.*} from ${InvProductSpecActivationMode as ipsam} where ${where}"""
+      .map(InvProductSpecActivationMode(ipsam.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[InvProductSpecActivationMode] = {
-    withSQL {
-      select.from(InvProductSpecActivationMode as ipsam).where.append(where)
-    }.map(InvProductSpecActivationMode(ipsam.resultName)).list.apply()
+    sql"""select ${ipsam.result.*} from ${InvProductSpecActivationMode as ipsam} where ${where}"""
+      .map(InvProductSpecActivationMode(ipsam.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(InvProductSpecActivationMode as ipsam).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${InvProductSpecActivationMode as ipsam} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
@@ -81,20 +77,31 @@ object InvProductSpecActivationMode extends SQLSyntaxSupport[InvProductSpecActiv
     reactivationmode: Int,
     chargetypeid: Int,
     chargeamount: Option[BigDecimal] = None)(implicit session: DBSession = autoSession): InvProductSpecActivationMode = {
-    val generatedKey = withSQL {
-      insert.into(InvProductSpecActivationMode).namedValues(
-        column.productspecid -> productspecid,
-        column.title -> title,
-        column.datefrom -> datefrom,
-        column.dateto -> dateto,
-        column.periodmode -> periodmode,
-        column.periodamount -> periodamount,
-        column.deactivationmode -> deactivationmode,
-        column.reactivationmode -> reactivationmode,
-        column.chargetypeid -> chargetypeid,
-        column.chargeamount -> chargeamount
+    val generatedKey = sql"""
+      insert into ${InvProductSpecActivationMode.table} (
+        ${column.productspecid},
+        ${column.title},
+        ${column.datefrom},
+        ${column.dateto},
+        ${column.periodmode},
+        ${column.periodamount},
+        ${column.deactivationmode},
+        ${column.reactivationmode},
+        ${column.chargetypeid},
+        ${column.chargeamount}
+      ) values (
+        ${productspecid},
+        ${title},
+        ${datefrom},
+        ${dateto},
+        ${periodmode},
+        ${periodamount},
+        ${deactivationmode},
+        ${reactivationmode},
+        ${chargetypeid},
+        ${chargeamount}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     InvProductSpecActivationMode(
       id = generatedKey.toInt,
@@ -149,26 +156,29 @@ object InvProductSpecActivationMode extends SQLSyntaxSupport[InvProductSpecActiv
   }
 
   def save(entity: InvProductSpecActivationMode)(implicit session: DBSession = autoSession): InvProductSpecActivationMode = {
-    withSQL {
-      update(InvProductSpecActivationMode).set(
-        column.id -> entity.id,
-        column.productspecid -> entity.productspecid,
-        column.title -> entity.title,
-        column.datefrom -> entity.datefrom,
-        column.dateto -> entity.dateto,
-        column.periodmode -> entity.periodmode,
-        column.periodamount -> entity.periodamount,
-        column.deactivationmode -> entity.deactivationmode,
-        column.reactivationmode -> entity.reactivationmode,
-        column.chargetypeid -> entity.chargetypeid,
-        column.chargeamount -> entity.chargeamount
-      ).where.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${InvProductSpecActivationMode.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.productspecid} = ${entity.productspecid},
+        ${column.title} = ${entity.title},
+        ${column.datefrom} = ${entity.datefrom},
+        ${column.dateto} = ${entity.dateto},
+        ${column.periodmode} = ${entity.periodmode},
+        ${column.periodamount} = ${entity.periodamount},
+        ${column.deactivationmode} = ${entity.deactivationmode},
+        ${column.reactivationmode} = ${entity.reactivationmode},
+        ${column.chargetypeid} = ${entity.chargetypeid},
+        ${column.chargeamount} = ${entity.chargeamount}
+      where
+        ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: InvProductSpecActivationMode)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(InvProductSpecActivationMode).where.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${InvProductSpecActivationMode.table} where ${column.id} = ${entity.id}""".update.apply()
   }
 
 }

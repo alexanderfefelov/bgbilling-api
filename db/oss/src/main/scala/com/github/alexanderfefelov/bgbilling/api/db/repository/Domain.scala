@@ -29,48 +29,48 @@ object Domain extends SQLSyntaxSupport[Domain] {
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[Domain] = {
-    withSQL {
-      select.from(Domain as d).where.eq(d.id, id)
-    }.map(Domain(d.resultName)).single.apply()
+    sql"""select ${d.result.*} from ${Domain as d} where ${d.id} = ${id}"""
+      .map(Domain(d.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[Domain] = {
-    withSQL(select.from(Domain as d)).map(Domain(d.resultName)).list.apply()
+    sql"""select ${d.result.*} from ${Domain as d}""".map(Domain(d.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(Domain as d)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${Domain.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[Domain] = {
-    withSQL {
-      select.from(Domain as d).where.append(where)
-    }.map(Domain(d.resultName)).single.apply()
+    sql"""select ${d.result.*} from ${Domain as d} where ${where}"""
+      .map(Domain(d.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[Domain] = {
-    withSQL {
-      select.from(Domain as d).where.append(where)
-    }.map(Domain(d.resultName)).list.apply()
+    sql"""select ${d.result.*} from ${Domain as d} where ${where}"""
+      .map(Domain(d.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(Domain as d).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${Domain as d} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
     parentid: Int,
     title: String,
     comment: String)(implicit session: DBSession = autoSession): Domain = {
-    val generatedKey = withSQL {
-      insert.into(Domain).namedValues(
-        column.parentid -> parentid,
-        column.title -> title,
-        column.comment -> comment
+    val generatedKey = sql"""
+      insert into ${Domain.table} (
+        ${column.parentid},
+        ${column.title},
+        ${column.comment}
+      ) values (
+        ${parentid},
+        ${title},
+        ${comment}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     Domain(
       id = generatedKey.toInt,
@@ -97,19 +97,22 @@ object Domain extends SQLSyntaxSupport[Domain] {
   }
 
   def save(entity: Domain)(implicit session: DBSession = autoSession): Domain = {
-    withSQL {
-      update(Domain).set(
-        column.id -> entity.id,
-        column.parentid -> entity.parentid,
-        column.title -> entity.title,
-        column.comment -> entity.comment
-      ).where.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${Domain.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.parentid} = ${entity.parentid},
+        ${column.title} = ${entity.title},
+        ${column.comment} = ${entity.comment}
+      where
+        ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: Domain)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(Domain).where.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${Domain.table} where ${column.id} = ${entity.id}""".update.apply()
   }
 
 }

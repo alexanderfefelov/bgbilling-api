@@ -28,48 +28,48 @@ object EntityAttrText extends SQLSyntaxSupport[EntityAttrText] {
   override val autoSession = AutoSession
 
   def find(entityid: Int, entityspecattrid: Int)(implicit session: DBSession = autoSession): Option[EntityAttrText] = {
-    withSQL {
-      select.from(EntityAttrText as eat).where.eq(eat.entityid, entityid).and.eq(eat.entityspecattrid, entityspecattrid)
-    }.map(EntityAttrText(eat.resultName)).single.apply()
+    sql"""select ${eat.result.*} from ${EntityAttrText as eat} where ${eat.entityid} = ${entityid} and ${eat.entityspecattrid} = ${entityspecattrid}"""
+      .map(EntityAttrText(eat.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[EntityAttrText] = {
-    withSQL(select.from(EntityAttrText as eat)).map(EntityAttrText(eat.resultName)).list.apply()
+    sql"""select ${eat.result.*} from ${EntityAttrText as eat}""".map(EntityAttrText(eat.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(EntityAttrText as eat)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${EntityAttrText.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[EntityAttrText] = {
-    withSQL {
-      select.from(EntityAttrText as eat).where.append(where)
-    }.map(EntityAttrText(eat.resultName)).single.apply()
+    sql"""select ${eat.result.*} from ${EntityAttrText as eat} where ${where}"""
+      .map(EntityAttrText(eat.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[EntityAttrText] = {
-    withSQL {
-      select.from(EntityAttrText as eat).where.append(where)
-    }.map(EntityAttrText(eat.resultName)).list.apply()
+    sql"""select ${eat.result.*} from ${EntityAttrText as eat} where ${where}"""
+      .map(EntityAttrText(eat.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(EntityAttrText as eat).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${EntityAttrText as eat} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
     entityid: Int,
     entityspecattrid: Int,
     value: String)(implicit session: DBSession = autoSession): EntityAttrText = {
-    withSQL {
-      insert.into(EntityAttrText).namedValues(
-        column.entityid -> entityid,
-        column.entityspecattrid -> entityspecattrid,
-        column.value -> value
+    sql"""
+      insert into ${EntityAttrText.table} (
+        ${column.entityid},
+        ${column.entityspecattrid},
+        ${column.value}
+      ) values (
+        ${entityid},
+        ${entityspecattrid},
+        ${value}
       )
-    }.update.apply()
+      """.update.apply()
 
     EntityAttrText(
       entityid = entityid,
@@ -95,18 +95,21 @@ object EntityAttrText extends SQLSyntaxSupport[EntityAttrText] {
   }
 
   def save(entity: EntityAttrText)(implicit session: DBSession = autoSession): EntityAttrText = {
-    withSQL {
-      update(EntityAttrText).set(
-        column.entityid -> entity.entityid,
-        column.entityspecattrid -> entity.entityspecattrid,
-        column.value -> entity.value
-      ).where.eq(column.entityid, entity.entityid).and.eq(column.entityspecattrid, entity.entityspecattrid)
-    }.update.apply()
+    sql"""
+      update
+        ${EntityAttrText.table}
+      set
+        ${column.entityid} = ${entity.entityid},
+        ${column.entityspecattrid} = ${entity.entityspecattrid},
+        ${column.value} = ${entity.value}
+      where
+        ${column.entityid} = ${entity.entityid} and ${column.entityspecattrid} = ${entity.entityspecattrid}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: EntityAttrText)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(EntityAttrText).where.eq(column.entityid, entity.entityid).and.eq(column.entityspecattrid, entity.entityspecattrid) }.update.apply()
+    sql"""delete from ${EntityAttrText.table} where ${column.entityid} = ${entity.entityid} and ${column.entityspecattrid} = ${entity.entityspecattrid}""".update.apply()
   }
 
 }

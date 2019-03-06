@@ -43,35 +43,31 @@ object InvProduct extends SQLSyntaxSupport[InvProduct] {
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[InvProduct] = {
-    withSQL {
-      select.from(InvProduct as ip).where.eq(ip.id, id)
-    }.map(InvProduct(ip.resultName)).single.apply()
+    sql"""select ${ip.result.*} from ${InvProduct as ip} where ${ip.id} = ${id}"""
+      .map(InvProduct(ip.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[InvProduct] = {
-    withSQL(select.from(InvProduct as ip)).map(InvProduct(ip.resultName)).list.apply()
+    sql"""select ${ip.result.*} from ${InvProduct as ip}""".map(InvProduct(ip.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(InvProduct as ip)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${InvProduct.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[InvProduct] = {
-    withSQL {
-      select.from(InvProduct as ip).where.append(where)
-    }.map(InvProduct(ip.resultName)).single.apply()
+    sql"""select ${ip.result.*} from ${InvProduct as ip} where ${where}"""
+      .map(InvProduct(ip.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[InvProduct] = {
-    withSQL {
-      select.from(InvProduct as ip).where.append(where)
-    }.map(InvProduct(ip.resultName)).list.apply()
+    sql"""select ${ip.result.*} from ${InvProduct as ip} where ${where}"""
+      .map(InvProduct(ip.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(InvProduct as ip).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${InvProduct as ip} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
@@ -89,24 +85,39 @@ object InvProduct extends SQLSyntaxSupport[InvProduct] {
     devicestate: Byte,
     comment: String,
     description: String)(implicit session: DBSession = autoSession): InvProduct = {
-    val generatedKey = withSQL {
-      insert.into(InvProduct).namedValues(
-        column.contractid -> contractid,
-        column.accountid -> accountid,
-        column.productspecid -> productspecid,
-        column.timefrom -> timefrom,
-        column.timeto -> timeto,
-        column.activationmodeid -> activationmodeid,
-        column.activationtime -> activationtime,
-        column.activationprice -> activationprice,
-        column.deactivationtime -> deactivationtime,
-        column.userid -> userid,
-        column.deviceproductid -> deviceproductid,
-        column.devicestate -> devicestate,
-        column.comment -> comment,
-        column.description -> description
+    val generatedKey = sql"""
+      insert into ${InvProduct.table} (
+        ${column.contractid},
+        ${column.accountid},
+        ${column.productspecid},
+        ${column.timefrom},
+        ${column.timeto},
+        ${column.activationmodeid},
+        ${column.activationtime},
+        ${column.activationprice},
+        ${column.deactivationtime},
+        ${column.userid},
+        ${column.deviceproductid},
+        ${column.devicestate},
+        ${column.comment},
+        ${column.description}
+      ) values (
+        ${contractid},
+        ${accountid},
+        ${productspecid},
+        ${timefrom},
+        ${timeto},
+        ${activationmodeid},
+        ${activationtime},
+        ${activationprice},
+        ${deactivationtime},
+        ${userid},
+        ${deviceproductid},
+        ${devicestate},
+        ${comment},
+        ${description}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     InvProduct(
       id = generatedKey.toInt,
@@ -177,30 +188,33 @@ object InvProduct extends SQLSyntaxSupport[InvProduct] {
   }
 
   def save(entity: InvProduct)(implicit session: DBSession = autoSession): InvProduct = {
-    withSQL {
-      update(InvProduct).set(
-        column.id -> entity.id,
-        column.contractid -> entity.contractid,
-        column.accountid -> entity.accountid,
-        column.productspecid -> entity.productspecid,
-        column.timefrom -> entity.timefrom,
-        column.timeto -> entity.timeto,
-        column.activationmodeid -> entity.activationmodeid,
-        column.activationtime -> entity.activationtime,
-        column.activationprice -> entity.activationprice,
-        column.deactivationtime -> entity.deactivationtime,
-        column.userid -> entity.userid,
-        column.deviceproductid -> entity.deviceproductid,
-        column.devicestate -> entity.devicestate,
-        column.comment -> entity.comment,
-        column.description -> entity.description
-      ).where.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${InvProduct.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.contractid} = ${entity.contractid},
+        ${column.accountid} = ${entity.accountid},
+        ${column.productspecid} = ${entity.productspecid},
+        ${column.timefrom} = ${entity.timefrom},
+        ${column.timeto} = ${entity.timeto},
+        ${column.activationmodeid} = ${entity.activationmodeid},
+        ${column.activationtime} = ${entity.activationtime},
+        ${column.activationprice} = ${entity.activationprice},
+        ${column.deactivationtime} = ${entity.deactivationtime},
+        ${column.userid} = ${entity.userid},
+        ${column.deviceproductid} = ${entity.deviceproductid},
+        ${column.devicestate} = ${entity.devicestate},
+        ${column.comment} = ${entity.comment},
+        ${column.description} = ${entity.description}
+      where
+        ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: InvProduct)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(InvProduct).where.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${InvProduct.table} where ${column.id} = ${entity.id}""".update.apply()
   }
 
 }

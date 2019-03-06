@@ -28,48 +28,48 @@ object EntitySpecAttrLink extends SQLSyntaxSupport[EntitySpecAttrLink] {
   override val autoSession = AutoSession
 
   def find(entityspecid: Int, entityspecattrid: Int, pos: Int)(implicit session: DBSession = autoSession): Option[EntitySpecAttrLink] = {
-    withSQL {
-      select.from(EntitySpecAttrLink as esal).where.eq(esal.entityspecid, entityspecid).and.eq(esal.entityspecattrid, entityspecattrid).and.eq(esal.pos, pos)
-    }.map(EntitySpecAttrLink(esal.resultName)).single.apply()
+    sql"""select ${esal.result.*} from ${EntitySpecAttrLink as esal} where ${esal.entityspecid} = ${entityspecid} and ${esal.entityspecattrid} = ${entityspecattrid} and ${esal.pos} = ${pos}"""
+      .map(EntitySpecAttrLink(esal.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[EntitySpecAttrLink] = {
-    withSQL(select.from(EntitySpecAttrLink as esal)).map(EntitySpecAttrLink(esal.resultName)).list.apply()
+    sql"""select ${esal.result.*} from ${EntitySpecAttrLink as esal}""".map(EntitySpecAttrLink(esal.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(EntitySpecAttrLink as esal)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${EntitySpecAttrLink.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[EntitySpecAttrLink] = {
-    withSQL {
-      select.from(EntitySpecAttrLink as esal).where.append(where)
-    }.map(EntitySpecAttrLink(esal.resultName)).single.apply()
+    sql"""select ${esal.result.*} from ${EntitySpecAttrLink as esal} where ${where}"""
+      .map(EntitySpecAttrLink(esal.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[EntitySpecAttrLink] = {
-    withSQL {
-      select.from(EntitySpecAttrLink as esal).where.append(where)
-    }.map(EntitySpecAttrLink(esal.resultName)).list.apply()
+    sql"""select ${esal.result.*} from ${EntitySpecAttrLink as esal} where ${where}"""
+      .map(EntitySpecAttrLink(esal.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(EntitySpecAttrLink as esal).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${EntitySpecAttrLink as esal} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
     entityspecid: Int,
     entityspecattrid: Int,
     pos: Int)(implicit session: DBSession = autoSession): EntitySpecAttrLink = {
-    withSQL {
-      insert.into(EntitySpecAttrLink).namedValues(
-        column.entityspecid -> entityspecid,
-        column.entityspecattrid -> entityspecattrid,
-        column.pos -> pos
+    sql"""
+      insert into ${EntitySpecAttrLink.table} (
+        ${column.entityspecid},
+        ${column.entityspecattrid},
+        ${column.pos}
+      ) values (
+        ${entityspecid},
+        ${entityspecattrid},
+        ${pos}
       )
-    }.update.apply()
+      """.update.apply()
 
     EntitySpecAttrLink(
       entityspecid = entityspecid,
@@ -95,18 +95,21 @@ object EntitySpecAttrLink extends SQLSyntaxSupport[EntitySpecAttrLink] {
   }
 
   def save(entity: EntitySpecAttrLink)(implicit session: DBSession = autoSession): EntitySpecAttrLink = {
-    withSQL {
-      update(EntitySpecAttrLink).set(
-        column.entityspecid -> entity.entityspecid,
-        column.entityspecattrid -> entity.entityspecattrid,
-        column.pos -> entity.pos
-      ).where.eq(column.entityspecid, entity.entityspecid).and.eq(column.entityspecattrid, entity.entityspecattrid).and.eq(column.pos, entity.pos)
-    }.update.apply()
+    sql"""
+      update
+        ${EntitySpecAttrLink.table}
+      set
+        ${column.entityspecid} = ${entity.entityspecid},
+        ${column.entityspecattrid} = ${entity.entityspecattrid},
+        ${column.pos} = ${entity.pos}
+      where
+        ${column.entityspecid} = ${entity.entityspecid} and ${column.entityspecattrid} = ${entity.entityspecattrid} and ${column.pos} = ${entity.pos}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: EntitySpecAttrLink)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(EntitySpecAttrLink).where.eq(column.entityspecid, entity.entityspecid).and.eq(column.entityspecattrid, entity.entityspecattrid).and.eq(column.pos, entity.pos) }.update.apply()
+    sql"""delete from ${EntitySpecAttrLink.table} where ${column.entityspecid} = ${entity.entityspecid} and ${column.entityspecattrid} = ${entity.entityspecattrid} and ${column.pos} = ${entity.pos}""".update.apply()
   }
 
 }

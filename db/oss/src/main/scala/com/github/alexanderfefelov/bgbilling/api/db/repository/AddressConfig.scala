@@ -29,35 +29,31 @@ object AddressConfig extends SQLSyntaxSupport[AddressConfig] {
   override val autoSession = AutoSession
 
   def find(key: String, recordId: Int, tableId: String)(implicit session: DBSession = autoSession): Option[AddressConfig] = {
-    withSQL {
-      select.from(AddressConfig as ac).where.eq(ac.key, key).and.eq(ac.recordId, recordId).and.eq(ac.tableId, tableId)
-    }.map(AddressConfig(ac.resultName)).single.apply()
+    sql"""select ${ac.result.*} from ${AddressConfig as ac} where ${ac.key} = ${key} and ${ac.recordId} = ${recordId} and ${ac.tableId} = ${tableId}"""
+      .map(AddressConfig(ac.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[AddressConfig] = {
-    withSQL(select.from(AddressConfig as ac)).map(AddressConfig(ac.resultName)).list.apply()
+    sql"""select ${ac.result.*} from ${AddressConfig as ac}""".map(AddressConfig(ac.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(AddressConfig as ac)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${AddressConfig.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[AddressConfig] = {
-    withSQL {
-      select.from(AddressConfig as ac).where.append(where)
-    }.map(AddressConfig(ac.resultName)).single.apply()
+    sql"""select ${ac.result.*} from ${AddressConfig as ac} where ${where}"""
+      .map(AddressConfig(ac.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[AddressConfig] = {
-    withSQL {
-      select.from(AddressConfig as ac).where.append(where)
-    }.map(AddressConfig(ac.resultName)).list.apply()
+    sql"""select ${ac.result.*} from ${AddressConfig as ac} where ${where}"""
+      .map(AddressConfig(ac.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(AddressConfig as ac).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${AddressConfig as ac} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
@@ -65,14 +61,19 @@ object AddressConfig extends SQLSyntaxSupport[AddressConfig] {
     recordId: Int,
     key: String,
     value: String)(implicit session: DBSession = autoSession): AddressConfig = {
-    withSQL {
-      insert.into(AddressConfig).namedValues(
-        column.tableId -> tableId,
-        column.recordId -> recordId,
-        column.key -> key,
-        column.value -> value
+    sql"""
+      insert into ${AddressConfig.table} (
+        ${column.tableId},
+        ${column.recordId},
+        ${column.key},
+        ${column.value}
+      ) values (
+        ${tableId},
+        ${recordId},
+        ${key},
+        ${value}
       )
-    }.update.apply()
+      """.update.apply()
 
     AddressConfig(
       tableId = tableId,
@@ -102,19 +103,22 @@ object AddressConfig extends SQLSyntaxSupport[AddressConfig] {
   }
 
   def save(entity: AddressConfig)(implicit session: DBSession = autoSession): AddressConfig = {
-    withSQL {
-      update(AddressConfig).set(
-        column.tableId -> entity.tableId,
-        column.recordId -> entity.recordId,
-        column.key -> entity.key,
-        column.value -> entity.value
-      ).where.eq(column.key, entity.key).and.eq(column.recordId, entity.recordId).and.eq(column.tableId, entity.tableId)
-    }.update.apply()
+    sql"""
+      update
+        ${AddressConfig.table}
+      set
+        ${column.tableId} = ${entity.tableId},
+        ${column.recordId} = ${entity.recordId},
+        ${column.key} = ${entity.key},
+        ${column.value} = ${entity.value}
+      where
+        ${column.key} = ${entity.key} and ${column.recordId} = ${entity.recordId} and ${column.tableId} = ${entity.tableId}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: AddressConfig)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(AddressConfig).where.eq(column.key, entity.key).and.eq(column.recordId, entity.recordId).and.eq(column.tableId, entity.tableId) }.update.apply()
+    sql"""delete from ${AddressConfig.table} where ${column.key} = ${entity.key} and ${column.recordId} = ${entity.recordId} and ${column.tableId} = ${entity.tableId}""".update.apply()
   }
 
 }

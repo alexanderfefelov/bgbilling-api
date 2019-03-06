@@ -12,6 +12,7 @@ case class InvProductSpec(
   parentid: Int,
   periodic: Byte,
   notrealtime: Byte,
+  priority: Int,
   title: String,
   identifier: String,
   tariffids: Option[String] = None,
@@ -41,7 +42,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
 
   override val tableName = "inv_product_spec"
 
-  override val columns = Seq("id", "entityId", "moduleId", "parentId", "periodic", "notRealtime", "title", "identifier", "tariffIds", "contractGroups", "depends", "incompatible", "activationModeIds", "dateFrom", "dateTo", "status", "hideForCustomer", "hideForContractGroups", "hideForContractGroupsMode", "activationByCustomer", "deactivationByCustomer", "comment", "description")
+  override val columns = Seq("id", "entityId", "moduleId", "parentId", "periodic", "notRealtime", "priority", "title", "identifier", "tariffIds", "contractGroups", "depends", "incompatible", "activationModeIds", "dateFrom", "dateTo", "status", "hideForCustomer", "hideForContractGroups", "hideForContractGroupsMode", "activationByCustomer", "deactivationByCustomer", "comment", "description")
 
   def apply(ips: SyntaxProvider[InvProductSpec])(rs: WrappedResultSet): InvProductSpec = autoConstruct(rs, ips)
   def apply(ips: ResultName[InvProductSpec])(rs: WrappedResultSet): InvProductSpec = autoConstruct(rs, ips)
@@ -51,35 +52,31 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[InvProductSpec] = {
-    withSQL {
-      select.from(InvProductSpec as ips).where.eq(ips.id, id)
-    }.map(InvProductSpec(ips.resultName)).single.apply()
+    sql"""select ${ips.result.*} from ${InvProductSpec as ips} where ${ips.id} = ${id}"""
+      .map(InvProductSpec(ips.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[InvProductSpec] = {
-    withSQL(select.from(InvProductSpec as ips)).map(InvProductSpec(ips.resultName)).list.apply()
+    sql"""select ${ips.result.*} from ${InvProductSpec as ips}""".map(InvProductSpec(ips.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(InvProductSpec as ips)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${InvProductSpec.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[InvProductSpec] = {
-    withSQL {
-      select.from(InvProductSpec as ips).where.append(where)
-    }.map(InvProductSpec(ips.resultName)).single.apply()
+    sql"""select ${ips.result.*} from ${InvProductSpec as ips} where ${where}"""
+      .map(InvProductSpec(ips.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[InvProductSpec] = {
-    withSQL {
-      select.from(InvProductSpec as ips).where.append(where)
-    }.map(InvProductSpec(ips.resultName)).list.apply()
+    sql"""select ${ips.result.*} from ${InvProductSpec as ips} where ${where}"""
+      .map(InvProductSpec(ips.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(InvProductSpec as ips).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${InvProductSpec as ips} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
@@ -88,6 +85,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
     parentid: Int,
     periodic: Byte,
     notrealtime: Byte,
+    priority: Int,
     title: String,
     identifier: String,
     tariffids: Option[String] = None,
@@ -105,32 +103,57 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
     deactivationbycustomer: Byte,
     comment: String,
     description: String)(implicit session: DBSession = autoSession): InvProductSpec = {
-    val generatedKey = withSQL {
-      insert.into(InvProductSpec).namedValues(
-        column.entityid -> entityid,
-        column.moduleid -> moduleid,
-        column.parentid -> parentid,
-        column.periodic -> periodic,
-        column.notrealtime -> notrealtime,
-        column.title -> title,
-        column.identifier -> identifier,
-        column.tariffids -> tariffids,
-        column.contractgroups -> contractgroups,
-        column.depends -> depends,
-        column.incompatible -> incompatible,
-        column.activationmodeids -> activationmodeids,
-        column.datefrom -> datefrom,
-        column.dateto -> dateto,
-        column.status -> status,
-        column.hideforcustomer -> hideforcustomer,
-        column.hideforcontractgroups -> hideforcontractgroups,
-        column.hideforcontractgroupsmode -> hideforcontractgroupsmode,
-        column.activationbycustomer -> activationbycustomer,
-        column.deactivationbycustomer -> deactivationbycustomer,
-        column.comment -> comment,
-        column.description -> description
+    val generatedKey = sql"""
+      insert into ${InvProductSpec.table} (
+        ${column.entityid},
+        ${column.moduleid},
+        ${column.parentid},
+        ${column.periodic},
+        ${column.notrealtime},
+        ${column.priority},
+        ${column.title},
+        ${column.identifier},
+        ${column.tariffids},
+        ${column.contractgroups},
+        ${column.depends},
+        ${column.incompatible},
+        ${column.activationmodeids},
+        ${column.datefrom},
+        ${column.dateto},
+        ${column.status},
+        ${column.hideforcustomer},
+        ${column.hideforcontractgroups},
+        ${column.hideforcontractgroupsmode},
+        ${column.activationbycustomer},
+        ${column.deactivationbycustomer},
+        ${column.comment},
+        ${column.description}
+      ) values (
+        ${entityid},
+        ${moduleid},
+        ${parentid},
+        ${periodic},
+        ${notrealtime},
+        ${priority},
+        ${title},
+        ${identifier},
+        ${tariffids},
+        ${contractgroups},
+        ${depends},
+        ${incompatible},
+        ${activationmodeids},
+        ${datefrom},
+        ${dateto},
+        ${status},
+        ${hideforcustomer},
+        ${hideforcontractgroups},
+        ${hideforcontractgroupsmode},
+        ${activationbycustomer},
+        ${deactivationbycustomer},
+        ${comment},
+        ${description}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     InvProductSpec(
       id = generatedKey.toInt,
@@ -139,6 +162,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
       parentid = parentid,
       periodic = periodic,
       notrealtime = notrealtime,
+      priority = priority,
       title = title,
       identifier = identifier,
       tariffids = tariffids,
@@ -166,6 +190,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
         'parentid -> entity.parentid,
         'periodic -> entity.periodic,
         'notrealtime -> entity.notrealtime,
+        'priority -> entity.priority,
         'title -> entity.title,
         'identifier -> entity.identifier,
         'tariffids -> entity.tariffids,
@@ -189,6 +214,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
       parentId,
       periodic,
       notRealtime,
+      priority,
       title,
       identifier,
       tariffIds,
@@ -212,6 +238,7 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
       {parentid},
       {periodic},
       {notrealtime},
+      {priority},
       {title},
       {identifier},
       {tariffids},
@@ -233,38 +260,42 @@ object InvProductSpec extends SQLSyntaxSupport[InvProductSpec] {
   }
 
   def save(entity: InvProductSpec)(implicit session: DBSession = autoSession): InvProductSpec = {
-    withSQL {
-      update(InvProductSpec).set(
-        column.id -> entity.id,
-        column.entityid -> entity.entityid,
-        column.moduleid -> entity.moduleid,
-        column.parentid -> entity.parentid,
-        column.periodic -> entity.periodic,
-        column.notrealtime -> entity.notrealtime,
-        column.title -> entity.title,
-        column.identifier -> entity.identifier,
-        column.tariffids -> entity.tariffids,
-        column.contractgroups -> entity.contractgroups,
-        column.depends -> entity.depends,
-        column.incompatible -> entity.incompatible,
-        column.activationmodeids -> entity.activationmodeids,
-        column.datefrom -> entity.datefrom,
-        column.dateto -> entity.dateto,
-        column.status -> entity.status,
-        column.hideforcustomer -> entity.hideforcustomer,
-        column.hideforcontractgroups -> entity.hideforcontractgroups,
-        column.hideforcontractgroupsmode -> entity.hideforcontractgroupsmode,
-        column.activationbycustomer -> entity.activationbycustomer,
-        column.deactivationbycustomer -> entity.deactivationbycustomer,
-        column.comment -> entity.comment,
-        column.description -> entity.description
-      ).where.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${InvProductSpec.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.entityid} = ${entity.entityid},
+        ${column.moduleid} = ${entity.moduleid},
+        ${column.parentid} = ${entity.parentid},
+        ${column.periodic} = ${entity.periodic},
+        ${column.notrealtime} = ${entity.notrealtime},
+        ${column.priority} = ${entity.priority},
+        ${column.title} = ${entity.title},
+        ${column.identifier} = ${entity.identifier},
+        ${column.tariffids} = ${entity.tariffids},
+        ${column.contractgroups} = ${entity.contractgroups},
+        ${column.depends} = ${entity.depends},
+        ${column.incompatible} = ${entity.incompatible},
+        ${column.activationmodeids} = ${entity.activationmodeids},
+        ${column.datefrom} = ${entity.datefrom},
+        ${column.dateto} = ${entity.dateto},
+        ${column.status} = ${entity.status},
+        ${column.hideforcustomer} = ${entity.hideforcustomer},
+        ${column.hideforcontractgroups} = ${entity.hideforcontractgroups},
+        ${column.hideforcontractgroupsmode} = ${entity.hideforcontractgroupsmode},
+        ${column.activationbycustomer} = ${entity.activationbycustomer},
+        ${column.deactivationbycustomer} = ${entity.deactivationbycustomer},
+        ${column.comment} = ${entity.comment},
+        ${column.description} = ${entity.description}
+      where
+        ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: InvProductSpec)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(InvProductSpec).where.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${InvProductSpec.table} where ${column.id} = ${entity.id}""".update.apply()
   }
 
 }

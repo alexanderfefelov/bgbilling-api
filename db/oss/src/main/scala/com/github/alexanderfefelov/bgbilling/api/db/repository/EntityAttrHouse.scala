@@ -28,48 +28,48 @@ object EntityAttrHouse extends SQLSyntaxSupport[EntityAttrHouse] {
   override val autoSession = AutoSession
 
   def find(entityid: Int, entityspecattrid: Int)(implicit session: DBSession = autoSession): Option[EntityAttrHouse] = {
-    withSQL {
-      select.from(EntityAttrHouse as eah).where.eq(eah.entityid, entityid).and.eq(eah.entityspecattrid, entityspecattrid)
-    }.map(EntityAttrHouse(eah.resultName)).single.apply()
+    sql"""select ${eah.result.*} from ${EntityAttrHouse as eah} where ${eah.entityid} = ${entityid} and ${eah.entityspecattrid} = ${entityspecattrid}"""
+      .map(EntityAttrHouse(eah.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[EntityAttrHouse] = {
-    withSQL(select.from(EntityAttrHouse as eah)).map(EntityAttrHouse(eah.resultName)).list.apply()
+    sql"""select ${eah.result.*} from ${EntityAttrHouse as eah}""".map(EntityAttrHouse(eah.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(EntityAttrHouse as eah)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${EntityAttrHouse.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[EntityAttrHouse] = {
-    withSQL {
-      select.from(EntityAttrHouse as eah).where.append(where)
-    }.map(EntityAttrHouse(eah.resultName)).single.apply()
+    sql"""select ${eah.result.*} from ${EntityAttrHouse as eah} where ${where}"""
+      .map(EntityAttrHouse(eah.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[EntityAttrHouse] = {
-    withSQL {
-      select.from(EntityAttrHouse as eah).where.append(where)
-    }.map(EntityAttrHouse(eah.resultName)).list.apply()
+    sql"""select ${eah.result.*} from ${EntityAttrHouse as eah} where ${where}"""
+      .map(EntityAttrHouse(eah.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(EntityAttrHouse as eah).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${EntityAttrHouse as eah} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
     entityid: Int,
     entityspecattrid: Int,
     value: Int)(implicit session: DBSession = autoSession): EntityAttrHouse = {
-    withSQL {
-      insert.into(EntityAttrHouse).namedValues(
-        column.entityid -> entityid,
-        column.entityspecattrid -> entityspecattrid,
-        column.value -> value
+    sql"""
+      insert into ${EntityAttrHouse.table} (
+        ${column.entityid},
+        ${column.entityspecattrid},
+        ${column.value}
+      ) values (
+        ${entityid},
+        ${entityspecattrid},
+        ${value}
       )
-    }.update.apply()
+      """.update.apply()
 
     EntityAttrHouse(
       entityid = entityid,
@@ -95,18 +95,21 @@ object EntityAttrHouse extends SQLSyntaxSupport[EntityAttrHouse] {
   }
 
   def save(entity: EntityAttrHouse)(implicit session: DBSession = autoSession): EntityAttrHouse = {
-    withSQL {
-      update(EntityAttrHouse).set(
-        column.entityid -> entity.entityid,
-        column.entityspecattrid -> entity.entityspecattrid,
-        column.value -> entity.value
-      ).where.eq(column.entityid, entity.entityid).and.eq(column.entityspecattrid, entity.entityspecattrid)
-    }.update.apply()
+    sql"""
+      update
+        ${EntityAttrHouse.table}
+      set
+        ${column.entityid} = ${entity.entityid},
+        ${column.entityspecattrid} = ${entity.entityspecattrid},
+        ${column.value} = ${entity.value}
+      where
+        ${column.entityid} = ${entity.entityid} and ${column.entityspecattrid} = ${entity.entityspecattrid}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: EntityAttrHouse)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(EntityAttrHouse).where.eq(column.entityid, entity.entityid).and.eq(column.entityspecattrid, entity.entityspecattrid) }.update.apply()
+    sql"""delete from ${EntityAttrHouse.table} where ${column.entityid} = ${entity.entityid} and ${column.entityspecattrid} = ${entity.entityspecattrid}""".update.apply()
   }
 
 }

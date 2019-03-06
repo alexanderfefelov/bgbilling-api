@@ -28,46 +28,45 @@ object Entity extends SQLSyntaxSupport[Entity] {
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[Entity] = {
-    withSQL {
-      select.from(Entity as e).where.eq(e.id, id)
-    }.map(Entity(e.resultName)).single.apply()
+    sql"""select ${e.result.*} from ${Entity as e} where ${e.id} = ${id}"""
+      .map(Entity(e.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[Entity] = {
-    withSQL(select.from(Entity as e)).map(Entity(e.resultName)).list.apply()
+    sql"""select ${e.result.*} from ${Entity as e}""".map(Entity(e.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(Entity as e)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${Entity.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[Entity] = {
-    withSQL {
-      select.from(Entity as e).where.append(where)
-    }.map(Entity(e.resultName)).single.apply()
+    sql"""select ${e.result.*} from ${Entity as e} where ${where}"""
+      .map(Entity(e.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[Entity] = {
-    withSQL {
-      select.from(Entity as e).where.append(where)
-    }.map(Entity(e.resultName)).list.apply()
+    sql"""select ${e.result.*} from ${Entity as e} where ${where}"""
+      .map(Entity(e.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(Entity as e).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${Entity as e} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
     entityspecid: Int,
     title: String)(implicit session: DBSession = autoSession): Entity = {
-    val generatedKey = withSQL {
-      insert.into(Entity).namedValues(
-        column.entityspecid -> entityspecid,
-        column.title -> title
+    val generatedKey = sql"""
+      insert into ${Entity.table} (
+        ${column.entityspecid},
+        ${column.title}
+      ) values (
+        ${entityspecid},
+        ${title}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     Entity(
       id = generatedKey.toInt,
@@ -90,18 +89,21 @@ object Entity extends SQLSyntaxSupport[Entity] {
   }
 
   def save(entity: Entity)(implicit session: DBSession = autoSession): Entity = {
-    withSQL {
-      update(Entity).set(
-        column.id -> entity.id,
-        column.entityspecid -> entity.entityspecid,
-        column.title -> entity.title
-      ).where.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${Entity.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.entityspecid} = ${entity.entityspecid},
+        ${column.title} = ${entity.title}
+      where
+        ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: Entity)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(Entity).where.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${Entity.table} where ${column.id} = ${entity.id}""".update.apply()
   }
 
 }

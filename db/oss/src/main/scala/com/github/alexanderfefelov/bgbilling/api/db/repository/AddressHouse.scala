@@ -40,35 +40,31 @@ object AddressHouse extends SQLSyntaxSupport[AddressHouse] {
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[AddressHouse] = {
-    withSQL {
-      select.from(AddressHouse as ah).where.eq(ah.id, id)
-    }.map(AddressHouse(ah.resultName)).single.apply()
+    sql"""select ${ah.result.*} from ${AddressHouse as ah} where ${ah.id} = ${id}"""
+      .map(AddressHouse(ah.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[AddressHouse] = {
-    withSQL(select.from(AddressHouse as ah)).map(AddressHouse(ah.resultName)).list.apply()
+    sql"""select ${ah.result.*} from ${AddressHouse as ah}""".map(AddressHouse(ah.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(AddressHouse as ah)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${AddressHouse.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[AddressHouse] = {
-    withSQL {
-      select.from(AddressHouse as ah).where.append(where)
-    }.map(AddressHouse(ah.resultName)).single.apply()
+    sql"""select ${ah.result.*} from ${AddressHouse as ah} where ${where}"""
+      .map(AddressHouse(ah.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[AddressHouse] = {
-    withSQL {
-      select.from(AddressHouse as ah).where.append(where)
-    }.map(AddressHouse(ah.resultName)).list.apply()
+    sql"""select ${ah.result.*} from ${AddressHouse as ah} where ${where}"""
+      .map(AddressHouse(ah.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(AddressHouse as ah).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${AddressHouse as ah} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
@@ -83,21 +79,33 @@ object AddressHouse extends SQLSyntaxSupport[AddressHouse] {
     dt: Option[LocalDate] = None,
     podDiapazon: String,
     pod: String)(implicit session: DBSession = autoSession): AddressHouse = {
-    val generatedKey = withSQL {
-      insert.into(AddressHouse).namedValues(
-        column.streetid -> streetid,
-        column.house -> house,
-        column.frac -> frac,
-        column.amount -> amount,
-        column.comment -> comment,
-        column.areaid -> areaid,
-        column.quarterid -> quarterid,
-        column.boxIndex -> boxIndex,
-        column.dt -> dt,
-        column.podDiapazon -> podDiapazon,
-        column.pod -> pod
+    val generatedKey = sql"""
+      insert into ${AddressHouse.table} (
+        ${column.streetid},
+        ${column.house},
+        ${column.frac},
+        ${column.amount},
+        ${column.comment},
+        ${column.areaid},
+        ${column.quarterid},
+        ${column.boxIndex},
+        ${column.dt},
+        ${column.podDiapazon},
+        ${column.pod}
+      ) values (
+        ${streetid},
+        ${house},
+        ${frac},
+        ${amount},
+        ${comment},
+        ${areaid},
+        ${quarterid},
+        ${boxIndex},
+        ${dt},
+        ${podDiapazon},
+        ${pod}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     AddressHouse(
       id = generatedKey.toInt,
@@ -156,27 +164,30 @@ object AddressHouse extends SQLSyntaxSupport[AddressHouse] {
   }
 
   def save(entity: AddressHouse)(implicit session: DBSession = autoSession): AddressHouse = {
-    withSQL {
-      update(AddressHouse).set(
-        column.id -> entity.id,
-        column.streetid -> entity.streetid,
-        column.house -> entity.house,
-        column.frac -> entity.frac,
-        column.amount -> entity.amount,
-        column.comment -> entity.comment,
-        column.areaid -> entity.areaid,
-        column.quarterid -> entity.quarterid,
-        column.boxIndex -> entity.boxIndex,
-        column.dt -> entity.dt,
-        column.podDiapazon -> entity.podDiapazon,
-        column.pod -> entity.pod
-      ).where.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${AddressHouse.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.streetid} = ${entity.streetid},
+        ${column.house} = ${entity.house},
+        ${column.frac} = ${entity.frac},
+        ${column.amount} = ${entity.amount},
+        ${column.comment} = ${entity.comment},
+        ${column.areaid} = ${entity.areaid},
+        ${column.quarterid} = ${entity.quarterid},
+        ${column.boxIndex} = ${entity.boxIndex},
+        ${column.dt} = ${entity.dt},
+        ${column.podDiapazon} = ${entity.podDiapazon},
+        ${column.pod} = ${entity.pod}
+      where
+        ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: AddressHouse)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(AddressHouse).where.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${AddressHouse.table} where ${column.id} = ${entity.id}""".update.apply()
   }
 
 }

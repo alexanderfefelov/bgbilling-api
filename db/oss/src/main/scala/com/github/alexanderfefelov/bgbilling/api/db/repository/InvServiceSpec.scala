@@ -38,35 +38,31 @@ object InvServiceSpec extends SQLSyntaxSupport[InvServiceSpec] {
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[InvServiceSpec] = {
-    withSQL {
-      select.from(InvServiceSpec as iss).where.eq(iss.id, id)
-    }.map(InvServiceSpec(iss.resultName)).single.apply()
+    sql"""select ${iss.result.*} from ${InvServiceSpec as iss} where ${iss.id} = ${id}"""
+      .map(InvServiceSpec(iss.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[InvServiceSpec] = {
-    withSQL(select.from(InvServiceSpec as iss)).map(InvServiceSpec(iss.resultName)).list.apply()
+    sql"""select ${iss.result.*} from ${InvServiceSpec as iss}""".map(InvServiceSpec(iss.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(InvServiceSpec as iss)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${InvServiceSpec.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[InvServiceSpec] = {
-    withSQL {
-      select.from(InvServiceSpec as iss).where.append(where)
-    }.map(InvServiceSpec(iss.resultName)).single.apply()
+    sql"""select ${iss.result.*} from ${InvServiceSpec as iss} where ${where}"""
+      .map(InvServiceSpec(iss.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[InvServiceSpec] = {
-    withSQL {
-      select.from(InvServiceSpec as iss).where.append(where)
-    }.map(InvServiceSpec(iss.resultName)).list.apply()
+    sql"""select ${iss.result.*} from ${InvServiceSpec as iss} where ${where}"""
+      .map(InvServiceSpec(iss.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(InvServiceSpec as iss).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${InvServiceSpec as iss} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
@@ -79,19 +75,29 @@ object InvServiceSpec extends SQLSyntaxSupport[InvServiceSpec] {
     dateto: Option[LocalDate] = None,
     comment: String,
     description: String)(implicit session: DBSession = autoSession): InvServiceSpec = {
-    val generatedKey = withSQL {
-      insert.into(InvServiceSpec).namedValues(
-        column.entityid -> entityid,
-        column.moduleid -> moduleid,
-        column.parentid -> parentid,
-        column.title -> title,
-        column.identifier -> identifier,
-        column.datefrom -> datefrom,
-        column.dateto -> dateto,
-        column.comment -> comment,
-        column.description -> description
+    val generatedKey = sql"""
+      insert into ${InvServiceSpec.table} (
+        ${column.entityid},
+        ${column.moduleid},
+        ${column.parentid},
+        ${column.title},
+        ${column.identifier},
+        ${column.datefrom},
+        ${column.dateto},
+        ${column.comment},
+        ${column.description}
+      ) values (
+        ${entityid},
+        ${moduleid},
+        ${parentid},
+        ${title},
+        ${identifier},
+        ${datefrom},
+        ${dateto},
+        ${comment},
+        ${description}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     InvServiceSpec(
       id = generatedKey.toInt,
@@ -142,25 +148,28 @@ object InvServiceSpec extends SQLSyntaxSupport[InvServiceSpec] {
   }
 
   def save(entity: InvServiceSpec)(implicit session: DBSession = autoSession): InvServiceSpec = {
-    withSQL {
-      update(InvServiceSpec).set(
-        column.id -> entity.id,
-        column.entityid -> entity.entityid,
-        column.moduleid -> entity.moduleid,
-        column.parentid -> entity.parentid,
-        column.title -> entity.title,
-        column.identifier -> entity.identifier,
-        column.datefrom -> entity.datefrom,
-        column.dateto -> entity.dateto,
-        column.comment -> entity.comment,
-        column.description -> entity.description
-      ).where.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${InvServiceSpec.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.entityid} = ${entity.entityid},
+        ${column.moduleid} = ${entity.moduleid},
+        ${column.parentid} = ${entity.parentid},
+        ${column.title} = ${entity.title},
+        ${column.identifier} = ${entity.identifier},
+        ${column.datefrom} = ${entity.datefrom},
+        ${column.dateto} = ${entity.dateto},
+        ${column.comment} = ${entity.comment},
+        ${column.description} = ${entity.description}
+      where
+        ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: InvServiceSpec)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(InvServiceSpec).where.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${InvServiceSpec.table} where ${column.id} = ${entity.id}""".update.apply()
   }
 
 }

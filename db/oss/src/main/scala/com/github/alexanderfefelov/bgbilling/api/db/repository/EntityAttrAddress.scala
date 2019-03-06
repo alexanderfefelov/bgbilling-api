@@ -35,35 +35,31 @@ object EntityAttrAddress extends SQLSyntaxSupport[EntityAttrAddress] {
   override val autoSession = AutoSession
 
   def find(entityid: Int, entityspecattrid: Int)(implicit session: DBSession = autoSession): Option[EntityAttrAddress] = {
-    withSQL {
-      select.from(EntityAttrAddress as eaa).where.eq(eaa.entityid, entityid).and.eq(eaa.entityspecattrid, entityspecattrid)
-    }.map(EntityAttrAddress(eaa.resultName)).single.apply()
+    sql"""select ${eaa.result.*} from ${EntityAttrAddress as eaa} where ${eaa.entityid} = ${entityid} and ${eaa.entityspecattrid} = ${entityspecattrid}"""
+      .map(EntityAttrAddress(eaa.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[EntityAttrAddress] = {
-    withSQL(select.from(EntityAttrAddress as eaa)).map(EntityAttrAddress(eaa.resultName)).list.apply()
+    sql"""select ${eaa.result.*} from ${EntityAttrAddress as eaa}""".map(EntityAttrAddress(eaa.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(EntityAttrAddress as eaa)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${EntityAttrAddress.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[EntityAttrAddress] = {
-    withSQL {
-      select.from(EntityAttrAddress as eaa).where.append(where)
-    }.map(EntityAttrAddress(eaa.resultName)).single.apply()
+    sql"""select ${eaa.result.*} from ${EntityAttrAddress as eaa} where ${where}"""
+      .map(EntityAttrAddress(eaa.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[EntityAttrAddress] = {
-    withSQL {
-      select.from(EntityAttrAddress as eaa).where.append(where)
-    }.map(EntityAttrAddress(eaa.resultName)).list.apply()
+    sql"""select ${eaa.result.*} from ${EntityAttrAddress as eaa} where ${where}"""
+      .map(EntityAttrAddress(eaa.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(EntityAttrAddress as eaa).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${EntityAttrAddress as eaa} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
@@ -77,20 +73,31 @@ object EntityAttrAddress extends SQLSyntaxSupport[EntityAttrAddress] {
     value: Option[String] = None,
     comment: Option[String] = None,
     formatKey: Option[String] = None)(implicit session: DBSession = autoSession): EntityAttrAddress = {
-    withSQL {
-      insert.into(EntityAttrAddress).namedValues(
-        column.entityid -> entityid,
-        column.entityspecattrid -> entityspecattrid,
-        column.houseid -> houseid,
-        column.flat -> flat,
-        column.room -> room,
-        column.pod -> pod,
-        column.floor -> floor,
-        column.value -> value,
-        column.comment -> comment,
-        column.formatKey -> formatKey
+    sql"""
+      insert into ${EntityAttrAddress.table} (
+        ${column.entityid},
+        ${column.entityspecattrid},
+        ${column.houseid},
+        ${column.flat},
+        ${column.room},
+        ${column.pod},
+        ${column.floor},
+        ${column.value},
+        ${column.comment},
+        ${column.formatKey}
+      ) values (
+        ${entityid},
+        ${entityspecattrid},
+        ${houseid},
+        ${flat},
+        ${room},
+        ${pod},
+        ${floor},
+        ${value},
+        ${comment},
+        ${formatKey}
       )
-    }.update.apply()
+      """.update.apply()
 
     EntityAttrAddress(
       entityid = entityid,
@@ -144,25 +151,28 @@ object EntityAttrAddress extends SQLSyntaxSupport[EntityAttrAddress] {
   }
 
   def save(entity: EntityAttrAddress)(implicit session: DBSession = autoSession): EntityAttrAddress = {
-    withSQL {
-      update(EntityAttrAddress).set(
-        column.entityid -> entity.entityid,
-        column.entityspecattrid -> entity.entityspecattrid,
-        column.houseid -> entity.houseid,
-        column.flat -> entity.flat,
-        column.room -> entity.room,
-        column.pod -> entity.pod,
-        column.floor -> entity.floor,
-        column.value -> entity.value,
-        column.comment -> entity.comment,
-        column.formatKey -> entity.formatKey
-      ).where.eq(column.entityid, entity.entityid).and.eq(column.entityspecattrid, entity.entityspecattrid)
-    }.update.apply()
+    sql"""
+      update
+        ${EntityAttrAddress.table}
+      set
+        ${column.entityid} = ${entity.entityid},
+        ${column.entityspecattrid} = ${entity.entityspecattrid},
+        ${column.houseid} = ${entity.houseid},
+        ${column.flat} = ${entity.flat},
+        ${column.room} = ${entity.room},
+        ${column.pod} = ${entity.pod},
+        ${column.floor} = ${entity.floor},
+        ${column.value} = ${entity.value},
+        ${column.comment} = ${entity.comment},
+        ${column.formatKey} = ${entity.formatKey}
+      where
+        ${column.entityid} = ${entity.entityid} and ${column.entityspecattrid} = ${entity.entityspecattrid}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: EntityAttrAddress)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(EntityAttrAddress).where.eq(column.entityid, entity.entityid).and.eq(column.entityspecattrid, entity.entityspecattrid) }.update.apply()
+    sql"""delete from ${EntityAttrAddress.table} where ${column.entityid} = ${entity.entityid} and ${column.entityspecattrid} = ${entity.entityspecattrid}""".update.apply()
   }
 
 }

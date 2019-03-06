@@ -29,48 +29,48 @@ object AddressQuarter extends SQLSyntaxSupport[AddressQuarter] {
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[AddressQuarter] = {
-    withSQL {
-      select.from(AddressQuarter as aq).where.eq(aq.id, id)
-    }.map(AddressQuarter(aq.resultName)).single.apply()
+    sql"""select ${aq.result.*} from ${AddressQuarter as aq} where ${aq.id} = ${id}"""
+      .map(AddressQuarter(aq.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[AddressQuarter] = {
-    withSQL(select.from(AddressQuarter as aq)).map(AddressQuarter(aq.resultName)).list.apply()
+    sql"""select ${aq.result.*} from ${AddressQuarter as aq}""".map(AddressQuarter(aq.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(AddressQuarter as aq)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${AddressQuarter.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[AddressQuarter] = {
-    withSQL {
-      select.from(AddressQuarter as aq).where.append(where)
-    }.map(AddressQuarter(aq.resultName)).single.apply()
+    sql"""select ${aq.result.*} from ${AddressQuarter as aq} where ${where}"""
+      .map(AddressQuarter(aq.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[AddressQuarter] = {
-    withSQL {
-      select.from(AddressQuarter as aq).where.append(where)
-    }.map(AddressQuarter(aq.resultName)).list.apply()
+    sql"""select ${aq.result.*} from ${AddressQuarter as aq} where ${where}"""
+      .map(AddressQuarter(aq.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(AddressQuarter as aq).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${AddressQuarter as aq} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
     title: String,
     gid: Option[Int] = None,
     cityid: Int)(implicit session: DBSession = autoSession): AddressQuarter = {
-    val generatedKey = withSQL {
-      insert.into(AddressQuarter).namedValues(
-        column.title -> title,
-        column.gid -> gid,
-        column.cityid -> cityid
+    val generatedKey = sql"""
+      insert into ${AddressQuarter.table} (
+        ${column.title},
+        ${column.gid},
+        ${column.cityid}
+      ) values (
+        ${title},
+        ${gid},
+        ${cityid}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     AddressQuarter(
       id = generatedKey.toInt,
@@ -97,19 +97,22 @@ object AddressQuarter extends SQLSyntaxSupport[AddressQuarter] {
   }
 
   def save(entity: AddressQuarter)(implicit session: DBSession = autoSession): AddressQuarter = {
-    withSQL {
-      update(AddressQuarter).set(
-        column.id -> entity.id,
-        column.title -> entity.title,
-        column.gid -> entity.gid,
-        column.cityid -> entity.cityid
-      ).where.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${AddressQuarter.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.title} = ${entity.title},
+        ${column.gid} = ${entity.gid},
+        ${column.cityid} = ${entity.cityid}
+      where
+        ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: AddressQuarter)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(AddressQuarter).where.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${AddressQuarter.table} where ${column.id} = ${entity.id}""".update.apply()
   }
 
 }

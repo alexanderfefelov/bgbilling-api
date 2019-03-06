@@ -36,35 +36,31 @@ object InvService extends SQLSyntaxSupport[InvService] {
   override val autoSession = AutoSession
 
   def find(contractid: Int, id: Int)(implicit session: DBSession = autoSession): Option[InvService] = {
-    withSQL {
-      select.from(InvService as is).where.eq(is.contractid, contractid).and.eq(is.id, id)
-    }.map(InvService(is.resultName)).single.apply()
+    sql"""select ${is.result.*} from ${InvService as is} where ${is.contractid} = ${contractid} and ${is.id} = ${id}"""
+      .map(InvService(is.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[InvService] = {
-    withSQL(select.from(InvService as is)).map(InvService(is.resultName)).list.apply()
+    sql"""select ${is.result.*} from ${InvService as is}""".map(InvService(is.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(InvService as is)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${InvService.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[InvService] = {
-    withSQL {
-      select.from(InvService as is).where.append(where)
-    }.map(InvService(is.resultName)).single.apply()
+    sql"""select ${is.result.*} from ${InvService as is} where ${where}"""
+      .map(InvService(is.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[InvService] = {
-    withSQL {
-      select.from(InvService as is).where.append(where)
-    }.map(InvService(is.resultName)).list.apply()
+    sql"""select ${is.result.*} from ${InvService as is} where ${where}"""
+      .map(InvService(is.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(InvService as is).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${InvService as is} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
@@ -75,17 +71,25 @@ object InvService extends SQLSyntaxSupport[InvService] {
     timefrom: DateTime,
     timeto: Option[DateTime] = None,
     devicestate: Byte)(implicit session: DBSession = autoSession): InvService = {
-    val generatedKey = withSQL {
-      insert.into(InvService).namedValues(
-        column.contractid -> contractid,
-        column.accountid -> accountid,
-        column.productid -> productid,
-        column.servicespecid -> servicespecid,
-        column.timefrom -> timefrom,
-        column.timeto -> timeto,
-        column.devicestate -> devicestate
+    val generatedKey = sql"""
+      insert into ${InvService.table} (
+        ${column.contractid},
+        ${column.accountid},
+        ${column.productid},
+        ${column.servicespecid},
+        ${column.timefrom},
+        ${column.timeto},
+        ${column.devicestate}
+      ) values (
+        ${contractid},
+        ${accountid},
+        ${productid},
+        ${servicespecid},
+        ${timefrom},
+        ${timeto},
+        ${devicestate}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     InvService(
       id = generatedKey.toInt,
@@ -128,23 +132,26 @@ object InvService extends SQLSyntaxSupport[InvService] {
   }
 
   def save(entity: InvService)(implicit session: DBSession = autoSession): InvService = {
-    withSQL {
-      update(InvService).set(
-        column.id -> entity.id,
-        column.contractid -> entity.contractid,
-        column.accountid -> entity.accountid,
-        column.productid -> entity.productid,
-        column.servicespecid -> entity.servicespecid,
-        column.timefrom -> entity.timefrom,
-        column.timeto -> entity.timeto,
-        column.devicestate -> entity.devicestate
-      ).where.eq(column.contractid, entity.contractid).and.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${InvService.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.contractid} = ${entity.contractid},
+        ${column.accountid} = ${entity.accountid},
+        ${column.productid} = ${entity.productid},
+        ${column.servicespecid} = ${entity.servicespecid},
+        ${column.timefrom} = ${entity.timefrom},
+        ${column.timeto} = ${entity.timeto},
+        ${column.devicestate} = ${entity.devicestate}
+      where
+        ${column.contractid} = ${entity.contractid} and ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: InvService)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(InvService).where.eq(column.contractid, entity.contractid).and.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${InvService.table} where ${column.contractid} = ${entity.contractid} and ${column.id} = ${entity.id}""".update.apply()
   }
 
 }

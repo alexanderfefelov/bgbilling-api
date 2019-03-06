@@ -29,48 +29,48 @@ object EntitySpecAttr extends SQLSyntaxSupport[EntitySpecAttr] {
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[EntitySpecAttr] = {
-    withSQL {
-      select.from(EntitySpecAttr as esa).where.eq(esa.id, id)
-    }.map(EntitySpecAttr(esa.resultName)).single.apply()
+    sql"""select ${esa.result.*} from ${EntitySpecAttr as esa} where ${esa.id} = ${id}"""
+      .map(EntitySpecAttr(esa.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[EntitySpecAttr] = {
-    withSQL(select.from(EntitySpecAttr as esa)).map(EntitySpecAttr(esa.resultName)).list.apply()
+    sql"""select ${esa.result.*} from ${EntitySpecAttr as esa}""".map(EntitySpecAttr(esa.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(EntitySpecAttr as esa)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${EntitySpecAttr.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[EntitySpecAttr] = {
-    withSQL {
-      select.from(EntitySpecAttr as esa).where.append(where)
-    }.map(EntitySpecAttr(esa.resultName)).single.apply()
+    sql"""select ${esa.result.*} from ${EntitySpecAttr as esa} where ${where}"""
+      .map(EntitySpecAttr(esa.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[EntitySpecAttr] = {
-    withSQL {
-      select.from(EntitySpecAttr as esa).where.append(where)
-    }.map(EntitySpecAttr(esa.resultName)).list.apply()
+    sql"""select ${esa.result.*} from ${EntitySpecAttr as esa} where ${where}"""
+      .map(EntitySpecAttr(esa.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(EntitySpecAttr as esa).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${EntitySpecAttr as esa} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
     title: String,
     `type`: Int,
     comment: String)(implicit session: DBSession = autoSession): EntitySpecAttr = {
-    val generatedKey = withSQL {
-      insert.into(EntitySpecAttr).namedValues(
-        column.title -> title,
-        column.`type` -> `type`,
-        column.comment -> comment
+    val generatedKey = sql"""
+      insert into ${EntitySpecAttr.table} (
+        ${column.title},
+        ${column.`type`},
+        ${column.comment}
+      ) values (
+        ${title},
+        ${`type`},
+        ${comment}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     EntitySpecAttr(
       id = generatedKey.toInt,
@@ -97,19 +97,22 @@ object EntitySpecAttr extends SQLSyntaxSupport[EntitySpecAttr] {
   }
 
   def save(entity: EntitySpecAttr)(implicit session: DBSession = autoSession): EntitySpecAttr = {
-    withSQL {
-      update(EntitySpecAttr).set(
-        column.id -> entity.id,
-        column.title -> entity.title,
-        column.`type` -> entity.`type`,
-        column.comment -> entity.comment
-      ).where.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${EntitySpecAttr.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.title} = ${entity.title},
+        ${column.`type`} = ${entity.`type`},
+        ${column.comment} = ${entity.comment}
+      where
+        ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: EntitySpecAttr)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(EntitySpecAttr).where.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${EntitySpecAttr.table} where ${column.id} = ${entity.id}""".update.apply()
   }
 
 }

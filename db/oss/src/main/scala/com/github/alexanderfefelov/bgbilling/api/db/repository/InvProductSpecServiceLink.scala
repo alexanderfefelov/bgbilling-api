@@ -34,35 +34,31 @@ object InvProductSpecServiceLink extends SQLSyntaxSupport[InvProductSpecServiceL
   override val autoSession = AutoSession
 
   def find(id: Int)(implicit session: DBSession = autoSession): Option[InvProductSpecServiceLink] = {
-    withSQL {
-      select.from(InvProductSpecServiceLink as ipssl).where.eq(ipssl.id, id)
-    }.map(InvProductSpecServiceLink(ipssl.resultName)).single.apply()
+    sql"""select ${ipssl.result.*} from ${InvProductSpecServiceLink as ipssl} where ${ipssl.id} = ${id}"""
+      .map(InvProductSpecServiceLink(ipssl.resultName)).single.apply()
   }
 
   def findAll()(implicit session: DBSession = autoSession): List[InvProductSpecServiceLink] = {
-    withSQL(select.from(InvProductSpecServiceLink as ipssl)).map(InvProductSpecServiceLink(ipssl.resultName)).list.apply()
+    sql"""select ${ipssl.result.*} from ${InvProductSpecServiceLink as ipssl}""".map(InvProductSpecServiceLink(ipssl.resultName)).list.apply()
   }
 
   def countAll()(implicit session: DBSession = autoSession): Long = {
-    withSQL(select(sqls.count).from(InvProductSpecServiceLink as ipssl)).map(rs => rs.long(1)).single.apply().get
+    sql"""select count(1) from ${InvProductSpecServiceLink.table}""".map(rs => rs.long(1)).single.apply().get
   }
 
   def findBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Option[InvProductSpecServiceLink] = {
-    withSQL {
-      select.from(InvProductSpecServiceLink as ipssl).where.append(where)
-    }.map(InvProductSpecServiceLink(ipssl.resultName)).single.apply()
+    sql"""select ${ipssl.result.*} from ${InvProductSpecServiceLink as ipssl} where ${where}"""
+      .map(InvProductSpecServiceLink(ipssl.resultName)).single.apply()
   }
 
   def findAllBy(where: SQLSyntax)(implicit session: DBSession = autoSession): List[InvProductSpecServiceLink] = {
-    withSQL {
-      select.from(InvProductSpecServiceLink as ipssl).where.append(where)
-    }.map(InvProductSpecServiceLink(ipssl.resultName)).list.apply()
+    sql"""select ${ipssl.result.*} from ${InvProductSpecServiceLink as ipssl} where ${where}"""
+      .map(InvProductSpecServiceLink(ipssl.resultName)).list.apply()
   }
 
   def countBy(where: SQLSyntax)(implicit session: DBSession = autoSession): Long = {
-    withSQL {
-      select(sqls.count).from(InvProductSpecServiceLink as ipssl).where.append(where)
-    }.map(_.long(1)).single.apply().get
+    sql"""select count(1) from ${InvProductSpecServiceLink as ipssl} where ${where}"""
+      .map(_.long(1)).single.apply().get
   }
 
   def create(
@@ -71,15 +67,21 @@ object InvProductSpecServiceLink extends SQLSyntaxSupport[InvProductSpecServiceL
     datefrom: Option[LocalDate] = None,
     dateto: Option[LocalDate] = None,
     comment: Option[String] = None)(implicit session: DBSession = autoSession): InvProductSpecServiceLink = {
-    val generatedKey = withSQL {
-      insert.into(InvProductSpecServiceLink).namedValues(
-        column.productspecid -> productspecid,
-        column.servicespecid -> servicespecid,
-        column.datefrom -> datefrom,
-        column.dateto -> dateto,
-        column.comment -> comment
+    val generatedKey = sql"""
+      insert into ${InvProductSpecServiceLink.table} (
+        ${column.productspecid},
+        ${column.servicespecid},
+        ${column.datefrom},
+        ${column.dateto},
+        ${column.comment}
+      ) values (
+        ${productspecid},
+        ${servicespecid},
+        ${datefrom},
+        ${dateto},
+        ${comment}
       )
-    }.updateAndReturnGeneratedKey.apply()
+      """.updateAndReturnGeneratedKey.apply()
 
     InvProductSpecServiceLink(
       id = generatedKey.toInt,
@@ -114,21 +116,24 @@ object InvProductSpecServiceLink extends SQLSyntaxSupport[InvProductSpecServiceL
   }
 
   def save(entity: InvProductSpecServiceLink)(implicit session: DBSession = autoSession): InvProductSpecServiceLink = {
-    withSQL {
-      update(InvProductSpecServiceLink).set(
-        column.id -> entity.id,
-        column.productspecid -> entity.productspecid,
-        column.servicespecid -> entity.servicespecid,
-        column.datefrom -> entity.datefrom,
-        column.dateto -> entity.dateto,
-        column.comment -> entity.comment
-      ).where.eq(column.id, entity.id)
-    }.update.apply()
+    sql"""
+      update
+        ${InvProductSpecServiceLink.table}
+      set
+        ${column.id} = ${entity.id},
+        ${column.productspecid} = ${entity.productspecid},
+        ${column.servicespecid} = ${entity.servicespecid},
+        ${column.datefrom} = ${entity.datefrom},
+        ${column.dateto} = ${entity.dateto},
+        ${column.comment} = ${entity.comment}
+      where
+        ${column.id} = ${entity.id}
+      """.update.apply()
     entity
   }
 
   def destroy(entity: InvProductSpecServiceLink)(implicit session: DBSession = autoSession): Int = {
-    withSQL { delete.from(InvProductSpecServiceLink).where.eq(column.id, entity.id) }.update.apply()
+    sql"""delete from ${InvProductSpecServiceLink.table} where ${column.id} = ${entity.id}""".update.apply()
   }
 
 }
