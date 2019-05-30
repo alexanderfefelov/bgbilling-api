@@ -1,7 +1,8 @@
 # bgbilling-api
 
-    DO NOT USE
-    WORK IN PROGRESS
+    ABANDONED!
+    DO NOT USE!
+
 
 ```bash
 git clone https://github.com/alexanderfefelov/bgbilling-api.git
